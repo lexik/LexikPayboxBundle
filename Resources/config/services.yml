@@ -1,0 +1,7 @@
+parameters:
+#    lexik_paybox.example.class: Lexik\Bundle\PayboxBundle\Example
+
+services:
+#    lexik_paybox.example:
+#        class: %lexik_paybox.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
