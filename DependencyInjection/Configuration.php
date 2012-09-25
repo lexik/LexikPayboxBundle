@@ -20,9 +20,58 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('lexik_paybox');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+
+                ->arrayNode('servers')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('primary')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('host')->defaultValue('https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi')->end()
+                                ->scalarNode('incoming')->defaultValue('194.2.160.66')->end()
+                                ->scalarNode('outgoing')->defaultValue('194.2.122.158')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('secondary')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('host')->defaultValue('https://tpeweb1.paybox.com/cgi/MYchoix_pagepaiement.cgi')->end()
+                                ->scalarNode('incoming')->defaultValue('195.25.7.146')->end()
+                                ->scalarNode('outgoing')->defaultValue('195.25.7.166')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('preprod')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('host')->defaultValue('https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi')->end()
+                                ->scalarNode('incoming')->defaultValue('195.101.99.72')->end()
+                                ->scalarNode('outgoing')->defaultValue('195.101.99.76')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('parameters')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('site')->isRequired()->end()
+                        ->scalarNode('rank')->isRequired()->end()
+                        ->scalarNode('login')->isRequired()->end()
+                        ->arrayNode('hmac')
+                            ->isRequired()
+                            ->children()
+                                ->scalarNode('algorithm')->defaultValue('sha512')->end()
+                                ->scalarNode('key')->isRequired()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+
+            ->end()
+        ;
 
         return $treeBuilder;
     }
