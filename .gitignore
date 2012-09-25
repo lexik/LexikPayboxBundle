@@ -1,2 +1,7 @@
-
+vendor
+phpunit.xml
+.DS_Store
+.buildpath
+.project
+.settings
 
