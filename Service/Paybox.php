@@ -128,8 +128,9 @@ class Paybox
     {
         $this->setParameter('PBX_TIME', date('c'));
 
-        $hmac = hash_hmac($this->getParameter('PBX_HASH'), $this->stringifyParameters(), $this->hmacKey);
+        $binKey = pack('H*', $this->hmacKey);
+        $hmac = hash_hmac($this->getParameter('PBX_HASH'), $this->stringifyParameters(), $binKey);
 
-        $this->setParameter('PBX_HMAC', $hmac);
+        $this->setParameter('PBX_HMAC', strtoupper($hmac));
     }
 }
