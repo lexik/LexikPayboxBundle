@@ -88,10 +88,6 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // $this->resolvedTypeFactory = $this->getMock('Symfony\Component\Form\ResolvedFormTypeFactoryInterface');
-        // $this->registry = $this->getMock('Symfony\Component\Form\FormRegistryInterface');
-        // $factory = new FormFactory($this->registry, $this->resolvedTypeFactory);
-
         $this->_paybox = new Paybox(array(
             'site'  => 1999888,
             'rank'  => 32,
