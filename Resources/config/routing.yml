@@ -1,3 +1,7 @@
-lexik_paybox_homepage:
-    pattern:  /hello/{name}
+lexik_paybox_payment_return:
+    pattern:  /payment/{status}
+    defaults: { _controller: LexikPayboxBundle:Ipn:index }
+
+lexik_paybox_test:
+    pattern:  /
     defaults: { _controller: LexikPayboxBundle:Default:index }
