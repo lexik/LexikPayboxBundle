@@ -1,7 +1,7 @@
 parameters:
-#    lexik_paybox.example.class: Lexik\Bundle\PayboxBundle\Example
+   lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxRequest
 
 services:
-#    lexik_paybox.example:
-#        class: %lexik_paybox.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+   lexik_paybox.request_handler:
+       class:     %lexik_paybox.request_handler.class%
+       arguments: [%lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory]
