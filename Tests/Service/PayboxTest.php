@@ -78,11 +78,11 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $parameters['PBX_HMAC'],
-            hash_hmac(
+            strtoupper(hash_hmac(
                 'sha512',
                 $qs,
-                'testKEY'
-            )
+                pack('H*', '0123456789ABCDEF')
+            ))
         );
     }
 
@@ -98,7 +98,7 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
             'login' => 2,
             'hmac'  => array(
                 'algorithm' => 'sha512',
-                'key'       => 'testKEY',
+                'key'       => '0123456789ABCDEF',
             ),
         ));
 
