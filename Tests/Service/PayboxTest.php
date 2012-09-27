@@ -71,7 +71,7 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
         $qs .= '&PBX_IDENTIFIANT=2';
         $qs .= '&PBX_PORTEUR=test@test.net';
         $qs .= '&PBX_RANG=32';
-        $qs .= '&PBX_RETOUR=Mt:M;Ref:R;Auto:A;Erreur:E';
+        $qs .= '&PBX_RETOUR=Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K'; // "Sign:K" is automaticaly added at the end of PBX_RETOUR
         $qs .= '&PBX_SITE=1999888';
         $qs .= '&PBX_TIME='.$parameters['PBX_TIME'];
         $qs .= '&PBX_TOTAL=100';
