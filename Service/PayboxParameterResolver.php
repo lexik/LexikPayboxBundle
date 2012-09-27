@@ -107,7 +107,7 @@ class PayboxParameterResolver
     {
         $this->resolver->setRequired($this->requiredParameters);
 
-        $this->resolver->setOptional(array_diff($this->requiredParameters, $this->knownParameters));
+        $this->resolver->setOptional(array_diff($this->knownParameters, $this->requiredParameters));
 
         $this->initAllowed();
     }
@@ -119,13 +119,18 @@ class PayboxParameterResolver
     {
         $this->resolver->setAllowedValues(array(
             'PBX_DEVISE' => array(
-                '756', // CHF
                 '978', // EUR
-                '826', // GBP
-                '036', // AUD
-                '124', // CAD
-                '840', // USD
+                '950', // XAF
                 '952', // XOF
+                '953', // XPF
+                '756', // CHF
+                '826', // GBP
+                '840', // USD
+                '124', // CAD
+                '036', // AUD
+                '959', // XAU
+                '961', // XAG
+                '962', // XPT
             ),
         ));
     }
