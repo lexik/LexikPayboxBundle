@@ -41,7 +41,15 @@ class Paybox
      */
     public function setParameter($name, $value)
     {
-        $this->parameters[strtoupper($name)] = $value;
+        /**
+         * @todo Hardcoded verification... must find a beter solution,
+         *       but the PBX_RETOUR realy must be ended by ";Sign:K"
+         */
+        if ('PBX_RETOUR' == $name = strtoupper($name)) {
+            $value = $this->verifyReturnParameter($value);
+        }
+
+        $this->parameters[$name] = $value;
 
         return $this;
     }
@@ -54,7 +62,7 @@ class Paybox
     public function setParameters(array $parameters)
     {
         foreach ($parameters as $name => $value) {
-            $this->parameters[strtoupper($name)] = $value;
+            $this->setParameter($name, $value);
         }
 
         return $this;
@@ -100,6 +108,29 @@ class Paybox
         $this->setParameter('PBX_RANG', $parameters['rank']);
         $this->setParameter('PBX_IDENTIFIANT', $parameters['login']);
         $this->setParameter('PBX_HASH', $parameters['hmac']['algorithm']);
+    }
+
+    /**
+     * Parameter PBX_RETOUR must contain the string ";Sign:K" at the end for ipn signature verification.
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function verifyReturnParameter($value)
+    {
+        if (false !== preg_match('`[^\:]+\:k`i', $value)) {
+            $vars = explode(';', $value);
+
+            array_walk($vars, function ($value, $key) use (&$vars) {
+                if (false !== stripos($value, ':K')) {
+                    unset($vars[$key]);
+                }
+            });
+
+            $value = implode(';', $vars);
+        }
+
+        return $value .= ';Sign:K';
     }
 
     /**

@@ -1,7 +1,5 @@
-lexik_paybox_payment_return:
-    pattern:  /payment/{status}
-    defaults: { _controller: LexikPayboxBundle:Ipn:index }
-
-lexik_paybox_test:
-    pattern:  /
-    defaults: { _controller: LexikPayboxBundle:Default:index }
+lexik_paybox_ipn:
+    pattern:  /payment-ipn/with-a-very-unlikely-url
+    defaults: { _controller: LexikPayboxBundle:Default:ipn }
+    requirements:
+        _method: POST

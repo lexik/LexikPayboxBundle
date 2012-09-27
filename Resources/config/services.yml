@@ -1,7 +1,14 @@
 parameters:
-   lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxRequest
+   lexik_paybox.request_handler.class:  Lexik\Bundle\PayboxBundle\Service\PayboxRequest
+   lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxResponse
 
 services:
    lexik_paybox.request_handler:
-       class:     %lexik_paybox.request_handler.class%
-       arguments: [%lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory]
+        class:     %lexik_paybox.request_handler.class%
+        arguments: [%lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory]
+
+   lexik_paybox.response_handler:
+        class:     %lexik_paybox.request_handler.class%
+        arguments: [%lexik_paybox.parameters%, @request=, @logger]
+        tags:
+        - { name: monolog.logger, channel: payment }
