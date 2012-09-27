@@ -14,7 +14,7 @@ class Paybox
     protected $parameters;
 
     /**
-     * Key used to compote the hmac hash.
+     * Key used to compute the hmac hash.
      *
      * @var string
      */
@@ -88,7 +88,9 @@ class Paybox
     }
 
     /**
-     * Initialise the object with the defaults values.
+     * Initialize the object with the defaults values.
+     *
+     * @param  array  $parameters
      */
     protected function initParameters(array $parameters)
     {
@@ -122,7 +124,7 @@ class Paybox
     }
 
     /**
-     * Computes the hmac.
+     * Computes the hmac hash.
      */
     protected function computeHmac()
     {

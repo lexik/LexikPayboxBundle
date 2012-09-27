@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Service;
 
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
@@ -27,11 +27,11 @@ class PayboxRequest extends Paybox
     /**
      * Constructor.
      *
-     * @param array       $parameters
-     * @param array       $servers
-     * @param FormFactory $factory
+     * @param array                $parameters
+     * @param array                $servers
+     * @param FormFactoryInterface $factory
      */
-    public function __construct(array $parameters, array $servers, FormFactory $factory)
+    public function __construct(array $parameters, array $servers, FormFactoryInterface $factory)
     {
         parent::__construct($parameters);
 
@@ -40,7 +40,7 @@ class PayboxRequest extends Paybox
     }
 
     /**
-     * Returns a form with
+     * Returns a form with defined parameters.
      *
      * @param  array $options
      * @return Form
