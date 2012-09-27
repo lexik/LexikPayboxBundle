@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Service;
 
-use Lexik\Bundle\PayboxBundle\Service\PayboxParameter;
+use Lexik\Bundle\PayboxBundle\Service\PayboxParameterResolver;
 
 class Paybox
 {
@@ -82,7 +82,7 @@ class Paybox
             $this->computeHmac();
         }
 
-        $resolver = new PayboxParameter();
+        $resolver = new PayboxParameterResolver();
 
         return $resolver->resolveSimplePaiement($this->parameters);
     }

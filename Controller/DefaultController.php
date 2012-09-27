@@ -12,7 +12,7 @@ class DefaultController extends Controller
         $paybox->setParameters(array(
             'PBX_CMD'     => 'CMD'.time(),
             'PBX_DEVISE'  => '978',
-            'PBX_PORTEUR' => 'test@test.net',
+            'PBX_PORTEUR' => 'test@paybox.com',
             'PBX_RETOUR'  => 'Mt:M;Ref:R;Auto:A;Erreur:E',
             'PBX_TOTAL'   => '1000',
         ));
