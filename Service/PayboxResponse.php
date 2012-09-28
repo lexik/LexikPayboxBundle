@@ -74,7 +74,7 @@ class PayboxResponse
         $this->initData();
         $this->initSignature();
 
-        $file = fopen(dirname(__FILE__ . '/../Resources/config/pubkey.pem', 'r'));
+        $file = fopen(dirname(__FILE__) . '/../Resources/config/pubkey.pem', 'r');
         $cert = fread($file, 8192);
         fclose($file);
 
