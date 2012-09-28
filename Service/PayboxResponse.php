@@ -36,16 +36,16 @@ class PayboxResponse
             switch (strlen($signature)) {
                 case 178 :
                     $this->signature = base64_decode($signature);
-                    $this->logger->info(sprintf('Signature : "%s"', $this->signature);
+                    $this->logger->info(sprintf('Signature : "%s"', $this->signature));
                     break;
 
                 case 128 :
                     $this->signature = $signature;
-                    $this->logger->info(sprintf('Signature : "%s"', $this->signature);
+                    $this->logger->info(sprintf('Signature : "%s"', $this->signature));
                     break;
 
                 default :
-                    $this->logger->err(sprintf('Invalid signature : "%s"', $signature);
+                    $this->logger->err(sprintf('Invalid signature : "%s"', $signature));
                     break;
             }
         } else {
