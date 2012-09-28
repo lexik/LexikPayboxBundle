@@ -17,7 +17,7 @@ class DefaultController extends Controller
         $result = $payboxResponse->verifySignature();
 
         return $this->render('LexikPayboxBundle:Default:index.html.twig', array(
-            'status' => $result ? 'OK' : 'KO!',
+            'status' => $result ? 'OK' : 'KO',
         ));
     }
 }

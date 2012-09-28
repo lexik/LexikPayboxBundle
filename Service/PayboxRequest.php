@@ -81,7 +81,7 @@ class PayboxRequest extends Paybox
 
         foreach ($servers as $server) {
             $doc = new \DOMDocument();
-            $doc->loadHTMLFile($this->getServerTestPage(sprintf(
+            $doc->loadHTMLFile($this->getWebPage(sprintf(
                 '%s://%s/load.html',
                 $server['protocol'],
                 $server['host']
@@ -101,7 +101,13 @@ class PayboxRequest extends Paybox
         throw new RuntimeException('No server available.');
     }
 
-    public function getServerTestPage($url)
+    /**
+     * Returns the content of a web resource.
+     *
+     * @param  string $url
+     * @return string
+     */
+    public function getWebPage($url)
     {
         $curl = curl_init();
 
@@ -112,9 +118,6 @@ class PayboxRequest extends Paybox
         $output = curl_exec($curl);
         curl_close($curl);
 
-var_dump($output);
-exit;
-
-        return $output;
+        return (string) $output;
     }
 }
