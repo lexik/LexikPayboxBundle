@@ -81,7 +81,7 @@ class PayboxRequest extends Paybox
 
         foreach ($servers as $server) {
             $doc = new \DOMDocument();
-            $doc->loadHTMLFile($this->getWebPage(sprintf(
+            $doc->loadHTML($this->getWebPage(sprintf(
                 '%s://%s/load.html',
                 $server['protocol'],
                 $server['host']
