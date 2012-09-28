@@ -2,4 +2,4 @@ lexik_paybox_ipn:
     pattern:  /payment-ipn/with-a-very-unlikely-url
     defaults: { _controller: LexikPayboxBundle:Default:ipn }
     requirements:
-        _method: POST|GET
+        _method: POST
