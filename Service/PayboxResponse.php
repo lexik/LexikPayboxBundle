@@ -34,7 +34,7 @@ class PayboxResponse
             $signature = $this->request->request->get('Sign');
 
             switch (strlen($signature)) {
-                case 178 :
+                case 172 :
                     $this->signature = base64_decode($signature);
                     $this->logger->info(sprintf('Signature : "%s"', $this->signature));
                     break;
@@ -45,7 +45,7 @@ class PayboxResponse
                     break;
 
                 default :
-                    $this->logger->err(sprintf('Invalid signature : "%s"', $signature));
+                    $this->logger->err(sprintf('Bad signature format : "%s"', $signature));
                     break;
             }
         } else {
