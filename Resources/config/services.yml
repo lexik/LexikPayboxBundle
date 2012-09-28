@@ -8,7 +8,7 @@ services:
         arguments: [%lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory]
 
    lexik_paybox.response_handler:
-        class:     %lexik_paybox.request_handler.class%
+        class:     %lexik_paybox.response_handler.class%
         arguments: [%lexik_paybox.parameters%, @request=, @logger]
         tags:
         - { name: monolog.logger, channel: payment }

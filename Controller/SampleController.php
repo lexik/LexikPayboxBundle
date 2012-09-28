@@ -13,7 +13,7 @@ class SampleController extends Controller
             'PBX_CMD'          => 'CMD'.time(),
             'PBX_DEVISE'       => '978',
             'PBX_PORTEUR'      => 'test@paybox.com',
-            'PBX_RETOUR'       => 'totoDU93:K;Mt:M;Ref:R;Auto:A;Erreur:E',
+            'PBX_RETOUR'       => 'Mt:M;Ref:R;Auto:A;Erreur:E',
             'PBX_TOTAL'        => '1000',
             'PBX_TYPEPAIEMENT' => 'CARTE',
             'PBX_TYPECARTE'    => 'CB,VISA,EUROCARD_MASTERCARD',
