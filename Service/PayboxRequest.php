@@ -81,11 +81,11 @@ class PayboxRequest extends Paybox
 
         foreach ($servers as $server) {
             $doc = new \DOMDocument();
-            $doc->loadHTMLFile(sprintf(
+            $doc->loadHTMLFile($this->getServerTestPage(sprintf(
                 '%s://%s/load.html',
                 $server['protocol'],
                 $server['host']
-            ));
+            )));
             $element = $doc->getElementById('server_status');
 
             if ($element && 'OK' == $element->textContent) {
@@ -99,5 +99,22 @@ class PayboxRequest extends Paybox
         }
 
         throw new RuntimeException('No server available.');
+    }
+
+    public function getServerTestPage($url)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_URL,            $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER,         false);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        $output = curl_exec($curl);
+        curl_close($curl);
+
+var_dump($output);
+exit;
+
+        return $output;
     }
 }
