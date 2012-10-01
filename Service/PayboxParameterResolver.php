@@ -111,7 +111,7 @@ class PayboxParameterResolver
         $this->resolver->setOptional(array_diff($this->knownParameters, $this->requiredParameters));
 
         $this->initAllowed();
-        $this->initDeaults();
+        $this->initDefaults();
     }
 
     /**
