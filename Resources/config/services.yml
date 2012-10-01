@@ -1,6 +1,6 @@
 parameters:
-    lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxRequest
-    lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxResponse
+    lexik_paybox.request_handler.class:          Lexik\Bundle\PayboxBundle\Service\PayboxRequest
+    lexik_paybox.response_handler.class:         Lexik\Bundle\PayboxBundle\Service\PayboxResponse
     lexik_paybox.sample_response_listener.class: Lexik\Bundle\PayboxBundle\Listener\PayboxResponseListener
 
 services:

@@ -34,11 +34,10 @@ class PayboxResponseListener
      */
     public function onPayboxIpnResponse(PayboxResponseEvent $event)
     {
-        $content = '';
         $path = $this->rootDir . 'data/' . date('Y\\m\\d\\');
-
         $this->filesystem->mkdir($path);
 
+        $content = sprintf("Signature verification : %s\n", $event->isVerified() ? 'OK' : 'KO');
         foreach ($event->getData() as $key => $value) {
             $content .= sprintf("%s:%s\n", $key, $value);
         }
