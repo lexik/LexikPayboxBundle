@@ -1,5 +1,5 @@
 lexik_paybox_ipn:
-    pattern:  /payment-ipn/with-a-very-unlikely-url
+    pattern:  /payment-ipn/{time}
     defaults: { _controller: LexikPayboxBundle:Default:ipn }
     requirements:
         _method: GET|POST
