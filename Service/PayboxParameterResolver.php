@@ -132,10 +132,13 @@ class PayboxParameterResolver
                 '961', // XAG
                 '962', // XPT
             ),
-            'PBX_RUF1' => array(
-                'GET',
-                'POST',
-            ),
+            /**
+             * @see https://github.com/symfony/OptionsResolver/pull/1
+             */
+            // 'PBX_RUF1' => array(
+            //     'GET',
+            //     'POST',
+            // ),
         ));
     }
 }
