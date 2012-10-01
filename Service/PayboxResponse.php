@@ -80,16 +80,14 @@ class PayboxResponse extends Paybox
             switch (strlen($signature)) {
                 case 172 :
                     $this->signature = base64_decode($signature);
-                    $this->logger->info(sprintf('Signature : "%s"', $this->signature));
                     break;
 
                 case 128 :
                     $this->signature = $signature;
-                    $this->logger->info(sprintf('Signature : "%s"', $this->signature));
                     break;
 
                 default :
-                    $this->logger->err(sprintf('Bad signature format : "%s"', $signature));
+                    $this->logger->err(sprintf('Bad signature format.', $signature));
                     break;
             }
         } else {
@@ -134,6 +132,9 @@ class PayboxResponse extends Paybox
             $this->signature,
             $publicKey
         );
+
+        $this->logger->info(self::stringify($this->data));
+        $this->logger->info(base64_encode($this->signature));
 
         if ($result == 1) {
             $this->logger->info('Signature is valid.');
