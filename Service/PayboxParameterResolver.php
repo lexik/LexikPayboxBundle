@@ -95,6 +95,7 @@ class PayboxParameterResolver
             'PBX_HASH',
             'PBX_TIME',
             'PBX_HMAC',
+            'PBX_RUF1',
         );
 
         $this->initParameters();
@@ -110,6 +111,7 @@ class PayboxParameterResolver
         $this->resolver->setOptional(array_diff($this->knownParameters, $this->requiredParameters));
 
         $this->initAllowed();
+        $this->initDeaults();
     }
 
     /**
@@ -132,6 +134,20 @@ class PayboxParameterResolver
                 '961', // XAG
                 '962', // XPT
             ),
+            'PBX_RUF1' => array(
+                'GET',
+                'POST',
+            ),
+        ));
+    }
+
+    /**
+     * Initialise default values.
+     */
+    protected function initDefaults()
+    {
+        $this->resolver->setDefaults(array(
+            'PBX_RUF1' => 'POST',
         ));
     }
 }

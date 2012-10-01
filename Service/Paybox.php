@@ -2,6 +2,8 @@
 
 namespace Lexik\Bundle\PayboxBundle\Service;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+
 use Lexik\Bundle\PayboxBundle\Service\PayboxParameterResolver;
 
 class Paybox
@@ -27,6 +29,10 @@ class Paybox
      */
     public function __construct(array $parameters)
     {
+        if (!function_exists('hash_hmac')) {
+            throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
+        }
+
         $this->parameters = array();
 
         $this->initParameters($parameters);
@@ -146,12 +152,14 @@ class Paybox
 
         ksort($this->parameters);
 
-        $querystring = '';
-        foreach ($this->parameters as $key => $value) {
-            $querystring .= sprintf('%s%s=%s', ($querystring == '') ? '' : '&', $key, $value);
-        }
+        // $querystring = '';
+        // foreach ($this->parameters as $key => $value) {
+        //     $querystring .= sprintf('%s%s=%s', ($querystring == '') ? '' : '&', $key, $value);
+        // }
 
-        return $querystring;
+        // return $querystring;
+
+        return self::stringify($this->parameters);
     }
 
     /**
@@ -165,5 +173,22 @@ class Paybox
         $hmac = hash_hmac($this->getParameter('PBX_HASH'), $this->stringifyParameters(), $binKey);
 
         $this->setParameter('PBX_HMAC', strtoupper($hmac));
+    }
+
+    /**
+     * Makes an array of parameters become a querystring like string.
+     *
+     * @param  array $array
+     * @return string
+     */
+    static public function stringify(array $array)
+    {
+        $result = array();
+
+        foreach ($array as $key => $value) {
+            $result[] = sprintf('%s=%s', $key, $value);
+        }
+
+        return implode('&', $result);
     }
 }

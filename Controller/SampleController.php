@@ -4,8 +4,14 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ *
+ */
 class SampleController extends Controller
 {
+    /**
+     * Sample action to call a payment.
+     */
     public function indexAction()
     {
         $paybox = $this->get('lexik_paybox.request_handler');
@@ -20,7 +26,6 @@ class SampleController extends Controller
             'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), true),
             'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
             'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
-            'PBX_RUF1'         => 'POST',
             'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array(), true),
         ));
 
@@ -33,6 +38,11 @@ class SampleController extends Controller
         );
     }
 
+    /**
+     * Sample action of a confirmation payment page on witch the user is sent
+     * afert he seizes his payment informations on the Paybox's platform.
+     * This action must only containts presentation logic.
+     */
     public function returnAction($status)
     {
         return $this->render(

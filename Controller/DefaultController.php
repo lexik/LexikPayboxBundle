@@ -4,10 +4,13 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ *
+ */
 class DefaultController extends Controller
 {
     /**
-     * IPN action.
+     * IPN action. Here, presentation is anecdotic.
      *
      * @return Response
      */

@@ -1,14 +1,21 @@
 parameters:
-   lexik_paybox.request_handler.class:  Lexik\Bundle\PayboxBundle\Service\PayboxRequest
-   lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxResponse
+    lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxRequest
+    lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxResponse
+    lexik_paybox.sample_response_listener.class: Lexik\Bundle\PayboxBundle\Listener\PayboxResponseListener
 
 services:
    lexik_paybox.request_handler:
         class:     %lexik_paybox.request_handler.class%
-        arguments: [%lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory]
+        arguments: [ %lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory ]
 
    lexik_paybox.response_handler:
         class:     %lexik_paybox.response_handler.class%
-        arguments: [%lexik_paybox.parameters%, @request=, @logger]
+        arguments: [ %lexik_paybox.parameters%, @request=, @logger, @event_dispatcher ]
         tags:
-        - { name: monolog.logger, channel: payment }
+            - { name: monolog.logger, channel: payment }
+
+    lexik_paybox.sample_response_listener:
+        class:     %lexik_paybox.sample_response_listener.class%
+        arguments: [ %kernel.root_dir%, @filesystem ]
+        tags:
+            - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }

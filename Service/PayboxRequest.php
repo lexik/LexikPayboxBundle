@@ -64,6 +64,9 @@ class PayboxRequest extends Paybox
      *
      * @param  string $env
      * @return string
+     *
+     * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
+     * @throws RuntimeException         If no server is available.
      */
     public function getUrl($env = 'dev')
     {
@@ -82,9 +85,10 @@ class PayboxRequest extends Paybox
         foreach ($servers as $server) {
             $doc = new \DOMDocument();
             $doc->loadHTML($this->getWebPage(sprintf(
-                '%s://%s/load.html',
+                '%s://%s%s',
                 $server['protocol'],
-                $server['host']
+                $server['host'],
+                $server['test_path']
             )));
             $element = $doc->getElementById('server_status');
 
@@ -93,7 +97,7 @@ class PayboxRequest extends Paybox
                     '%s://%s%s',
                     $server['protocol'],
                     $server['host'],
-                    $server['path']
+                    $server['cgi_path']
                 );
             }
         }
