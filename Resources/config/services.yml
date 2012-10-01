@@ -4,11 +4,11 @@ parameters:
     lexik_paybox.sample_response_listener.class: Lexik\Bundle\PayboxBundle\Listener\PayboxResponseListener
 
 services:
-   lexik_paybox.request_handler:
+    lexik_paybox.request_handler:
         class: %lexik_paybox.request_handler.class%
         arguments: [ %lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory ]
 
-   lexik_paybox.response_handler:
+    lexik_paybox.response_handler:
         class: %lexik_paybox.response_handler.class%
         arguments: [ %lexik_paybox.parameters%, @request=, @logger, @event_dispatcher ]
         tags:
