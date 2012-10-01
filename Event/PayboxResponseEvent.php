@@ -12,7 +12,7 @@ class PayboxResponseEvent extends Event
     /**
      * @var array
      */
-    private $data
+    private $data;
 
     /**
      * @var boolean
