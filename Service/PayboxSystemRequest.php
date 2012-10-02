@@ -110,7 +110,7 @@ class PayboxSystemRequest extends Paybox
         }
 
         $resolver = new PayboxSystemParameterResolver();
-        return $resolver->resolveParameters($this->parameters);
+        return $resolver->resolve($this->parameters);
     }
 
     /**
