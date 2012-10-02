@@ -24,11 +24,18 @@ abstract class Paybox
     protected $globals;
 
     /**
+     * Array of servers informations.
+     *
+     * @var array
+     */
+    protected $servers;
+
+    /**
      * Constructor.
      *
      * @param array $parameters
      */
-    public function __construct(array $parameters)
+    public function __construct(array $parameters, array $servers)
     {
         if (!function_exists('hash_hmac')) {
             throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
@@ -36,6 +43,7 @@ abstract class Paybox
 
         $this->parameters = array();
         $this->globals = array();
+        $this->servers = $servers;
 
         $this->initGlobals($parameters);
         $this->initParameters();
@@ -148,5 +156,50 @@ abstract class Paybox
     {
         $binKey = pack('H*', $this->globals['hmac_key']);
         return hash_hmac($this->globals['hmac_algorithm'], $this->stringifyParameters(), $binKey);
+    }
+
+    /**
+     * Returns the url of an available server.
+     *
+     * @param  string $env
+     * @return string
+     *
+     * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
+     * @throws RuntimeException         If no server is available.
+     */
+    public function getUrl($env = 'dev')
+    {
+        if (!in_array($env, array('dev', 'prod'))) {
+            throw new InvalidArgumentException('Invalid $env argument value.');
+        }
+
+        $servers = array();
+        if ('dev' === $env) {
+            $servers[] = $this->servers['preprod'];
+        } else {
+            $servers[] = $this->servers['primary'];
+            $servers[] = $this->servers['secondary'];
+        }
+
+        foreach ($servers as $server) {
+            $doc = new \DOMDocument();
+            $doc->loadHTML($this->getWebPage(sprintf(
+                '%s://%s%s',
+                $server['protocol'],
+                $server['host'],
+                $server['test_path']
+            )));
+            $element = $doc->getElementById('server_status');
+
+            if ($element && 'OK' == $element->textContent) {
+                return sprintf(
+                    '%s://%s',
+                    $server['protocol'],
+                    $server['host']
+                );
+            }
+        }
+
+        throw new RuntimeException('No server available.');
     }
 }

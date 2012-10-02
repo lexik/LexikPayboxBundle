@@ -15,13 +15,6 @@ use Lexik\Bundle\PayboxBundle\Service\PayboxSystemParameterResolver;
 class PayboxSystemRequest extends Paybox
 {
     /**
-     * Array of servers informations.
-     *
-     * @var array
-     */
-    protected $servers;
-
-    /**
      * FormFactory.
      *
      * @var FormFactory
@@ -37,9 +30,8 @@ class PayboxSystemRequest extends Paybox
      */
     public function __construct(array $parameters, array $servers, FormFactoryInterface $factory)
     {
-        parent::__construct($parameters);
+        parent::__construct($parameters, $servers);
 
-        $this->servers = $servers;
         $this->factory = $factory;
     }
 
@@ -144,39 +136,11 @@ class PayboxSystemRequest extends Paybox
      */
     public function getUrl($env = 'dev')
     {
-        if (!in_array($env, array('dev', 'prod'))) {
-            throw new InvalidArgumentException('Invalid $env argument value.');
-        }
-
-        $servers = array();
-        if ('dev' === $env) {
-            $servers[] = $this->servers['preprod'];
-        } else {
-            $servers[] = $this->servers['primary'];
-            $servers[] = $this->servers['secondary'];
-        }
-
-        foreach ($servers as $server) {
-            $doc = new \DOMDocument();
-            $doc->loadHTML($this->getWebPage(sprintf(
-                '%s://%s%s',
-                $server['protocol'],
-                $server['host'],
-                $server['test_path']
-            )));
-            $element = $doc->getElementById('server_status');
-
-            if ($element && 'OK' == $element->textContent) {
-                return sprintf(
-                    '%s://%s%s',
-                    $server['protocol'],
-                    $server['host'],
-                    $server['cgi_path']
-                );
-            }
-        }
-
-        throw new RuntimeException('No server available.');
+        return sprintf(
+            '%s%s',
+            parent::getUrl($env),
+            $server['system_path']
+        );
     }
 
     /**

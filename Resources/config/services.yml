@@ -1,6 +1,7 @@
 parameters:
     lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxSystemRequest
     lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Service\PayboxSystemResponse
+    lexik_paybox.direct_manager.class: Lexik\Bundle\PayboxBundle\Service\PayboxDirectManager
     lexik_paybox.sample_response_listener.class: Lexik\Bundle\PayboxBundle\Listener\PayboxResponseListener
 
 services:
@@ -13,6 +14,10 @@ services:
         arguments: [ @request=, @logger, @event_dispatcher ]
         tags:
             - { name: monolog.logger, channel: payment }
+
+    lexik_paybox.direct_manager:
+        class: %lexik_paybox.direct_manager.class%
+        arguments: [ %lexik_paybox.parameters%, %lexik_paybox.servers% ]
 
     lexik_paybox.sample_response_listener:
         class: %lexik_paybox.sample_response_listener.class%
