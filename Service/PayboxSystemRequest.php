@@ -145,24 +145,4 @@ class PayboxSystemRequest extends Paybox
             $server['system_path']
         );
     }
-
-    /**
-     * Returns the content of a web resource.
-     *
-     * @param  string $url
-     * @return string
-     */
-    protected function getWebPage($url)
-    {
-        $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_URL,            $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER,         false);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        $output = curl_exec($curl);
-        curl_close($curl);
-
-        return (string) $output;
-    }
 }
