@@ -74,7 +74,7 @@ class PayboxDirectManager extends Paybox
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
      * @throws RuntimeException         If no server is available.
      */
-    protected function getUrl($env = 'dev')
+    public function getUrl($env = 'dev')
     {
         return sprintf(
             '%s%s',
