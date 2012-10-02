@@ -34,7 +34,7 @@ class SampleController extends Controller
             'LexikPayboxBundle:Sample:index.html.twig',
             array(
                 'url'  => $paybox->getUrl(),
-                'form' => $paybox->getSimplePaymentForm()->createView(),
+                'form' => $paybox->getForm()->createView(),
             )
         );
     }
@@ -64,14 +64,14 @@ class SampleController extends Controller
             'LexikPayboxBundle:Sample:index.html.twig',
             array(
                 'url'  => $paybox->getUrl(),
-                'form' => $paybox->getSimplePaymentForm()->createView(),
+                'form' => $paybox->getForm()->createView(),
             )
         );
     }
 
     /**
      * Sample action of a confirmation payment page on witch the user is sent
-     * afert he seizes his payment informations on the Paybox's platform.
+     * after he seizes his payment informations on the Paybox's platform.
      * This action must only containts presentation logic.
      */
     public function returnAction($status)

@@ -6,10 +6,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use Lexik\Bundle\PayboxBundle\Service\Paybox;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
-class PayboxResponse extends Paybox
+/**
+ *
+ */
+class PayboxSystemResponse
 {
     /**
      * @var Request
@@ -39,15 +41,12 @@ class PayboxResponse extends Paybox
     /**
      *  Contructor.
      *
-     * @param array           $parameters
      * @param Request         $request
      * @param LoggerInterface $logger
      * @param EventDispatcher $dispatcher
      */
-    public function __construct(array $parameters, Request $request, LoggerInterface $logger, EventDispatcher $dispatcher)
+    public function __construct(Request $request, LoggerInterface $logger, EventDispatcher $dispatcher)
     {
-        parent::__construct($parameters);
-
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
@@ -104,7 +103,7 @@ class PayboxResponse extends Paybox
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
             if ('Sign' !== $key) {
-                $this->data[$key] = $value;
+                $this->data[$key] = urlencode($value);
             }
         }
     }
@@ -133,7 +132,7 @@ class PayboxResponse extends Paybox
             $publicKey
         );
 
-        $this->logger->info(self::stringify($this->data));
+        $this->logger->info(Paybox::stringify($this->data));
         $this->logger->info(base64_encode($this->signature));
 
         if ($result == 1) {

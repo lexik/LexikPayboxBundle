@@ -4,9 +4,10 @@ namespace Lexik\Bundle\PayboxBundle\Service;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Lexik\Bundle\PayboxBundle\Service\PayboxParameterResolver;
-
-class Paybox
+/**
+ *
+ */
+abstract class Paybox
 {
     /**
      * Array of parameters of the transaction.
@@ -16,11 +17,11 @@ class Paybox
     protected $parameters;
 
     /**
-     * Key used to compute the hmac hash.
+     * Array of globals parameters.
      *
-     * @var string
+     * @var array
      */
-    protected $hmacKey;
+    protected $globals;
 
     /**
      * Constructor.
@@ -34,9 +35,32 @@ class Paybox
         }
 
         $this->parameters = array();
+        $this->globals = array();
 
-        $this->initParameters($parameters);
+        $this->initGlobals($parameters);
+        $this->initParameters();
     }
+
+    /**
+     * Initialize the object with the defaults values.
+     *
+     * @param  array  $parameters
+     */
+    protected function initGlobals(array $parameters)
+    {
+        $this->globals = array(
+            'site'           => $parameters['site'],
+            'rank'           => $parameters['rank'],
+            'login'          => $parameters['login'],
+            'hmac_key'       => $parameters['hmac']['key'],
+            'hmac_algorithm' => $parameters['hmac']['algorithm'],
+        );
+    }
+
+    /**
+     * Initialise defaults parameters with globals.
+     */
+    abstract protected function initParameters()
 
     /**
      * Sets a parameter.
@@ -47,14 +71,6 @@ class Paybox
      */
     public function setParameter($name, $value)
     {
-        /**
-         * @todo Hardcoded verification... must find a beter solution,
-         *       but the PBX_RETOUR realy must be ended by ";Sign:K"
-         */
-        if ('PBX_RETOUR' == $name = strtoupper($name)) {
-            $value = $this->verifyReturnParameter($value);
-        }
-
         $this->parameters[$name] = $value;
 
         return $this;
@@ -90,54 +106,7 @@ class Paybox
      *
      * @return array
      */
-    public function getSimplePaymentParameters()
-    {
-        if (!isset($this->parameters['PBX_HMAC'])) {
-            $this->computeHmac();
-        }
-
-        $resolver = new PayboxParameterResolver();
-
-        return $resolver->resolveSimplePaiement($this->parameters);
-    }
-
-    /**
-     * Initialize the object with the defaults values.
-     *
-     * @param  array  $parameters
-     */
-    protected function initParameters(array $parameters)
-    {
-        $this->hmacKey = $parameters['hmac']['key'];
-
-        $this->setParameter('PBX_SITE', $parameters['site']);
-        $this->setParameter('PBX_RANG', $parameters['rank']);
-        $this->setParameter('PBX_IDENTIFIANT', $parameters['login']);
-        $this->setParameter('PBX_HASH', $parameters['hmac']['algorithm']);
-    }
-
-    /**
-     * Parameter PBX_RETOUR must contain the string ";Sign:K" at the end for ipn signature verification.
-     *
-     * @param  string $value
-     * @return string
-     */
-    protected function verifyReturnParameter($value)
-    {
-        if (false !== preg_match('`[^\:]+\:k`i', $value)) {
-            $vars = explode(';', $value);
-
-            array_walk($vars, function ($value, $key) use (&$vars) {
-                if (false !== stripos($value, ':K')) {
-                    unset($vars[$key]);
-                }
-            });
-
-            $value = implode(';', $vars);
-        }
-
-        return $value .= ';Sign:K';
-    }
+    abstract public function getParameters()
 
     /**
      * Returns all parameters as a querystring.
@@ -152,27 +121,7 @@ class Paybox
 
         ksort($this->parameters);
 
-        // $querystring = '';
-        // foreach ($this->parameters as $key => $value) {
-        //     $querystring .= sprintf('%s%s=%s', ($querystring == '') ? '' : '&', $key, $value);
-        // }
-
-        // return $querystring;
-
         return self::stringify($this->parameters);
-    }
-
-    /**
-     * Computes the hmac hash.
-     */
-    protected function computeHmac()
-    {
-        $this->setParameter('PBX_TIME', date('c'));
-
-        $binKey = pack('H*', $this->hmacKey);
-        $hmac = hash_hmac($this->getParameter('PBX_HASH'), $this->stringifyParameters(), $binKey);
-
-        $this->setParameter('PBX_HMAC', strtoupper($hmac));
     }
 
     /**
@@ -190,5 +139,14 @@ class Paybox
         }
 
         return implode('&', $result);
+    }
+
+    /**
+     * Computes the hmac hash.
+     */
+    protected function computeHmac()
+    {
+        $binKey = pack('H*', $this->globals['hmac_key']);
+        return hash_hmac($this->globals['hmac_algorithm'], $this->stringifyParameters(), $binKey);
     }
 }

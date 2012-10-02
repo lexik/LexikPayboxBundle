@@ -7,8 +7,12 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 use Lexik\Bundle\PayboxBundle\Service\Paybox;
+use Lexik\Bundle\PayboxBundle\Service\PayboxSystemParameterResolver;
 
-class PayboxRequest extends Paybox
+/**
+ *
+ */
+class PayboxSystemRequest extends Paybox
 {
     /**
      * Array of servers informations.
@@ -40,16 +44,86 @@ class PayboxRequest extends Paybox
     }
 
     /**
+     * @see Paybox::initParameters()
+     */
+    protected function initParameters()
+    {
+        $this->setParameter('PBX_SITE', $this->globals['site']);
+        $this->setParameter('PBX_RANG', $this->globals['rank']);
+        $this->setParameter('PBX_IDENTIFIANT', $this->globals['login']);
+        $this->setParameter('PBX_HASH', $this->globals['hmac_algorithm']);
+    }
+
+    /**
+     * Sets a parameter.
+     *
+     * @param string $name
+     * @param mixed  $value
+     * @return $this
+     */
+    public function setParameter($name, $value)
+    {
+        /**
+         * @todo Hardcoded verification... must find a beter solution,
+         *       but the PBX_RETOUR realy must be ended by ";Sign:K"
+         */
+        if ('PBX_RETOUR' == $name = strtoupper($name)) {
+            $value = $this->verifyReturnParameter($value);
+        }
+
+        return parent::setParameter($name, $value);
+    }
+
+    /**
+     * Parameter PBX_RETOUR must contain the string ";Sign:K" at the end for ipn signature verification.
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function verifyReturnParameter($value)
+    {
+        if (false !== preg_match('`[^\:]+\:k`i', $value)) {
+            $vars = explode(';', $value);
+
+            array_walk($vars, function ($value, $key) use (&$vars) {
+                if (false !== stripos($value, ':K')) {
+                    unset($vars[$key]);
+                }
+            });
+
+            $value = implode(';', $vars);
+        }
+
+        return $value .= ';Sign:K';
+    }
+
+    /**
+     * Returns all parameters set for a payment.
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        if (null === $this->getParameter('PBX_HMAC')) {
+            $this->setParameter('PBX_TIME', date('c'));
+            $this->setParameter('PBX_HMAC', strtoupper(parent::computeHmac()));
+        }
+
+        $resolver = new PayboxSystemParameterResolver();
+        return $resolver->resolveParameters($this->parameters);
+    }
+
+    /**
      * Returns a form with defined parameters.
      *
      * @param  array $options
      * @return Form
      */
-    public function getSimplePaymentForm($options = array())
+    public function getForm($options = array())
     {
         $options['csrf_protection'] = false;
 
-        $parameters = $this->getSimplePaymentParameters();
+        $parameters = $this->getParameters();
         $builder = $this->factory->createBuilder('form', $parameters, $options);
 
         foreach ($parameters as $key => $value) {
@@ -111,7 +185,7 @@ class PayboxRequest extends Paybox
      * @param  string $url
      * @return string
      */
-    public function getWebPage($url)
+    protected function getWebPage($url)
     {
         $curl = curl_init();
 

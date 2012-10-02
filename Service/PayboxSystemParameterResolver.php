@@ -5,7 +5,7 @@ namespace Lexik\Bundle\PayboxBundle\Service;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
-class PayboxParameterResolver
+class PayboxSystemParameterResolver
 {
     private $knownParameters;
 
@@ -14,7 +14,7 @@ class PayboxParameterResolver
     private $resolver;
 
     /**
-     * Constructor initialise all available parameters.
+     * Constructor initialise all availables parameters.
      */
     public function __construct()
     {
@@ -66,22 +66,22 @@ class PayboxParameterResolver
     }
 
     /**
-     * Resolves parameters for a simple paiement call.
+     * Resolves parameters for a paiement call.
      *
      * @param  array $parameters
      * @return Options
      */
-    public function resolveSimplePaiement(array $parameters)
+    public function resolve(array $parameters)
     {
-        $this->initSimplePaiementParameters();
+        $this->initParameters();
 
         return $this->resolver->resolve($parameters);
     }
 
     /**
-     * Initialise required options for a simple paiement call.
+     * Initialise required options for a paiement call.
      */
-    protected function initSimplePaiementParameters()
+    protected function initParameters()
     {
         $this->requiredParameters = array(
             'PBX_SITE',
@@ -97,13 +97,13 @@ class PayboxParameterResolver
             'PBX_HMAC',
         );
 
-        $this->initParameters();
+        $this->initResolver();
     }
 
     /**
      * Initialise the OptionResolver with required/optionnal options and allowed values.
      */
-    protected function initParameters()
+    protected function initResolver()
     {
         $this->resolver->setRequired($this->requiredParameters);
 
