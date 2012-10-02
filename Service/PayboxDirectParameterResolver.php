@@ -23,15 +23,18 @@ class PayboxDirectParameterResolver
         $this->resolver = new OptionsResolver();
 
         $this->knownParameters = array(
-            'VERSION',
-            'TYPE',
-            'SITE',
-            'MACH',
-            'IDENTIFIANT',
-            'HMAC',
-            'TIME',
             'ABONNEMENT',
+            'DEVISE',
+            'HMAC',
+            'IDENTIFIANT',
+            'MACH',
+            'MONTANT',
+            'NUMQUESTION',
             'REFERENCE',
+            'SITE',
+            'TIME',
+            'TYPE',
+            'VERSION',
         );
     }
 

@@ -52,7 +52,6 @@ class SampleController extends Controller
                 'MONTANT'     => '1000',
                 'DEVISE'      => '978',
                 'REFERENCE'   => 'CMD'.time(),
-                'REFABONNE'   => 'ABO000001',
             ))
             ->doRequest()
         ;
