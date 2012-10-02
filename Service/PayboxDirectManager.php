@@ -76,9 +76,12 @@ class PayboxDirectManager extends Paybox
      */
     public function getUrl($env = 'dev')
     {
+        $server = $this->getServer($env);
+
         return sprintf(
-            '%s%s',
-            parent::getUrl($env),
+            '%s://%s%s',
+            $server['protocol'],
+            $server['host'],
             $server['direct_path']
         );
     }

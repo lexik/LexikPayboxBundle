@@ -162,12 +162,12 @@ abstract class Paybox
      * Returns the url of an available server.
      *
      * @param  string $env
-     * @return string
+     * @return array
      *
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
      * @throws RuntimeException         If no server is available.
      */
-    public function getUrl($env = 'dev')
+    protected function getServer($env = 'dev')
     {
         if (!in_array($env, array('dev', 'prod'))) {
             throw new InvalidArgumentException('Invalid $env argument value.');
@@ -192,11 +192,7 @@ abstract class Paybox
             $element = $doc->getElementById('server_status');
 
             if ($element && 'OK' == $element->textContent) {
-                return sprintf(
-                    '%s://%s',
-                    $server['protocol'],
-                    $server['host']
-                );
+                return $server;
             }
         }
 
