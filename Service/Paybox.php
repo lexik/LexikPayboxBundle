@@ -60,7 +60,7 @@ abstract class Paybox
     /**
      * Initialise defaults parameters with globals.
      */
-    abstract protected function initParameters()
+    abstract protected function initParameters();
 
     /**
      * Sets a parameter.
@@ -106,7 +106,7 @@ abstract class Paybox
      *
      * @return array
      */
-    abstract public function getParameters()
+    abstract public function getParameters();
 
     /**
      * Returns all parameters as a querystring.
