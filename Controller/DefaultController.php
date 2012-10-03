@@ -5,12 +5,15 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
+ * Paybox default controller.
  *
+ * @author Lexik <dev@lexik.fr>
  */
 class DefaultController extends Controller
 {
     /**
-     * IPN action. Here, presentation is anecdotic.
+     * Instant Payment Notification action.
+     * Here, presentation is anecdotic.
      *
      * @return Response
      */

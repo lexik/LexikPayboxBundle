@@ -8,11 +8,19 @@ use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
  * Simple listener that create a file for each ipn call.
+ *
+ * @author Lexik <dev@lexik.fr>
  */
 class PayboxResponseListener
 {
+    /**
+     * @var string
+     */
     private $rootDir;
 
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
     /**

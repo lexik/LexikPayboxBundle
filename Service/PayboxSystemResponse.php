@@ -9,7 +9,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
+ * PayboxSystemResponse class.
  *
+ * @author Lexik <dev@lexik.fr>
  */
 class PayboxSystemResponse
 {

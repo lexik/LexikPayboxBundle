@@ -2,10 +2,6 @@ lexik_paybox_sample_call:
     pattern:  /
     defaults: { _controller: LexikPayboxBundle:Sample:index }
 
-lexik_paybox_sample_call_curl:
-    pattern:  /curl
-    defaults: { _controller: LexikPayboxBundle:Sample:curl }
-
 lexik_paybox_sample_return:
     pattern:  /payment/return/{status}
     defaults: { _controller: LexikPayboxBundle:Sample:return, status: error }

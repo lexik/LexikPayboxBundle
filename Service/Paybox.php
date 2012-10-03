@@ -5,7 +5,9 @@ namespace Lexik\Bundle\PayboxBundle\Service;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
+ * Paybox class.
  *
+ * @author Lexik <dev@lexik.fr>
  */
 abstract class Paybox
 {

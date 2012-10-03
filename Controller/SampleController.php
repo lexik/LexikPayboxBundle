@@ -5,12 +5,14 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
+ * Paybox sample controller.
  *
+ * @author Lexik <dev@lexik.fr>
  */
 class SampleController extends Controller
 {
     /**
-     * Sample action to call a payment.
+     * Index action creates the form for a payment call.
      */
     public function indexAction()
     {
@@ -40,34 +42,7 @@ class SampleController extends Controller
     }
 
     /**
-     * Sample action to call a payment.
-     */
-    public function curlAction()
-    {
-        $paybox = $this->get('lexik_paybox.direct_manager');
-        $parameters = $paybox
-            ->setParameters(array(
-                'TYPE'        => '003',
-                'NUMQUESTION' => time(),
-                'MONTANT'     => '1000',
-                'DEVISE'      => '978',
-                'REFERENCE'   => 'CMD'.time(),
-                'PORTEUR'     => '',
-            ))
-            ->doRequest()
-        ;
-
-        return $this->render(
-            'LexikPayboxBundle:Sample:return.html.twig',
-            array(
-                'status'     => ($parameters['ACQ'] == 'OK') ? 'OK' : 'KO',
-                'parameters' => $parameters,
-            )
-        );
-    }
-
-    /**
-     * Sample action of a confirmation payment page on witch the user is sent
+     * Return action fot a confirmation payment page on witch the user is sent
      * after he seizes his payment informations on the Paybox's platform.
      * This action must only containts presentation logic.
      */

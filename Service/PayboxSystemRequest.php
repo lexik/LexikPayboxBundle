@@ -10,13 +10,13 @@ use Lexik\Bundle\PayboxBundle\Service\Paybox;
 use Lexik\Bundle\PayboxBundle\Service\PayboxSystemParameterResolver;
 
 /**
+ * PayboxSystemRequest class.
  *
+ * @author Lexik <dev@lexik.fr>
  */
 class PayboxSystemRequest extends Paybox
 {
     /**
-     * FormFactory.
-     *
      * @var FormFactory
      */
     protected $factory;

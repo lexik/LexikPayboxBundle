@@ -5,12 +5,26 @@ namespace Lexik\Bundle\PayboxBundle\Service;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
+/**
+ * PayboxSystemParameterResolver class.
+ *
+ * @author Lexik <dev@lexik.fr>
+ */
 class PayboxSystemParameterResolver
 {
+    /**
+     * @var array
+     */
     private $knownParameters;
 
+    /**
+     * @var array
+     */
     private $requiredParameters;
 
+    /**
+     * @var OptionsResolver
+     */
     private $resolver;
 
     /**
@@ -66,7 +80,7 @@ class PayboxSystemParameterResolver
     }
 
     /**
-     * Resolves parameters for a paiement call.
+     * Resolves parameters for a payment call.
      *
      * @param  array $parameters
      * @return Options
@@ -79,7 +93,7 @@ class PayboxSystemParameterResolver
     }
 
     /**
-     * Initialise required options for a paiement call.
+     * Initialise required parameters for a payment call.
      */
     protected function initParameters()
     {
@@ -101,7 +115,7 @@ class PayboxSystemParameterResolver
     }
 
     /**
-     * Initialise the OptionResolver with required/optionnal options and allowed values.
+     * Initialize the OptionResolver with required/optionnal options and allowed values.
      */
     protected function initResolver()
     {
@@ -113,7 +127,7 @@ class PayboxSystemParameterResolver
     }
 
     /**
-     * Initialise allowed values.
+     * Initialize allowed values.
      */
     protected function initAllowed()
     {
@@ -132,13 +146,10 @@ class PayboxSystemParameterResolver
                 '961', // XAG
                 '962', // XPT
             ),
-            /**
-             * @see https://github.com/symfony/OptionsResolver/pull/1
-             */
-            // 'PBX_RUF1' => array(
-            //     'GET',
-            //     'POST',
-            // ),
+            'PBX_RUF1' => array(
+                'GET',
+                'POST',
+            ),
         ));
     }
 }
