@@ -47,11 +47,12 @@ class SampleController extends Controller
         $paybox = $this->get('lexik_paybox.direct_manager');
         $parameters = $paybox
             ->setParameters(array(
-                'TYPE'        => '001',
+                'TYPE'        => '003',
                 'NUMQUESTION' => time(),
                 'MONTANT'     => '1000',
                 'DEVISE'      => '978',
                 'REFERENCE'   => 'CMD'.time(),
+                'PORTEUR'     => '',
             ))
             ->doRequest()
         ;
@@ -59,7 +60,7 @@ class SampleController extends Controller
         return $this->render(
             'LexikPayboxBundle:Sample:return.html.twig',
             array(
-                'status'     => $parameters,
+                'status'     => ($parameters['ACQ'] == 'OK') ? 'OK' : 'KO',
                 'parameters' => $parameters,
             )
         );
