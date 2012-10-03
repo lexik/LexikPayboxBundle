@@ -5,6 +5,9 @@ namespace Lexik\Bundle\PayboxBundle\Service;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
+/**
+ *
+ */
 class PayboxDirectParameterResolver
 {
     const PAYBOX_DIRECT_VERSION = '001';
@@ -30,6 +33,7 @@ class PayboxDirectParameterResolver
             'MACH',
             'MONTANT',
             'NUMQUESTION',
+            'PORTEUR',
             'REFERENCE',
             'SITE',
             'TIME',

@@ -1,19 +1,19 @@
 <?php
 
-namespace  Lexik\Bundle\PayboxBundle\Listener;
+namespace Lexik\Bundle\PayboxBundle\Listener;
 
 use Symfony\Component\Filesystem\Filesystem;
 
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
- * A dummy sample listener that create a file for each ipn call.
+ * Simple listener that create a file for each ipn call.
  */
 class PayboxResponseListener
 {
     private $rootDir;
 
-    private $filsystem;
+    private $filesystem;
 
     /**
      * Constructor.
@@ -23,12 +23,12 @@ class PayboxResponseListener
      */
     public function __construct($rootDir, Filesystem $filesystem)
     {
-        $this->rootDir    = $rootDir;
+        $this->rootDir = $rootDir;
         $this->filesystem = $filesystem;
     }
 
     /**
-     * Dummy sample.
+     * Creates a txt file containing all parameters for each IPN.
      *
      * @param  PayboxResponseEvent $event
      */
