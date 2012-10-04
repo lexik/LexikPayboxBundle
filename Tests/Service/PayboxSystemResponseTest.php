@@ -88,7 +88,7 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
      * @covers PayboxSystemRequest::initSignature
      * @covers PayboxSystemRequest::getRequestParameters
      */
-    public function testVerifySignatureValidParameter()
+    public function testVerifySignatureInvalidParameter()
     {
         $this->initMock(array(
             'Mt'     => '1000',
@@ -117,7 +117,7 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
      * @covers PayboxSystemRequest::initSignature
      * @covers PayboxSystemRequest::getRequestParameters
      */
-    public function testVerifySignatureValidSignature()
+    public function testVerifySignatureInvalidSignature()
     {
         $this->initMock(array(
             'Mt'     => '1000',
