@@ -2,13 +2,13 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Service;
 
-use Lexik\Bundle\PayboxBundle\Service\Paybox;
-use Symfony\Component\Form\FormFactory;
+use Lexik\Bundle\PayboxBundle\Service\PayboxSystemRequest;
+use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * Paybox class tests.
  */
-class PayboxTest extends \PHPUnit_Framework_TestCase
+class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
 {
     private $_paybox;
 
@@ -21,8 +21,8 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Paybox::getParameter
-     * @covers Paybox::setParameter
+     * @covers PayboxSystemRequest::getParameter
+     * @covers PayboxSystemRequest::setParameter
      */
     public function testSetParameter()
     {
@@ -36,8 +36,8 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Paybox::getParameter
-     * @covers Paybox::setParameters
+     * @covers PayboxSystemRequest::getParameter
+     * @covers PayboxSystemRequest::setParameters
      */
     public function testSetParameters()
     {
@@ -51,16 +51,16 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Paybox::getSimplePaymentParameters
-     * @covers Paybox::computeHmac
-     * @covers Paybox::stringifyParameters
+     * @covers PayboxSystemRequest::getParameters
+     * @covers PayboxSystemRequest::computeHmac
+     * @covers PayboxSystemRequest::stringifyParameters
      */
-    public function testGetSimplePaymentParameters()
+    public function testGetParameters()
     {
         $this->assertTrue(null === $this->_paybox->getParameter('PBX_TIME'));
         $this->assertTrue(null === $this->_paybox->getParameter('PBX_HMAC'));
 
-        $parameters = $this->_paybox->getSimplePaymentParameters();
+        $parameters = $this->_paybox->getParameters();
 
         $this->assertTrue(isset($parameters['PBX_TIME']));
         $this->assertTrue(isset($parameters['PBX_HMAC']));
@@ -88,7 +88,9 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_paybox = new Paybox(array(
+        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+
+        $this->_paybox = new PayboxSystemRequest(array(
             'site'  => 1999888,
             'rank'  => 32,
             'login' => 2,
@@ -96,7 +98,7 @@ class PayboxTest extends \PHPUnit_Framework_TestCase
                 'algorithm' => 'sha512',
                 'key'       => '0123456789ABCDEF',
             ),
-        ));
+        ), array(), $formFactory);
 
         $this->_paybox->setParameter('PBX_CMD',     'cmd123');
         $this->_paybox->setParameter('PBX_DEVISE',  '978');
