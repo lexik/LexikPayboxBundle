@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+use Lexik\Bundle\PayboxBundle\Service\Paybox;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
@@ -88,7 +89,7 @@ class PayboxSystemResponse
                     break;
 
                 default :
-                    $this->logger->err(sprintf('Bad signature format.', $signature));
+                    $this->logger->err('Bad signature format.');
                     break;
             }
         } else {
@@ -129,7 +130,7 @@ class PayboxSystemResponse
         $publicKey = openssl_get_publickey($cert);
 
         $result = openssl_verify(
-            self::stringify($this->data),
+            Paybox::stringify($this->data),
             $this->signature,
             $publicKey
         );
