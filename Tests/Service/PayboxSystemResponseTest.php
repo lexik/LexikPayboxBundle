@@ -105,7 +105,7 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
             array('info', 'Sign=QnhlnuOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClpFw0='),
             array('info', 'Mt=1000&Ref=CMD1349338389&Auto=XXXXXX&Erreur=00000'),
             array('info', 'QnhlnuOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClpFw0='),
-            array('info', 'Signature is invalid.'),
+            array('err',  'Signature is invalid.'),
         ));
 
         $this->assertFalse($this->_response->verifySignature());
@@ -121,7 +121,7 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
     {
         $this->initMock(array(
             'Mt'     => '1000',
-            'Ref'    => 'CMD1349338389',
+            'Ref'    => 'CMD1349338388',
             'Auto'   => 'XXXXXX',
             'Erreur' => '00000',
             'Sign'   => 'INVALIDOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClp',
@@ -132,9 +132,10 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
             array('info', 'Auto=XXXXXX'),
             array('info', 'Erreur=00000'),
             array('info', 'Sign=INVALIDOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClp'),
+            array('err',  'Bad signature format.'),
             array('info', 'Mt=1000&Ref=CMD1349338388&Auto=XXXXXX&Erreur=00000'),
-            array('info', 'INVALIDOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClp'),
-            array('info', 'Signature is invalid.'),
+            array('info', ''),
+            array('err',  'Signature is invalid.'),
         ));
 
         $this->assertFalse($this->_response->verifySignature());
