@@ -98,7 +98,9 @@ The bundle includes a sample controller with two actions.
     }
     ...
 
-The payment confirmation is done by an instant payment notification (IPN).
+The getUrl() method silently does a server check
+
+The payment confirmation in your business logic must be done when the instant payment notification (IPN) occurs.
 The plugin contains a controller with an action that manages this IPN and trigger an event.
 The event contains all data transmeted during the request and a boolean that tells if signature verification was successful.
 
@@ -160,6 +162,12 @@ For exemple the exemple listener of the bundle :
             arguments: [ %kernel.root_dir%, @filesystem ]
             tags:
                 - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
+
+Production
+----------
+
+By default, getUrl() returns the preproduction url.
+To toggle in production, you just need to specify 'prod' in parameter of the getUrl('prod') method.
 
 Resources
 ---------
