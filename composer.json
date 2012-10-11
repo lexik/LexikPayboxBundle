@@ -1,8 +1,8 @@
 {
     "name": "lexik/paybox-bundle",
     "type": "symfony-bundle",
-    "keywords": ["Symfony2", "bundle", "Paybox"],
-    "homepage": "http://projets.lexiktrac.com/projects/lexikpayboxbundle",
+    "keywords": ["Symfony2", "bundle", "Paybox", "Payment"],
+    "homepage": "https://github.com/lexik/LexikPayboxBundle",
     "authors": [
         {
             "name": "Olivier Maisonneuve",
@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "2.1.*,<2.2-dev"
+        "symfony/framework-bundle": "2.1.*,<2.2-dev",
+        "symfony/options-resolver": "2.1.*,<2.2-dev"
     },
     "autoload": {
         "psr-0": { "Lexik\\Bundle\\PayboxBundle": "" }
