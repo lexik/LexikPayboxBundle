@@ -134,18 +134,12 @@ class PayboxSystemParameterResolver
     {
         $this->resolver->setAllowedValues(array(
             'PBX_DEVISE' => array(
-                '978', // EUR
-                '950', // XAF
-                '952', // XOF
-                '953', // XPF
+                '036', // AUD
+                '124', // CAD
                 '756', // CHF
                 '826', // GBP
                 '840', // USD
-                '124', // CAD
-                '036', // AUD
-                '959', // XAU
-                '961', // XAG
-                '962', // XPT
+                '978', // EUR
             ),
             'PBX_RUF1' => array(
                 'GET',
