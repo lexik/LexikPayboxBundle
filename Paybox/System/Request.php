@@ -1,20 +1,20 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Service;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
-use Lexik\Bundle\PayboxBundle\Service\Paybox;
-use Lexik\Bundle\PayboxBundle\Service\PayboxSystemParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
+use Lexik\Bundle\PayboxBundle\Paybox\System\ParameterResolver;
 
 /**
- * PayboxSystemRequest class.
+ * Paybox\System\Request class.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxSystemRequest extends Paybox
+class Request extends Paybox
 {
     /**
      * @var FormFactory
@@ -52,7 +52,7 @@ class PayboxSystemRequest extends Paybox
      * @param string $name
      * @param mixed  $value
      *
-     * @return PayboxSystemRequest
+     * @return Request
      */
     public function setParameter($name, $value)
     {
@@ -103,7 +103,7 @@ class PayboxSystemRequest extends Paybox
             $this->setParameter('PBX_HMAC', strtoupper(parent::computeHmac()));
         }
 
-        $resolver = new PayboxSystemParameterResolver();
+        $resolver = new ParameterResolver();
         return $resolver->resolve($this->parameters);
     }
 

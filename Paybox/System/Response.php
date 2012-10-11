@@ -1,20 +1,21 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Service;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use Lexik\Bundle\PayboxBundle\Service\Paybox;
+use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
+use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
- * PayboxSystemResponse class.
+ * Paybox\System\Response class.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxSystemResponse
+class Response
 {
     /**
      * @var Request
@@ -44,11 +45,11 @@ class PayboxSystemResponse
     /**
      * Contructor.
      *
-     * @param Request         $request
+     * @param HttpRequest     $request
      * @param LoggerInterface $logger
      * @param EventDispatcher $dispatcher
      */
-    public function __construct(Request $request, LoggerInterface $logger, EventDispatcher $dispatcher)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcher $dispatcher)
     {
         $this->request    = $request;
         $this->logger     = $logger;
@@ -123,7 +124,7 @@ class PayboxSystemResponse
         $this->initData();
         $this->initSignature();
 
-        $file = fopen(dirname(__FILE__) . '/../Resources/config/paybox_public_key.pem', 'r');
+        $file = fopen(dirname(__FILE__) . '/../../Resources/config/paybox_public_key.pem', 'r');
         $cert = fread($file, 8192);
         fclose($file);
 
@@ -151,7 +152,7 @@ class PayboxSystemResponse
         openssl_free_key($publicKey);
 
         $event = new PayboxResponseEvent($this->data, $result);
-        $this->dispatcher->dispatch('paybox.ipn_response', $event);
+        $this->dispatcher->dispatch(PayboxEvents::PAYBOX_IPN_RESPONSE, $event);
 
         return $result;
     }

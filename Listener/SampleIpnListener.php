@@ -9,9 +9,9 @@ use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 /**
  * Sample listener that create a file for each ipn call.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxResponseListener
+class SampleIpnListener
 {
     /**
      * @var string
@@ -42,14 +42,17 @@ class PayboxResponseListener
      */
     public function onPayboxIpnResponse(PayboxResponseEvent $event)
     {
-        $path = $this->rootDir . '/../data/' . date('Y\/m\/d\/');
+        $path = sprintf('%s/../data/%s', $this->rootDir, date('Y\/m\/d\/'));
         $this->filesystem->mkdir($path);
 
-        $content = sprintf("Signature verification : %s\n", $event->isVerified() ? 'OK' : 'KO');
+        $content = sprintf('Signature verification : %s%s', $event->isVerified() ? 'OK' : 'KO', PHP_EOL);
         foreach ($event->getData() as $key => $value) {
-            $content .= sprintf("%s:%s\n", $key, $value);
+            $content .= sprintf("%s:%s%s", $key, $value, PHP_EOL);
         }
 
-        file_put_contents($path . time() . '.txt', $content);
+        file_put_contents(
+            sprintf('%s%s.txt', $path, time()),
+            $content
+        );
     }
 }

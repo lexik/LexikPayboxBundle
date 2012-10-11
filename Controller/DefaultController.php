@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 /**
  * Paybox default controller.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class DefaultController extends Controller
 {

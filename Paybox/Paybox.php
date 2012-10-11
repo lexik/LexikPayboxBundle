@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Service;
+namespace Lexik\Bundle\PayboxBundle\Paybox;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 

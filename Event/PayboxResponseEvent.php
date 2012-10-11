@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * PayboxResponseEvent class.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class PayboxResponseEvent extends Event
 {

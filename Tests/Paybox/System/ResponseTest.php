@@ -1,19 +1,20 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Service;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Lexik\Bundle\PayboxBundle\Service\Paybox;
-use Lexik\Bundle\PayboxBundle\Service\PayboxSystemResponse;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Response;
 
 /**
- * PayboxSystemResponse's test class.
+ * Paybox\System\Response class tests.
+ *
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     private $_response;
 
@@ -45,7 +46,7 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
         ;
 
-        $this->_response = new PayboxSystemResponse($request, $logger, $dispatcher);
+        $this->_response = new Response($request, $logger, $dispatcher);
     }
 
     protected function tearDown()
@@ -53,12 +54,6 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
         $this->_response = null;
     }
 
-    /**
-     * @covers PayboxSystemRequest::verifySignature
-     * @covers PayboxSystemRequest::initData
-     * @covers PayboxSystemRequest::initSignature
-     * @covers PayboxSystemRequest::getRequestParameters
-     */
     public function testVerifySignatureValid()
     {
         $this->initMock(array(
@@ -82,12 +77,6 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_response->verifySignature());
     }
 
-    /**
-     * @covers PayboxSystemRequest::verifySignature
-     * @covers PayboxSystemRequest::initData
-     * @covers PayboxSystemRequest::initSignature
-     * @covers PayboxSystemRequest::getRequestParameters
-     */
     public function testVerifySignatureInvalidParameter()
     {
         $this->initMock(array(
@@ -111,12 +100,6 @@ class PayboxSystemResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_response->verifySignature());
     }
 
-    /**
-     * @covers PayboxSystemRequest::verifySignature
-     * @covers PayboxSystemRequest::initData
-     * @covers PayboxSystemRequest::initSignature
-     * @covers PayboxSystemRequest::getRequestParameters
-     */
     public function testVerifySignatureInvalidSignature()
     {
         $this->initMock(array(

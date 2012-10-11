@@ -1,16 +1,16 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Service;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * PayboxSystemParameterResolver class.
+ * Paybox\System\ParameterResolver class.
  *
- * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxSystemParameterResolver
+class ParameterResolver
 {
     /**
      * @var array

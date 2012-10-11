@@ -1,14 +1,17 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Service;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
-use Lexik\Bundle\PayboxBundle\Service\PayboxSystemRequest;
 use Symfony\Component\Form\FormFactoryInterface;
 
+use Lexik\Bundle\PayboxBundle\Paybox\System\Request;
+
 /**
- * Paybox class tests.
+ * Paybox\System\Request class tests.
+ *
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
     private $_paybox;
 
@@ -20,10 +23,6 @@ class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sha512', $this->_paybox->getParameter('pbx_hash'));
     }
 
-    /**
-     * @covers PayboxSystemRequest::getParameter
-     * @covers PayboxSystemRequest::setParameter
-     */
     public function testSetParameter()
     {
         $this->_paybox->setParameter('pbx_annule', 'Test');
@@ -35,10 +34,6 @@ class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_paybox->getParameter('PBX_DISPLAY'));
     }
 
-    /**
-     * @covers PayboxSystemRequest::getParameter
-     * @covers PayboxSystemRequest::setParameters
-     */
     public function testSetParameters()
     {
         $this->_paybox->setParameters(array(
@@ -50,11 +45,6 @@ class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_paybox->getParameter('pbx_archivage'), 'Test');
     }
 
-    /**
-     * @covers PayboxSystemRequest::getParameters
-     * @covers PayboxSystemRequest::computeHmac
-     * @covers PayboxSystemRequest::stringifyParameters
-     */
     public function testGetParameters()
     {
         $this->assertTrue(null === $this->_paybox->getParameter('PBX_TIME'));
@@ -90,7 +80,7 @@ class PayboxSystemRequestTest extends \PHPUnit_Framework_TestCase
     {
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 
-        $this->_paybox = new PayboxSystemRequest(array(
+        $this->_paybox = new Request(array(
             'site'  => 1999888,
             'rank'  => 32,
             'login' => 2,
