@@ -77,8 +77,8 @@ class Response
      */
     protected function initSignature()
     {
-        if ($this->getRequestParameters()->has('Sign')) {
-            $signature = $this->getRequestParameters()->get('Sign');
+        if ($this->getRequestParameters()->has(Paybox::SIGNATURE_PARAMETER)) {
+            $signature = $this->getRequestParameters()->get(Paybox::SIGNATURE_PARAMETER);
 
             switch (strlen($signature)) {
                 case 172 :
@@ -106,7 +106,7 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if ('Sign' !== $key) {
+            if (Paybox::SIGNATURE_PARAMETER !== $key) {
                 $this->data[$key] = urlencode($value);
             }
         }

@@ -3,6 +3,7 @@
 namespace Lexik\Bundle\PayboxBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Paybox default controller.
@@ -13,7 +14,7 @@ class DefaultController extends Controller
 {
     /**
      * Instant Payment Notification action.
-     * Here, presentation is anecdotic.
+     * Here, presentation is anecdotic, the server only look at the http status.
      *
      * @return Response
      */
@@ -22,8 +23,6 @@ class DefaultController extends Controller
         $payboxResponse = $this->container->get('lexik_paybox.response_handler');
         $result = $payboxResponse->verifySignature();
 
-        return $this->render('LexikPayboxBundle:Default:ipn.html.twig', array(
-            'status' => $result ? 'OK' : 'KO',
-        ));
+        return new Response($result ? 'OK' : 'KO');;
     }
 }

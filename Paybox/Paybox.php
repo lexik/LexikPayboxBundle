@@ -14,6 +14,13 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 abstract class Paybox
 {
     /**
+     * The name of the parameter containing the signature on IPN.
+     *
+     * @var string
+     */
+    const SIGNATURE_PARAMETER = 'Sign';
+
+    /**
      * Array of parameters of the transaction.
      *
      * @var array
