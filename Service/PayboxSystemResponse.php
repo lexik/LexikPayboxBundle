@@ -42,7 +42,7 @@ class PayboxSystemResponse
     private $signature;
 
     /**
-     *  Contructor.
+     * Contructor.
      *
      * @param Request         $request
      * @param LoggerInterface $logger

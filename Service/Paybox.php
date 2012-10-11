@@ -35,7 +35,10 @@ abstract class Paybox
     /**
      * Constructor.
      *
-     * @param array $parameters
+     * @param  array $parameters
+     * @param  array $servers
+     *
+     * @throws InvalidConfigurationException
      */
     public function __construct(array $parameters, array $servers)
     {
@@ -54,7 +57,7 @@ abstract class Paybox
     /**
      * Initialize the object with the defaults values.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      */
     protected function initGlobals(array $parameters)
     {
@@ -68,16 +71,17 @@ abstract class Paybox
     }
 
     /**
-     * Initialise defaults parameters with globals.
+     * Initialize defaults parameters with globals.
      */
     abstract protected function initParameters();
 
     /**
      * Sets a parameter.
      *
-     * @param string $name
-     * @param mixed  $value
-     * @return $this
+     * @param  string $name
+     * @param  mixed  $value
+     *
+     * @return Paybox
      */
     public function setParameter($name, $value)
     {
@@ -89,7 +93,9 @@ abstract class Paybox
     /**
      * Sets a bunch of parameters.
      *
-     * @param array $parameters
+     * @param  array $parameters
+     *
+     * @return Paybox
      */
     public function setParameters(array $parameters)
     {
@@ -104,6 +110,7 @@ abstract class Paybox
      * Returns a parameter.
      *
      * @param  string $name
+     *
      * @return array
      */
     public function getParameter($name)
@@ -138,6 +145,7 @@ abstract class Paybox
      * Makes an array of parameters become a querystring like string.
      *
      * @param  array $array
+     *
      * @return string
      */
     static public function stringify(array $array)
@@ -164,6 +172,7 @@ abstract class Paybox
      * Returns the url of an available server.
      *
      * @param  string $env
+     *
      * @return array
      *
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
@@ -205,6 +214,7 @@ abstract class Paybox
      * Returns the content of a web resource.
      *
      * @param  string $url
+     *
      * @return string
      */
     protected function getWebPage($url)

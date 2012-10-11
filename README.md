@@ -22,11 +22,11 @@ Requirements
 Installation
 ------------
 
-Installation with composer.
+Installation with composer:
 
         "require": {
             ...
-            "lexik/paybox-bundle": "dev-develop",
+            "lexik/paybox-bundle": "dev-master",
             ...
         },
 
@@ -104,7 +104,7 @@ The payment confirmation in your business logic must be done when the instant pa
 The plugin contains a controller with an action that manages this IPN and trigger an event.
 The event contains all data transmeted during the request and a boolean that tells if signature verification was successful.
 
-The plugin contains a listener exemple that simply create a file on each ipn call.
+The bundle contains a listener example that simply create a file on each ipn call.
 
     namespace Lexik\Bundle\PayboxBundle\Listener;
 
@@ -153,7 +153,7 @@ The plugin contains a listener exemple that simply create a file on each ipn cal
     }
 
 To create your own listener, you just have to make it wait for the "paybox.ipn_response" event.
-For exemple the exemple listener of the bundle :
+For example the listener of the bundle:
 
     services:
         ...

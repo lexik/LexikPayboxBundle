@@ -34,8 +34,8 @@ class PayboxResponseEvent extends Event
     }
 
     /**
-      * Returns all parameters sent on IPN.
-      *
+     * Returns all parameters sent on IPN.
+     *
      * @return array
      */
     public function getData()

@@ -7,7 +7,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 
 /**
- * Simple listener that create a file for each ipn call.
+ * Sample listener that create a file for each ipn call.
  *
  * @author Lexik <dev@lexik.fr>
  */
@@ -38,7 +38,7 @@ class PayboxResponseListener
     /**
      * Creates a txt file containing all parameters for each IPN.
      *
-     * @param  PayboxResponseEvent $event
+     * @param PayboxResponseEvent $event
      */
     public function onPayboxIpnResponse(PayboxResponseEvent $event)
     {

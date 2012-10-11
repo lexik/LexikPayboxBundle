@@ -28,7 +28,7 @@ class PayboxSystemParameterResolver
     private $resolver;
 
     /**
-     * Constructor initialise all availables parameters.
+     * Constructor initialize all available parameters.
      */
     public function __construct()
     {
@@ -83,6 +83,7 @@ class PayboxSystemParameterResolver
      * Resolves parameters for a payment call.
      *
      * @param  array $parameters
+     *
      * @return Options
      */
     public function resolve(array $parameters)

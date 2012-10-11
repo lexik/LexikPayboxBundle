@@ -51,13 +51,14 @@ class PayboxSystemRequest extends Paybox
      *
      * @param string $name
      * @param mixed  $value
-     * @return $this
+     *
+     * @return PayboxSystemRequest
      */
     public function setParameter($name, $value)
     {
         /**
          * @todo Hardcoded verification... must find a beter solution,
-         *       but the PBX_RETOUR realy must be ended by ";Sign:K"
+         *       but the PBX_RETOUR really must be ended by ";Sign:K"
          */
         if ('PBX_RETOUR' == $name = strtoupper($name)) {
             $value = $this->verifyReturnParameter($value);
@@ -70,6 +71,7 @@ class PayboxSystemRequest extends Paybox
      * Parameter PBX_RETOUR must contain the string ";Sign:K" at the end for ipn signature verification.
      *
      * @param  string $value
+     *
      * @return string
      */
     protected function verifyReturnParameter($value)
@@ -109,6 +111,7 @@ class PayboxSystemRequest extends Paybox
      * Returns a form with defined parameters.
      *
      * @param  array $options
+     *
      * @return Form
      */
     public function getForm($options = array())
@@ -129,6 +132,7 @@ class PayboxSystemRequest extends Paybox
      * Returns the url of an available server.
      *
      * @param  string $env
+     *
      * @return string
      *
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).

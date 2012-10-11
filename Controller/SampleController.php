@@ -42,7 +42,7 @@ class SampleController extends Controller
     }
 
     /**
-     * Return action fot a confirmation payment page on witch the user is sent
+     * Return action for a confirmation payment page on which the user is sent
      * after he seizes his payment informations on the Paybox's platform.
      * This action must only containts presentation logic.
      */
