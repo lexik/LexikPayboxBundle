@@ -3,8 +3,6 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\System;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Lexik\Bundle\PayboxBundle\Paybox\System\ParameterResolver;
@@ -104,6 +102,7 @@ class Request extends Paybox
         }
 
         $resolver = new ParameterResolver();
+
         return $resolver->resolve($this->parameters);
     }
 
@@ -134,9 +133,6 @@ class Request extends Paybox
      * @param  string $env
      *
      * @return string
-     *
-     * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
-     * @throws RuntimeException         If no server is available.
      */
     public function getUrl($env = 'dev')
     {

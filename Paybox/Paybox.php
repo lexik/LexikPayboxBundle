@@ -3,6 +3,8 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
  * Paybox class.
@@ -38,7 +40,7 @@ abstract class Paybox
      * @param  array $parameters
      * @param  array $servers
      *
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException If the hash_hmac() function of PECL hash is not available.
      */
     public function __construct(array $parameters, array $servers)
     {
@@ -161,10 +163,13 @@ abstract class Paybox
 
     /**
      * Computes the hmac hash.
+     *
+     * @return string
      */
     protected function computeHmac()
     {
         $binKey = pack('H*', $this->globals['hmac_key']);
+
         return hash_hmac($this->globals['hmac_algorithm'], $this->stringifyParameters(), $binKey);
     }
 

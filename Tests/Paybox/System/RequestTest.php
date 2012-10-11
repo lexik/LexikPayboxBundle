@@ -76,6 +76,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetUrl()
+    {
+        $server = $this->_paybox->getUrl();
+
+        $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
+
+        $server = $this->_paybox->getUrl('prod');
+
+        $this->assertEquals('https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
+
+        $this->setExpectedException('InvalidArgumentException', 'Invalid $env argument value.');
+        $server = $this->_paybox->getUrl('bad');
+    }
+
     protected function setUp()
     {
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
@@ -88,12 +102,31 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                 'algorithm' => 'sha512',
                 'key'       => '0123456789ABCDEF',
             ),
-        ), array(), $formFactory);
+        ), array(
+            'primary' => array(
+                'protocol'    => 'https',
+                'host'        => 'tpeweb.paybox.com',
+                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                'test_path'   => '/load.html',
+            ),
+            'secondary' => array(
+                'protocol'    => 'https',
+                'host'        => 'tpeweb1.paybox.com',
+                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                'test_path'   => '/load.html',
+            ),
+            'preprod' => array(
+                'protocol'    => 'https',
+                'host'        => 'preprod-tpeweb.paybox.com',
+                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                'test_path'   => '/load.html',
+            ),
+        ), $formFactory);
 
         $this->_paybox->setParameter('PBX_CMD',     'cmd123');
         $this->_paybox->setParameter('PBX_DEVISE',  '978');
         $this->_paybox->setParameter('PBX_PORTEUR', 'test@test.net');
-        $this->_paybox->setParameter('PBX_RETOUR',  'Mt:M;Ref:R;Auto:A;Erreur:E');
+        $this->_paybox->setParameter('PBX_RETOUR',  'Mt:M;Ref:R;Auto:A;Sign:K;Erreur:E');
         $this->_paybox->setParameter('PBX_TOTAL',   '100');
     }
 
