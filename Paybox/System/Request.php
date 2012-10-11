@@ -86,7 +86,7 @@ class Request extends Paybox
             $value = implode(';', $vars);
         }
 
-        return = sprintf(
+        return sprintf(
             '%s;%s:K',
             $value,
             Paybox::SIGNATURE_PARAMETER
