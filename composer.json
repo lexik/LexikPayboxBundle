@@ -1,8 +1,10 @@
 {
     "name": "lexik/paybox-bundle",
     "type": "symfony-bundle",
+    "description": "LexikPayboxBundle eases the implementation of the Paybox payment system.",
     "keywords": ["Symfony2", "bundle", "Paybox", "Payment"],
     "homepage": "https://github.com/lexik/LexikPayboxBundle",
+    "license": "MIT",
     "authors": [
         {
             "name": "Olivier Maisonneuve",
