@@ -76,6 +76,8 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->scalarNode('transport')->defaultValue('curl')->end()
+
             ->end()
         ;
 

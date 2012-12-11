@@ -1,0 +1,6 @@
+parameters:
+    lexik_paybox.transport.class: Lexik\Bundle\PayboxBundle\Transport\CurlTransport
+
+services:
+    lexik_paybox.transport:
+        class:     %lexik_paybox.transport.class%
