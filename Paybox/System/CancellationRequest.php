@@ -9,9 +9,9 @@ use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationParameterResolver;
 use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
 
 /**
- * Paybox\System\Request class.
+ * Paybox\System\CancellationRequest class.
  *
- * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
+ * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
 class CancellationRequest extends Paybox
 {

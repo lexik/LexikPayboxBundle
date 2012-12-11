@@ -5,7 +5,7 @@ namespace Lexik\Bundle\PayboxBundle\Transport;
 use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
 
 /**
- * Perform a call with cURL
+ * Transport\CurlTransport class.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */

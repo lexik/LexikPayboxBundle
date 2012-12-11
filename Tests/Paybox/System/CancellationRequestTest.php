@@ -8,9 +8,9 @@ use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 
 /**
- * Paybox\System\Request class tests.
+ * Paybox\System\CancellationRequest class tests.
  *
- * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
+ * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
 class CancellationRequestTest extends \PHPUnit_Framework_TestCase
 {

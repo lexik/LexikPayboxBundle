@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\Options;
 /**
  * Paybox\System\CancellationParameterResolver class.
  *
- * @author Olivier Maisonneuve <fabien.pomerol@gmail.com>
+ * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
 class CancellationParameterResolver
 {

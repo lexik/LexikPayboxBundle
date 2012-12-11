@@ -3,7 +3,7 @@
 namespace Lexik\Bundle\PayboxBundle\Transport;
 
 /**
- * Transport base which contains the main methods for transports.
+ * Transport\AbstractTransport class.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */

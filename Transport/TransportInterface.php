@@ -7,7 +7,7 @@ use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
 /**
  * Transport\TransportInterface class.
  *
- * @author Fabien POMEROL <fabien.pomerol@gmail.com>
+ * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
 interface TransportInterface
 {
