@@ -76,7 +76,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
-                ->scalarNode('transport')->defaultValue('curl')->end()
+                ->scalarNode('transport')
+                    ->defaultValue('Lexik\Bundle\PayboxBundle\Transport\CurlTransport')
+                    ->validate()
+                    ->ifTrue(function($v) { return !class_exists($v); })
+                        ->thenInvalid('Invalid "transport" parameter.')
+                    ->end()
+                ->end()
 
             ->end()
         ;

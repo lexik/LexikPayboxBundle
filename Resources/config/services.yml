@@ -24,3 +24,6 @@ services:
         arguments: [ %kernel.root_dir%, @filesystem ]
         tags:
             - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
+
+    lexik_paybox.transport:
+        class:     %lexik_paybox.transport.class%

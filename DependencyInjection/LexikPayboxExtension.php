@@ -23,10 +23,10 @@ class LexikPayboxExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('transport/'.$config['transport'].'.yml');
         $loader->load('services.yml');
 
         $container->setParameter('lexik_paybox.servers', $config['servers']);
         $container->setParameter('lexik_paybox.parameters', $config['parameters']);
+        $container->setParameter('lexik_paybox.transport.class', $config['transport']);
     }
 }
