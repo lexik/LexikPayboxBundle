@@ -27,5 +27,6 @@ class LexikPayboxExtension extends Extension
 
         $container->setParameter('lexik_paybox.servers', $config['servers']);
         $container->setParameter('lexik_paybox.parameters', $config['parameters']);
+        $container->setParameter('lexik_paybox.transport.class', $config['transport']);
     }
 }
