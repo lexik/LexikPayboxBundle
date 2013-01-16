@@ -2,7 +2,6 @@ parameters:
     lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\Request
     lexik_paybox.request_cancellation_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest
     lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\Response
-    lexik_paybox.sample_response_listener.class: Lexik\Bundle\PayboxBundle\Listener\SampleIpnListener
 
 services:
     lexik_paybox.request_handler:
@@ -18,12 +17,6 @@ services:
         arguments: [ @request=, @logger, @event_dispatcher ]
         tags:
             - { name: monolog.logger, channel: payment }
-
-    lexik_paybox.sample_response_listener:
-        class:     %lexik_paybox.sample_response_listener.class%
-        arguments: [ %kernel.root_dir%, @filesystem ]
-        tags:
-            - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
 
     lexik_paybox.transport:
         class:     %lexik_paybox.transport.class%
