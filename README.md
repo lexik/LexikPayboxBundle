@@ -36,6 +36,20 @@ Installation with composer :
     ...
 ```
 
+Add this bundle to your app/AppKernel.php:
+
+``` php
+// application/ApplicationKernel.php
+public function registerBundles()
+{
+    return array(
+        // ...
+        new Lexik\Bundle\PayboxBundle\LexikPayboxBundle(),
+        // ...
+    );
+}
+```
+
 Configuration
 -------------
 
