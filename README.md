@@ -36,7 +36,7 @@ Installation with composer :
     ...
 ```
 
-Add this bundle to your app/AppKernel.php:
+Add this bundle to your app/AppKernel.php :
 
 ``` php
 public function registerBundles()
