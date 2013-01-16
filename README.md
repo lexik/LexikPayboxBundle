@@ -36,6 +36,19 @@ Installation with composer :
     ...
 ```
 
+Add this bundle to your app/AppKernel.php :
+
+``` php
+public function registerBundles()
+{
+    return array(
+        // ...
+        new Lexik\Bundle\PayboxBundle\LexikPayboxBundle(),
+        // ...
+    );
+}
+```
+
 Configuration
 -------------
 
@@ -50,6 +63,14 @@ lexik_paybox:
         login: '999999999' # Customer's login provided by Paybox
         hmac:
             key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
+```
+
+The routing collection must be set in your routing.yml
+
+```yml
+# Lexik Paybox Bundle
+lexik_paybox:
+    resource: '@LexikPayboxBundle/Resources/config/routing.yml'
 ```
 
 Usage
