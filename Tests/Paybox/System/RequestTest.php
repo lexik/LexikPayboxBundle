@@ -95,10 +95,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 
         $this->_paybox = new Request(array(
-            'site'  => 1999888,
-            'rank'  => 32,
-            'login' => 2,
-            'hmac'  => array(
+            'currencies' => array(
+                '036', // AUD
+                '124', // CAD
+                '756', // CHF
+                '826', // GBP
+                '840', // USD
+                '978', // EUR
+            ),
+            'site'       => 1999888,
+            'rank'       => 32,
+            'login'      => 2,
+            'hmac'       => array(
                 'algorithm' => 'sha512',
                 'key'       => '0123456789ABCDEF',
             ),

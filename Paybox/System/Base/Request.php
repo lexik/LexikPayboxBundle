@@ -105,7 +105,7 @@ class Request extends Paybox
             $this->setParameter('PBX_HMAC', strtoupper(parent::computeHmac()));
         }
 
-        $resolver = new ParameterResolver();
+        $resolver = new ParameterResolver($this->globals['currencies']);
 
         return $resolver->resolve($this->parameters);
     }

@@ -25,7 +25,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
         $this->object = new CurlTransport();
 
         $this->server = array('protocol' => 'http', 'host' => 'test.com', 'cancellation_path' => 'test.cgi');
-        $this->globals = array('site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512'));
+        $this->globals = array('currencies' => array(), 'site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512'));
     }
 
     /**

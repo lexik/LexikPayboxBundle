@@ -73,10 +73,11 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_paybox = new Request(array(
-            'site'  => 1999888,
-            'rank'  => 32,
-            'login' => 2,
-            'hmac'  => array(
+            'currencies' => array(),
+            'site'       => 1999888,
+            'rank'       => 32,
+            'login'      => 2,
+            'hmac'       => array(
                 'algorithm' => 'sha512',
                 'key'       => '0123456789ABCDEF',
             ),
