@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\Response;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Response;
 
 /**
  * Paybox\System\Response class tests.

@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\ParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
 
 /**
  * Paybox\System\ParameterResolver class tests.

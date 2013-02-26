@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\Options;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationParameterResolver
+class ParameterResolver
 {
     /**
      * @var array

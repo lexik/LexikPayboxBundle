@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
@@ -129,6 +129,7 @@ class ParameterResolver
 
     /**
      * Initialize allowed values.
+     * @see http://www.fastwrite.com/resources/core/iso-currency-codes/index.php
      */
     protected function initAllowed()
     {

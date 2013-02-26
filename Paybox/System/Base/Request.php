@@ -1,11 +1,11 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\ParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
 
 /**
  * Paybox\System\Request class.

@@ -4,7 +4,7 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\Request;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request;
 
 /**
  * Paybox\System\Request class tests.

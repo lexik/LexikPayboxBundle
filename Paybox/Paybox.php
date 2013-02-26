@@ -56,8 +56,8 @@ abstract class Paybox
         }
 
         $this->parameters = array();
-        $this->globals = array();
-        $this->servers = $servers;
+        $this->globals    = array();
+        $this->servers    = $servers;
 
         $this->initGlobals($parameters);
         $this->initParameters();

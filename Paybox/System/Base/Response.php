@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
@@ -124,7 +124,7 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $file = fopen(dirname(__FILE__) . '/../../Resources/config/paybox_public_key.pem', 'r');
+        $file = fopen(dirname(__FILE__) . '/../../../Resources/config/paybox_public_key.pem', 'r');
         $cert = fread($file, 8192);
         fclose($file);
 
