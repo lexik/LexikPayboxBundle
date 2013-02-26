@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
@@ -28,12 +28,20 @@ class ParameterResolver
     private $resolver;
 
     /**
-     * Constructor initialize all available parameters.
+     * @var array
      */
-    public function __construct()
+    private $currencies;
+
+    /**
+     * Constructor initialize all available parameters.
+     *
+     * @param array $currencies
+     */
+    public function __construct(array $currencies)
     {
         $this->resolver = new OptionsResolver();
 
+        $this->currencies = $currencies;
         $this->knownParameters = array(
             'PBX_1EURO_CODEEXTER',
             'PBX_1EURO_DATA',
@@ -129,19 +137,13 @@ class ParameterResolver
 
     /**
      * Initialize allowed values.
+     * @see http://www.fastwrite.com/resources/core/iso-currency-codes/index.php
      */
     protected function initAllowed()
     {
         $this->resolver->setAllowedValues(array(
-            'PBX_DEVISE' => array(
-                '036', // AUD
-                '124', // CAD
-                '756', // CHF
-                '826', // GBP
-                '840', // USD
-                '978', // EUR
-            ),
-            'PBX_RUF1' => array(
+            'PBX_DEVISE' => $this->currencies,
+            'PBX_RUF1'   => array(
                 'GET',
                 'POST',
             ),

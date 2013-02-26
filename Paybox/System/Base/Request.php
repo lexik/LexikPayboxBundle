@@ -1,11 +1,11 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\ParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
 
 /**
  * Paybox\System\Request class.
@@ -105,7 +105,7 @@ class Request extends Paybox
             $this->setParameter('PBX_HMAC', strtoupper(parent::computeHmac()));
         }
 
-        $resolver = new ParameterResolver();
+        $resolver = new ParameterResolver($this->globals['currencies']);
 
         return $resolver->resolve($this->parameters);
     }

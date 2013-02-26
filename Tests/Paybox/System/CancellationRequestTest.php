@@ -4,11 +4,11 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 
 /**
- * Paybox\System\CancellationRequest class tests.
+ * Paybox\System\Cancellation\Request class tests.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
@@ -72,12 +72,12 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-        $this->_paybox = new CancellationRequest(array(
-            'site'  => 1999888,
-            'rank'  => 32,
-            'login' => 2,
-            'hmac'  => array(
+        $this->_paybox = new Request(array(
+            'currencies' => array(),
+            'site'       => 1999888,
+            'rank'       => 32,
+            'login'      => 2,
+            'hmac'       => array(
                 'algorithm' => 'sha512',
                 'key'       => '0123456789ABCDEF',
             ),
@@ -104,8 +104,6 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
                 'test_path'   => '/load.html',
             ),
         ), new CurlTransport());
-
-    //    $this->_paybox->setParameter('PBX_CMD',     'cmd123');
     }
 
     protected function tearDown()

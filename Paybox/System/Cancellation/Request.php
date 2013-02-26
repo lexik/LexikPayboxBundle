@@ -1,19 +1,19 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
 use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
 
 /**
- * Paybox\System\CancellationRequest class.
+ * Paybox\System\Cancellation\Request class.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationRequest extends Paybox
+class Request extends Paybox
 {
     /**
      * @var TransportInterface This is how
@@ -39,10 +39,10 @@ class CancellationRequest extends Paybox
      */
     protected function initParameters()
     {
-        $this->setParameter('VERSION', '001');
-        $this->setParameter('TYPE', '001');
-        $this->setParameter('SITE', $this->globals['site']);
-        $this->setParameter('MACH', $this->formatRankParameter($this->globals['rank']));
+        $this->setParameter('VERSION',     '001');
+        $this->setParameter('TYPE',        '001');
+        $this->setParameter('SITE',        $this->globals['site']);
+        $this->setParameter('MACH',        sprintf('%03d', $this->globals['rank']));
         $this->setParameter('IDENTIFIANT', $this->globals['login']);
     }
 
@@ -58,7 +58,7 @@ class CancellationRequest extends Paybox
             $this->setParameter('HMAC', strtoupper(parent::computeHmac()));
         }
 
-        $resolver = new CancellationParameterResolver();
+        $resolver = new ParameterResolver();
 
         return $resolver->resolve($this->parameters);
     }
@@ -103,23 +103,5 @@ class CancellationRequest extends Paybox
         $this->transport->setEndpoint($this->getUrl());
 
         return $this->transport->call($this);
-    }
-
-    /**
-     * Return a well formed rank paramaters on 3 chars
-     * For a cancellation request the rank parameter is required on 3 chars
-     * instead of 2 for a payment request.
-     *
-     * @param the rank param
-     *
-     * @return the rank param
-     */
-    public function formatRankParameter($rank)
-    {
-        if (strlen($rank) < 3) {
-            return '0'.$rank;
-        }
-
-        return $rank;
     }
 }

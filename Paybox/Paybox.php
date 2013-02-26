@@ -56,8 +56,8 @@ abstract class Paybox
         }
 
         $this->parameters = array();
-        $this->globals = array();
-        $this->servers = $servers;
+        $this->globals    = array();
+        $this->servers    = $servers;
 
         $this->initGlobals($parameters);
         $this->initParameters();
@@ -71,6 +71,7 @@ abstract class Paybox
     protected function initGlobals(array $parameters)
     {
         $this->globals = array(
+            'currencies'     => $parameters['currencies'],
             'site'           => $parameters['site'],
             'rank'           => $parameters['rank'],
             'login'          => $parameters['login'],

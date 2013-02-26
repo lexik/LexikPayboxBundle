@@ -63,6 +63,16 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('parameters')
                     ->isRequired()
                     ->children()
+                        ->scalarNode('currencies')
+                            ->defaultValue(array(
+                                '036', // AUD
+                                '124', // CAD
+                                '756', // CHF
+                                '826', // GBP
+                                '840', // USD
+                                '978', // EUR
+                            ))
+                        ->end()
                         ->scalarNode('site')->isRequired()->end()
                         ->scalarNode('rank')->isRequired()->end()
                         ->scalarNode('login')->isRequired()->end()

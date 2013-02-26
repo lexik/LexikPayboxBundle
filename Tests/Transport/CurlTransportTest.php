@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Transport;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 
 /**
@@ -25,7 +25,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
         $this->object = new CurlTransport();
 
         $this->server = array('protocol' => 'http', 'host' => 'test.com', 'cancellation_path' => 'test.cgi');
-        $this->globals = array('site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512'));
+        $this->globals = array('currencies' => array(), 'site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512'));
     }
 
     /**
@@ -35,10 +35,12 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->setEndpoint('http://test.fr/hey.cgi');
         $method = new \ReflectionMethod('\Lexik\Bundle\PayboxBundle\Transport\CurlTransport', 'call');
-        $method->setAccessible(TRUE);
-        $cancellationRequest = new CancellationRequest($this->globals, $this->server, $this->object);
+        $method->setAccessible(true);
+
+        $cancellationRequest = new Request($this->globals, $this->server, $this->object);
         $cancellationRequest->setParameter('HMAC', 'test');
         $cancellationRequest->setParameter('TIME', 'test');
+
         $response = $method->invoke($this->object, $cancellationRequest);
         $this->assertTrue(is_string($response));
     }
@@ -46,16 +48,15 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
     public function testCallEmpty()
     {
         $curl = new mockCurlTransport();
-        $this->assertEquals($curl->call(new CancellationRequest($this->globals, $this->server, $this->object)), '');
+        $this->assertEquals($curl->call(new Request($this->globals, $this->server, $this->object)), '');
     }
 
 }
 
 class mockCurlTransport extends CurlTransport
 {
-    public function call(CancellationRequest $request)
+    public function call(Request $request)
     {
         return '';
     }
-
 }
