@@ -1,22 +1,22 @@
 parameters:
-    lexik_paybox.request_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request
-    lexik_paybox.request_cancellation_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request
-    lexik_paybox.response_handler.class: Lexik\Bundle\PayboxBundle\Paybox\System\Base\Response
+    lexik_paybox.request_handler.class:              'Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request'
+    lexik_paybox.request_cancellation_handler.class: 'Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request'
+    lexik_paybox.response_handler.class:             'Lexik\Bundle\PayboxBundle\Paybox\System\Base\Response'
 
 services:
     lexik_paybox.request_handler:
-        class:     %lexik_paybox.request_handler.class%
-        arguments: [ %lexik_paybox.parameters%, %lexik_paybox.servers%, @form.factory ]
+        class:     '%lexik_paybox.request_handler.class%'
+        arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@form.factory']
 
     lexik_paybox.request_cancellation_handler:
-        class:     %lexik_paybox.request_cancellation_handler.class%
-        arguments: [ %lexik_paybox.parameters%, %lexik_paybox.servers%, @lexik_paybox.transport ]
+        class:     '%lexik_paybox.request_cancellation_handler.class%'
+        arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@lexik_paybox.transport']
 
     lexik_paybox.response_handler:
-        class:     %lexik_paybox.response_handler.class%
-        arguments: [ @request=, @logger, @event_dispatcher ]
+        class:     '%lexik_paybox.response_handler.class%'
+        arguments: ['@request=', '@logger', '@event_dispatcher']
         tags:
             - { name: monolog.logger, channel: payment }
 
     lexik_paybox.transport:
-        class:     %lexik_paybox.transport.class%
+        class:     '%lexik_paybox.transport.class%'
