@@ -3,7 +3,7 @@ LexikPayboxBundle
 
 [![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
 
-LexikPayboxBundle eases the implementation of [Paybox](http://www.paybox.com) payment system 
+LexikPayboxBundle eases the implementation of [Paybox](http://www.paybox.com) payment system
 and does all the boring thing for you.
 
 LexikPayboxBundle silently does :
@@ -63,6 +63,15 @@ lexik_paybox:
         login: '999999999' # Customer's login provided by Paybox
         hmac:
             key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
+
+        # Optionnal parameters, this is the default value
+        currencies:
+            - '036' # AUD
+            - '124' # CAD
+            - '756' # CHF
+            - '826' # GBP
+            - '840' # USD
+            - '978' # EUR
 ```
 
 The routing collection must be set in your routing.yml

@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Transport;
 
-use Lexik\Bundle\PayboxBundle\Paybox\System\CancellationRequest;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 
 /**
  * Transport\CurlTransport class.
@@ -35,7 +35,7 @@ class CurlTransport extends AbstractTransport implements TransportInterface
      *
      * @return string $response The html of the temporary form
      */
-    public function call(CancellationRequest $request)
+    public function call(Request $request)
     {
         $this->checkEndpoint();
 
