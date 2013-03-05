@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit backupGlobals="false"
   backupStaticAttributes="false"
   colors="true"
@@ -11,11 +10,10 @@
   syntaxCheck="false"
   bootstrap="./Tests/bootstrap.php">
     <testsuites>
-        <testsuite name="FreeAgentWorkflowBundle test suite">
+        <testsuite name="LexikPayboxBundle's test suite.">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
-
     <filter>
         <whitelist>
             <directory>./</directory>
