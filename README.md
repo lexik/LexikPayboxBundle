@@ -3,14 +3,13 @@ LexikPayboxBundle
 
 [![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
 
-LexikPayboxBundle eases the implementation of [Paybox](http://www.paybox.com) payment system
-and does all the boring thing for you.
+LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
 LexikPayboxBundle silently does :
  * hmac hash calculation of parameters during request.
  * server testing before request to be sure it is up.
  * signature verification with openssl on ipn response.
- * trigger an event on response.
+ * triggers an event on response.
 
 You only need to provide parameters of your transaction, customize the response page
 and wait for the event triggered on ipn response.
@@ -141,8 +140,8 @@ public function responseAction($status)
 The getUrl() method silently does a server check and throws an exception if the destination server does not respond.
 
 The payment confirmation in your business logic must be done when the instant payment notification (IPN) occurs.
-The plugin contains a controller with an action that manages this IPN and trigger an event.
-The event contains all data transmeted during the request and a boolean that tells if signature verification was successful.
+The plugin contains a controller with an action that manages this IPN and triggers an event.
+The event contains all data transmetted during the request and a boolean that tells if signature verification was successful.
 
 The bundle contains a listener example that simply create a file on each ipn call.
 
