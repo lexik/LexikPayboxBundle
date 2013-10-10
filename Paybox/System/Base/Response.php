@@ -128,13 +128,17 @@ class Response
         $cert = fread($file, 8192);
         fclose($file);
 
-        $publicKey = openssl_get_publickey($cert);
-
-        $result = openssl_verify(
-            Paybox::stringify($this->data),
-            $this->signature,
-            $publicKey
-        );
+        $publicKey = openssl_pkey_get_public($cert);
+        
+	$first = strpos ( $_SERVER ['REQUEST_URI'], '?' );
+	$qrystr = substr ( $_SERVER ['REQUEST_URI'], $first + 1 );
+	$pos = strrpos ( $qrystr, '&' );
+	$data = substr ( $qrystr, 0, $pos );
+	$pos = strpos ( $qrystr, '=', $pos ) + 1;
+	$this->signature = substr ( $qrystr, $pos );
+	$this->signature = base64_decode ( urldecode ( $this->signature ) );
+                
+        $result = openssl_verify ( $data, $this->signature, $publicKey );
 
         $this->logger->info(Paybox::stringify($this->data));
         $this->logger->info(base64_encode($this->signature));
