@@ -130,8 +130,8 @@ class Response
 
         $publicKey = openssl_pkey_get_public($cert);
         
-	$first = strpos ( $_SERVER ['REQUEST_URI'], '?' );
-	$qrystr = substr ( $_SERVER ['REQUEST_URI'], $first + 1 );
+	$first = strpos ( $this->request->server->get('REQUEST_URI'), '?' );
+	$qrystr = substr ( $this->request->server->get('REQUEST_URI'), $first + 1 );
 	$pos = strrpos ( $qrystr, '&' );
 	$data = substr ( $qrystr, 0, $pos );
 	$pos = strpos ( $qrystr, '=', $pos ) + 1;
