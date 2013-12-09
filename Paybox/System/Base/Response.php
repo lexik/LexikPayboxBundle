@@ -4,7 +4,7 @@ namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
@@ -49,7 +49,7 @@ class Response
      * @param LoggerInterface $logger
      * @param EventDispatcher $dispatcher
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcher $dispatcher)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher)
     {
         $this->request    = $request;
         $this->logger     = $logger;
@@ -79,10 +79,10 @@ class Response
     {
         if ($this->getRequestParameters()->has(Paybox::SIGNATURE_PARAMETER)) {
             $signature = $this->getRequestParameters()->get(Paybox::SIGNATURE_PARAMETER);
-
+            
             switch (strlen($signature)) {
                 case 172 :
-                    $this->signature = base64_decode($signature);
+                    $this->signature = base64_decode(urldecode($signature));
                     break;
 
                 case 128 :
@@ -130,14 +130,15 @@ class Response
 
         $publicKey = openssl_pkey_get_public($cert);
         
-	$first = strpos ( $this->request->server->get('REQUEST_URI'), '?' );
-	$qrystr = substr ( $this->request->server->get('REQUEST_URI'), $first + 1 );
+        $first = strpos ( $_SERVER ['REQUEST_URI'], '?' );
+	$qrystr = substr ( $_SERVER ['REQUEST_URI'], $first + 1 );
 	$pos = strrpos ( $qrystr, '&' );
 	$data = substr ( $qrystr, 0, $pos );
 	$pos = strpos ( $qrystr, '=', $pos ) + 1;
 	$this->signature = substr ( $qrystr, $pos );
-	$this->signature = base64_decode ( urldecode ( $this->signature ) );
-                
+        
+        $this->signature = base64_decode ( urldecode ( $this->signature ) );
+        
         $result = openssl_verify ( $data, $this->signature, $publicKey );
 
         $this->logger->info(Paybox::stringify($this->data));
