@@ -4,7 +4,7 @@ namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
@@ -49,7 +49,7 @@ class Response
      * @param LoggerInterface $logger
      * @param EventDispatcher $dispatcher
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcher $dispatcher)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher)
     {
         $this->request    = $request;
         $this->logger     = $logger;
