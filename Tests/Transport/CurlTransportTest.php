@@ -33,15 +33,15 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
      */
     public function testCall()
     {
-        $this->object->setEndpoint('http://test.fr/hey.cgi');
+        $this->object->setEndpoint('http://www.google.com/hey.cgi');
         $method = new \ReflectionMethod('\Lexik\Bundle\PayboxBundle\Transport\CurlTransport', 'call');
-        $method->setAccessible(true);
 
         $cancellationRequest = new Request($this->globals, $this->server, $this->object);
         $cancellationRequest->setParameter('HMAC', 'test');
         $cancellationRequest->setParameter('TIME', 'test');
 
         $response = $method->invoke($this->object, $cancellationRequest);
+
         $this->assertTrue(is_string($response));
     }
 
