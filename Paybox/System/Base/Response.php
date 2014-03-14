@@ -45,9 +45,9 @@ class Response
     /**
      * Contructor.
      *
-     * @param HttpRequest     $request
-     * @param LoggerInterface $logger
-     * @param EventDispatcher $dispatcher
+     * @param HttpRequest              $request
+     * @param LoggerInterface          $logger
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher)
     {

@@ -24,9 +24,9 @@ class Request extends Paybox
     /**
      * Constructor.
      *
-     * @param array                $parameters
-     * @param array                $servers
-     * @param FormFactoryInterface $factory
+     * @param array              $parameters
+     * @param array              $servers
+     * @param TransportInterface $transport
      */
     public function __construct(array $parameters, array $servers, TransportInterface $transport = null)
     {
@@ -55,7 +55,7 @@ class Request extends Paybox
     {
         if (null === $this->getParameter('HMAC')) {
             $this->setParameter('TIME', date('c'));
-            $this->setParameter('HMAC', strtoupper(parent::computeHmac()));
+            $this->setParameter('HMAC', strtoupper($this->computeHmac()));
         }
 
         $resolver = new ParameterResolver();

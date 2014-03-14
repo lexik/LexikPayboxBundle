@@ -102,7 +102,7 @@ class Request extends Paybox
     {
         if (null === $this->getParameter('PBX_HMAC')) {
             $this->setParameter('PBX_TIME', date('c'));
-            $this->setParameter('PBX_HMAC', strtoupper(parent::computeHmac()));
+            $this->setParameter('PBX_HMAC', strtoupper($this->computeHmac()));
         }
 
         $resolver = new ParameterResolver($this->globals['currencies']);
