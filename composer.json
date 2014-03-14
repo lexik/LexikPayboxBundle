@@ -17,8 +17,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "lib-curl": ">=7.32.0",
-        "lib-openssl": ">=1.0.1.5"
+        "lib-curl": ">=7.10.0",
+        "lib-openssl": ">=1.0.0"
     },
     "require-dev": {
         "symfony/framework-bundle": "~2.1",
