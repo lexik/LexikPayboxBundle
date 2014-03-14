@@ -72,6 +72,7 @@ class Configuration implements ConfigurationInterface
                                 '840', // USD
                                 '978', // EUR
                             ))
+                            ->prototype('scalar')->end()
                         ->end()
                         ->scalarNode('site')->isRequired()->end()
                         ->scalarNode('rank')->isRequired()->end()
