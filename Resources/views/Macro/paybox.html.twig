@@ -1,5 +1,5 @@
 {%- macro input(field) -%}
-    <input type="{{ field.vars.block_prefixes[2] }}" name="{{ field.vars.name }}" {% if field.vars.value is not empty %}value="{{ field.vars.value }}" {% endif %}/>
+    <input type="{{ field.vars.block_prefixes[1] }}" name="{{ field.vars.name }}" {% if field.vars.value is not empty %}value="{{ field.vars.value }}" {% endif %}/>
 {%- endmacro -%}
 
 {%- macro form(form) -%}
