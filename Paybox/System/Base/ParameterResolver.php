@@ -151,6 +151,11 @@ class ParameterResolver
                 'GET',
                 'POST',
             ),
+            'PBX_TYPECARTE' => array(
+                'CB',
+                'VISA',
+                'EUROCARD_MASTERCARD',
+            )
         ));
     }
 }
