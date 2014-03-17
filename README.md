@@ -102,7 +102,7 @@ public function callAction()
         'PBX_RETOUR'       => 'Mt:M;Ref:R;Auto:A;Erreur:E',
         'PBX_TOTAL'        => '1000',
         'PBX_TYPEPAIEMENT' => 'CARTE',
-        'PBX_TYPECARTE'    => 'CB,VISA,EUROCARD_MASTERCARD',
+        'PBX_TYPECARTE'    => 'CB',
         'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), true),
         'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
         'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
