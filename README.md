@@ -2,6 +2,7 @@ LexikPayboxBundle
 =================
 
 [![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
+![Project Status](http://stillmaintained.com/lexik/LexikPayboxBundle.png)
 
 LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
