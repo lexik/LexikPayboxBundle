@@ -2,8 +2,6 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
-use Symfony\Component\Form\FormFactoryInterface;
-
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
 use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;

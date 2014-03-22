@@ -14,7 +14,7 @@ services:
 
     lexik_paybox.response_handler:
         class:     '%lexik_paybox.response_handler.class%'
-        arguments: ['@request=', '@logger', '@event_dispatcher']
+        arguments: ['@request=', '@logger', '@event_dispatcher', %lexik_paybox.public_key%]
         tags:
             - { name: monolog.logger, channel: payment }
 

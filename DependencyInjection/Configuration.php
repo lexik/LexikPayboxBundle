@@ -74,6 +74,7 @@ class Configuration implements ConfigurationInterface
                             ))
                             ->prototype('scalar')->end()
                         ->end()
+                        ->scalarNode('public_key')->defaultValue(__DIR__ . '/../Resources/config/paybox_public_key.pem')->end()
                         ->scalarNode('site')->isRequired()->end()
                         ->scalarNode('rank')->isRequired()->end()
                         ->scalarNode('login')->isRequired()->end()

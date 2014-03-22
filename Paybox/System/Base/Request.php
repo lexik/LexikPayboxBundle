@@ -55,8 +55,7 @@ class Request extends Paybox
     public function setParameter($name, $value)
     {
         /**
-         * @todo Hardcoded verification... must find a beter solution,
-         *       but the PBX_RETOUR really must be ended by ";Sign:K"
+         * PBX_RETOUR have to be ended by ";Sign:K"
          */
         if ('PBX_RETOUR' == $name = strtoupper($name)) {
             $value = $this->verifyReturnParameter($value);

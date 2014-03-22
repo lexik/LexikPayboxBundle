@@ -43,17 +43,24 @@ class Response
     private $signature;
 
     /**
+     * @var string
+     */
+    private $publicKey;
+
+    /**
      * Contructor.
      *
      * @param HttpRequest              $request
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
+     * @param string                   $publicKey
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey)
     {
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
+        $this->publicKey  = $publicKey;
     }
 
     /**
@@ -124,7 +131,7 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $file = fopen(dirname(__FILE__) . '/../../../Resources/config/paybox_public_key.pem', 'r');
+        $file = fopen($this->publicKey, 'r');
         $cert = fread($file, 8192);
         fclose($file);
 
