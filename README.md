@@ -4,6 +4,8 @@ LexikPayboxBundle
 [![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
 ![Project Status](http://stillmaintained.com/lexik/LexikPayboxBundle.png)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/big.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
+
 LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
 LexikPayboxBundle silently does :
