@@ -46,7 +46,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
         ;
 
-        $this->_response = new Response($request, $logger, $dispatcher);
+        $publicKey = __DIR__ . '/../../../Resources/config/paybox_public_key.pem';
+
+        $this->_response = new Response($request, $logger, $dispatcher, $publicKey);
     }
 
     protected function tearDown()

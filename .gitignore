@@ -3,8 +3,6 @@ coverage
 composer.lock
 composer.phar
 phpunit.xml
-.DS_Store
 .buildpath
 .project
-.idea
 .settings
