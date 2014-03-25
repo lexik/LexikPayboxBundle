@@ -88,6 +88,7 @@ class ParameterResolver
             'PBX_TOTAL',
             'PBX_TYPECARTE',
             'PBX_TYPEPAIEMENT',
+            'PBX_ATTENTE',
         );
     }
 
