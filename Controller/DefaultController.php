@@ -23,6 +23,6 @@ class DefaultController extends Controller
         $payboxResponse = $this->container->get('lexik_paybox.response_handler');
         $result = $payboxResponse->verifySignature();
 
-        return new Response($result ? 'OK' : 'KO');;
+        return new Response($result ? 'OK' : 'KO');
     }
 }
