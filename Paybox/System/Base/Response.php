@@ -48,6 +48,16 @@ class Response
     private $publicKey;
 
     /**
+     * @var string
+     */
+    private $validationBy;
+
+    /**
+     * @var string
+     */
+    private $pbxRetour;
+
+    /**
      * Contructor.
      *
      * @param HttpRequest              $request
@@ -55,12 +65,14 @@ class Response
      * @param EventDispatcherInterface $dispatcher
      * @param string                   $publicKey
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey, $validationBy, $pbxRetour)
     {
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
         $this->publicKey  = $publicKey;
+        $this->validationBy = $validationBy;
+        $this->pbxRetour  = $pbxRetour;
     }
 
     /**
@@ -137,8 +149,12 @@ class Response
 
         $publicKey = openssl_get_publickey($cert);
 
+        $data = 'url_ipn' == $this->validationBy ?
+                Paybox::stringify($this->data) :
+                $this->pbxRetour;
+
         $result = openssl_verify(
-            Paybox::stringify($this->data),
+            $data,
             $this->signature,
             $publicKey
         );
@@ -163,4 +179,5 @@ class Response
 
         return $result;
     }
+
 }
