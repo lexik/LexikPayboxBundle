@@ -33,6 +33,12 @@ class LexikPayboxExtension extends Extension
             $config['parameters']['public_key'] = __DIR__ . '/../Resources/config/paybox_public_key.pem';
         }
 
+        if('pbx_retour' == $config['parameters']['validation_by'] && (!isset($config['parameters']['pbx_retour']) || !$config['parameters']['pbx_retour'])){
+            throw new \InvalidArgumentException(
+                'The "pbx_retour" option must be set for validation_by "pbx_retour"'
+            );
+        }
+
         $container->setParameter('lexik_paybox.public_key', $config['parameters']['public_key']);
     }
 }
