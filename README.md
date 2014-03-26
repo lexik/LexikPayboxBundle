@@ -216,9 +216,6 @@ Production
 By default, getUrl() returns the preproduction url.
 To toggle in production, you just need to specify 'prod' in parameter of the getUrl('prod') method.
 
-Resources
----------
-
 Validation respons IPN
 ----------------------
 
@@ -243,5 +240,8 @@ lexik_paybox:
     parameters:
         validation_by: url_ipn
 ```
+
+Resources
+---------
 
 All transactions parameters are available in the [official documentation](http://www1.paybox.com/telechargement_focus.aspx?cat=3).
