@@ -216,24 +216,24 @@ Production
 By default, getUrl() returns the preproduction url.
 To toggle in production, you just need to specify 'prod' in parameter of the getUrl('prod') method.
 
-Validation respons IPN
-----------------------
+Validation IPN response
+-----------------------
 
 For security, the status returned by PBX_EFFECTUE, PBX_REFUSE, PBX_ANNULE and PBX_ATTENTE, should
 not be trusted as it can by altered by malicous user. You must instead use IPN notification.
 IPN notification is send directly from Paybox server to the URL you specified either in PBX_REPONDRE_A
 option or in Paybox interface.
 
-If you use PBX_REPONDRE_A option you must specify in your config.yml the following parameters :
+If you use PBX_REPONDRE_A option you must specify in your `config.yml` file the following parameters :
 
 ```yml
 lexik_paybox:
     parameters:
         validation_by: pbx_retour
-        pbx_retour: Mt:M;Ref:R;Auto:A;Erreur:E  # report the PBX_RETOUR option you defined
+        pbx_retour: Mt:M;Ref:R;Auto:A;Erreur:E  # report the PBX_RETOUR option you defined in your code
 ```
 
-If you don't use PBX_REPONDRE_A you can the defaults parameters :
+If you use the Paybox interface, you can let the default parameters :
 
 ```yml
 lexik_paybox:
