@@ -47,8 +47,10 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         ;
 
         $publicKey = __DIR__ . '/../../../Resources/config/paybox_public_key.pem';
+        $validationBy = 'url_ipn';
+        $pbxRetour = array_diff(array_keys($parameters), array('Sign'));
 
-        $this->_response = new Response($request, $logger, $dispatcher, $publicKey);
+        $this->_response = new Response($request, $logger, $dispatcher, $publicKey, $validationBy, $pbxRetour);
     }
 
     protected function tearDown()
