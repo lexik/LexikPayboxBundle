@@ -53,7 +53,7 @@ class Response
     private $validationBy;
 
     /**
-     * @var string
+     * @var array
      */
     private $pbxRetour;
 
@@ -64,8 +64,10 @@ class Response
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
      * @param string                   $publicKey
+     * @param string                   $validationBy
+     * @param array                    $pbxRetour
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey, $validationBy, $pbxRetour)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey, $validationBy, array $pbxRetour)
     {
         $this->request    = $request;
         $this->logger     = $logger;
@@ -125,7 +127,7 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if (Paybox::SIGNATURE_PARAMETER !== $key) {
+            if (in_array($key, $this->pbxRetour)) {
                 $this->data[$key] = urlencode($value);
             }
         }
@@ -143,18 +145,11 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $file = fopen($this->publicKey, 'r');
-        $cert = fread($file, 8192);
-        fclose($file);
-
+        $cert = file_get_contents($this->publicKey);
         $publicKey = openssl_get_publickey($cert);
 
-        $data = 'url_ipn' == $this->validationBy ?
-                Paybox::stringify($this->data) :
-                $this->pbxRetour;
-
         $result = openssl_verify(
-            $data,
+            Paybox::stringify($this->data),
             $this->signature,
             $publicKey
         );

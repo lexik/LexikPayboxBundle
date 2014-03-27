@@ -39,7 +39,14 @@ class LexikPayboxExtension extends Extension
                     'The "pbx_retour" option must be set for validation_by "pbx_retour"'
                 );
             }else{
-                $container->setParameter('lexik_paybox.pbx_retour', $config['parameters']['pbx_retour']);
+                // if PXB_REPONDRE_A is used the signature only sign parameter from PBX_RETOUR without 'Sign' parameter
+                $param_signed = explode(';', $config['parameters']['pbx_retour']);
+                $param_signed = array_map(function($param){
+                    return substr($param, 0, strpos($param, ':'));
+                }, $param_signed);
+                $param_signed = array_diff($param_signed, array(Paybox::SIGNATURE_PARAMETER));
+
+                $container->setParameter('lexik_paybox.pbx_retour', $param_signed);
             }
         }else{
             $container->setParameter('lexik_paybox.pbx_retour', null);
