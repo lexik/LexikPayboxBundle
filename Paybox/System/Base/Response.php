@@ -43,9 +43,9 @@ class Response
     private $signature;
 
     /**
-     * @var string
+     * @var array
      */
-    private $publicKey;
+    private $parameters;
 
     /**
      * Contructor.
@@ -53,14 +53,14 @@ class Response
      * @param HttpRequest              $request
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
-     * @param string                   $publicKey
+     * @param array                    $parameters
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $parameters)
     {
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
-        $this->publicKey  = $publicKey;
+        $this->parameters  = $parameters;
     }
 
     /**
@@ -84,8 +84,8 @@ class Response
      */
     protected function initSignature()
     {
-        if ($this->getRequestParameters()->has(Paybox::SIGNATURE_PARAMETER)) {
-            $signature = $this->getRequestParameters()->get(Paybox::SIGNATURE_PARAMETER);
+        if ($this->getRequestParameters()->has($this->parameters['hmac']['signature_name'])) {
+            $signature = $this->getRequestParameters()->get($this->parameters['hmac']['signature_name']);
 
             switch (strlen($signature)) {
                 case 172 :
@@ -113,7 +113,7 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if (Paybox::SIGNATURE_PARAMETER !== $key) {
+            if ($this->parameters['hmac']['signature_name'] !== $key) {
                 $this->data[$key] = urlencode($value);
             }
         }
@@ -131,7 +131,7 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $file = fopen($this->publicKey, 'r');
+        $file = fopen($this->parameters['public_key'], 'r');
         $cert = fread($file, 8192);
         fclose($file);
 

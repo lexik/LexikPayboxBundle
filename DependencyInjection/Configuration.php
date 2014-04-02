@@ -83,6 +83,7 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('algorithm')->defaultValue('sha512')->end()
                                 ->scalarNode('key')->isRequired()->end()
+                                ->scalarNode('signature_name')->default('Sign')->end()
                             ->end()
                         ->end()
                     ->end()

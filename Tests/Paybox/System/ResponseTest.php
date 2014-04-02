@@ -46,9 +46,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
         ;
 
-        $publicKey = __DIR__ . '/../../../Resources/config/paybox_public_key.pem';
+        $parameters = array(
+            'public_key' => __DIR__ . '/../../../Resources/config/paybox_public_key.pem',
+            'hmac' => array(
+                'signature_name' => 'Sign',
+            ),
+        );
 
-        $this->_response = new Response($request, $logger, $dispatcher, $publicKey);
+        $this->_response = new Response($request, $logger, $dispatcher, $parameters);
     }
 
     protected function tearDown()

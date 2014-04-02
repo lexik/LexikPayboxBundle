@@ -78,8 +78,9 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
             'rank'       => 32,
             'login'      => 2,
             'hmac'       => array(
-                'algorithm' => 'sha512',
-                'key'       => '0123456789ABCDEF',
+                'algorithm'      => 'sha512',
+                'key'            => '0123456789ABCDEF',
+                'signature_name' => 'Sign',
             ),
         ), array(
             'primary' => array(

@@ -14,13 +14,6 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 abstract class Paybox
 {
     /**
-     * The name of the parameter containing the signature on IPN.
-     *
-     * @var string
-     */
-    const SIGNATURE_PARAMETER = 'Sign';
-
-    /**
      * Array of parameters of the transaction.
      *
      * @var array
@@ -71,12 +64,13 @@ abstract class Paybox
     protected function initGlobals(array $parameters)
     {
         $this->globals = array(
-            'currencies'     => $parameters['currencies'],
-            'site'           => $parameters['site'],
-            'rank'           => $parameters['rank'],
-            'login'          => $parameters['login'],
-            'hmac_key'       => $parameters['hmac']['key'],
-            'hmac_algorithm' => $parameters['hmac']['algorithm'],
+            'currencies'          => $parameters['currencies'],
+            'site'                => $parameters['site'],
+            'rank'                => $parameters['rank'],
+            'login'               => $parameters['login'],
+            'hmac_key'            => $parameters['hmac']['key'],
+            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
+            'hmac_signature_name' => $parameters['hmac']['signature_name'],
         );
     }
 
