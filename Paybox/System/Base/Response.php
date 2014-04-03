@@ -127,7 +127,13 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if (in_array($key, $this->pbxRetour)) {
+            if(Paybox::SIGNATURE_PARAMETER == $key){
+                continue;
+            }
+
+            if ('url_ipn' == $this->validationBy) {
+                $this->data[$key] = urlencode($value);
+            } elseif (in_array($key, $this->pbxRetour)) {
                 $this->data[$key] = urlencode($value);
             }
         }
