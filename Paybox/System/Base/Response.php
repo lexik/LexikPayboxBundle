@@ -43,19 +43,10 @@ class Response
     private $signature;
 
     /**
-     * @var string
-     */
-    private $publicKey;
-
-    /**
-     * @var string
-     */
-    private $validationBy;
-
-    /**
      * @var array
      */
-    private $pbxRetour;
+    private $parameters;
+
 
     /**
      * Contructor.
@@ -63,18 +54,14 @@ class Response
      * @param HttpRequest              $request
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
-     * @param string                   $publicKey
-     * @param string                   $validationBy
-     * @param array                    $pbxRetour
+     * @param array                    $parameters
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $publicKey, $validationBy, array $pbxRetour)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $parameters)
     {
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
-        $this->publicKey  = $publicKey;
-        $this->validationBy = $validationBy;
-        $this->pbxRetour  = $pbxRetour;
+        $this->parameters  = $parameters;
     }
 
     /**
@@ -98,8 +85,8 @@ class Response
      */
     protected function initSignature()
     {
-        if ($this->getRequestParameters()->has(Paybox::SIGNATURE_PARAMETER)) {
-            $signature = $this->getRequestParameters()->get(Paybox::SIGNATURE_PARAMETER);
+        if ($this->getRequestParameters()->has($this->parameters['hmac']['signature_name'])) {
+            $signature = $this->getRequestParameters()->get($this->parameters['hmac']['signature_name']);
 
             switch (strlen($signature)) {
                 case 172 :
@@ -127,13 +114,13 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if(Paybox::SIGNATURE_PARAMETER == $key){
+            if($this->parameters['hmac']['signature_name'] == $key){
                 continue;
             }
 
-            if ('url_ipn' == $this->validationBy) {
+            if ('url_ipn' == $this->parameters['validation_by']) {
                 $this->data[$key] = urlencode($value);
-            } elseif (in_array($key, $this->pbxRetour)) {
+            } elseif (in_array($key, $this->parameters['pbx_retour'])) {
                 $this->data[$key] = urlencode($value);
             }
         }
@@ -151,7 +138,7 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $cert = file_get_contents($this->publicKey);
+        $cert = file_get_contents($this->parameters['public_key']);
         $publicKey = openssl_get_publickey($cert);
 
         $result = openssl_verify(

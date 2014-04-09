@@ -88,7 +88,7 @@ class Request extends Paybox
         return sprintf(
             '%s;%s:K',
             $value,
-            Paybox::SIGNATURE_PARAMETER
+            $this->globals['hmac_signature_name']
         );
     }
 

@@ -65,15 +65,23 @@ lexik_paybox:
         login: '999999999' # Customer's login provided by Paybox
         hmac:
             key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
+```
 
-        # Optionnal parameters, this is the default value
-        currencies:
-            - '036' # AUD
-            - '124' # CAD
-            - '756' # CHF
-            - '826' # GBP
-            - '840' # USD
-            - '978' # EUR
+Additional configuration:
+
+```yml
+lexik_paybox:
+    parameters:
+        currencies:  # Optionnal parameters, this is the default value
+            - '036'  # AUD
+            - '124'  # CAD
+            - '756'  # CHF
+            - '826'  # GBP
+            - '840'  # USD
+            - '978'  # EUR
+        hmac:
+            algorithm:      sha512 # signature algorithm
+            signature_name: Sign   # customize the signature parameter name
         validation_by: url_ipn
 ```
 
