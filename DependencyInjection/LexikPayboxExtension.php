@@ -25,14 +25,13 @@ class LexikPayboxExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('lexik_paybox.servers', $config['servers']);
-        $container->setParameter('lexik_paybox.parameters', $config['parameters']);
-        $container->setParameter('lexik_paybox.transport.class', $config['transport']);
-
         if (null === $config['parameters']['public_key']) {
             $config['parameters']['public_key'] = __DIR__ . '/../Resources/config/paybox_public_key.pem';
         }
 
+        $container->setParameter('lexik_paybox.servers', $config['servers']);
+        $container->setParameter('lexik_paybox.parameters', $config['parameters']);
+        $container->setParameter('lexik_paybox.transport.class', $config['transport']);
         $container->setParameter('lexik_paybox.public_key', $config['parameters']['public_key']);
     }
 }
