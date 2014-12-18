@@ -137,13 +137,16 @@ class Response
 
         $publicKey = openssl_get_publickey($cert);
 
+        // conform datas to the RFC 3986
+        $datas = str_replace('+', '%20', Paybox::stringify($this->data));
+
         $result = openssl_verify(
-            Paybox::stringify($this->data),
+            $datas,
             $this->signature,
             $publicKey
         );
 
-        $this->logger->info(Paybox::stringify($this->data));
+        $this->logger->info($datas);
         $this->logger->info(base64_encode($this->signature));
 
         if ($result == 1) {
