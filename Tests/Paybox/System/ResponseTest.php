@@ -51,6 +51,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'hmac' => array(
                 'signature_name' => 'Sign',
             ),
+            'validation_by' => 'url_ipn',
         );
 
         $this->_response = new Response($request, $logger, $dispatcher, $parameters);
