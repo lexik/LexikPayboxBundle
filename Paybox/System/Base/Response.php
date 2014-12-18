@@ -47,6 +47,7 @@ class Response
      */
     private $parameters;
 
+
     /**
      * Contructor.
      *
@@ -113,7 +114,13 @@ class Response
         foreach ($this->getRequestParameters() as $key => $value) {
             $this->logger->info(sprintf('%s=%s', $key, $value));
 
-            if ($this->parameters['hmac']['signature_name'] !== $key) {
+            if($this->parameters['hmac']['signature_name'] == $key){
+                continue;
+            }
+
+            if ('url_ipn' == $this->parameters['validation_by']) {
+                $this->data[$key] = urlencode($value);
+            } elseif (in_array($key, $this->parameters['pbx_retour'])) {
                 $this->data[$key] = urlencode($value);
             }
         }
@@ -131,10 +138,7 @@ class Response
         $this->initData();
         $this->initSignature();
 
-        $file = fopen($this->parameters['public_key'], 'r');
-        $cert = fread($file, 8192);
-        fclose($file);
-
+        $cert = file_get_contents($this->parameters['public_key']);
         $publicKey = openssl_get_publickey($cert);
 
         // conform datas to the RFC 3986
@@ -166,4 +170,5 @@ class Response
 
         return $result;
     }
+
 }
