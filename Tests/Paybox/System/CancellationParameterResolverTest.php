@@ -21,7 +21,7 @@ class CancellationParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveSecond()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The option "VERSION" has the value "", but is expected to be one of "001"');
+        $this->setExpectedException('InvalidArgumentException', 'The option "VERSION" with value "" is invalid. Accepted values are: "001".');
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array(

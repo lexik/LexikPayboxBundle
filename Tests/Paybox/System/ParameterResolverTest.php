@@ -21,7 +21,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveNoCurrency()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The option "PBX_DEVISE" has the value "", but is expected to be one of "953"');
+        $this->setExpectedException('InvalidArgumentException', 'The option "PBX_DEVISE" with value "" is invalid. Accepted values are: "953".');
 
         $resolver = new ParameterResolver(array('953'));
         $resolver->resolve(array(
@@ -41,7 +41,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveBadCurrency()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The option "PBX_DEVISE" has the value "978", but is expected to be one of "953"');
+        $this->setExpectedException('InvalidArgumentException', 'The option "PBX_DEVISE" with value "978" is invalid. Accepted values are: "953".');
 
         $resolver = new ParameterResolver(array('953'));
         $resolver->resolve(array(
