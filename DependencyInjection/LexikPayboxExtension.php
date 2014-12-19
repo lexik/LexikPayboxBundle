@@ -27,6 +27,7 @@ class LexikPayboxExtension extends Extension
 
         if (null === $config['parameters']['public_key']) {
             $config['parameters']['public_key'] = __DIR__ . '/../Resources/config/paybox_public_key.pem';
+            $container->setParameter('lexik_paybox.parameters', $config['parameters']);
         }
 
         $container->setParameter('lexik_paybox.servers', $config['servers']);
