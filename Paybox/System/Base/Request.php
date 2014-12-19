@@ -123,7 +123,7 @@ class Request extends AbstractPaybox
         $options['csrf_protection'] = false;
 
         $parameters = $this->getParameters();
-        $builder = $this->factory->createBuilder('form', $parameters, $options);
+        $builder = $this->factory->createNamedBuilder('', 'form', $parameters, $options);
 
         foreach ($parameters as $key => $value) {
             $builder->add($key, 'hidden');

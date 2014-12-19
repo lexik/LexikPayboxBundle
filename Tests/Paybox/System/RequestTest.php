@@ -3,15 +3,19 @@
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request;
-use Symfony\Component\Form\FormFactoryInterface;
 
 /**
- * Paybox\System\Request class tests.
+ * Class RequestTest
+ *
+ * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\System
  *
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Request
+     */
     private $_paybox;
 
     public function testInitParameters()
@@ -62,7 +66,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $qs .= '&PBX_RANG=32';
         $qs .= '&PBX_RETOUR=Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K'; // "Sign:K" is automaticaly added at the end of PBX_RETOUR
         $qs .= '&PBX_SITE=1999888';
-        $qs .= '&PBX_TIME='.$parameters['PBX_TIME'];
+        $qs .= '&PBX_TIME=' . $parameters['PBX_TIME'];
         $qs .= '&PBX_TOTAL=100';
 
         $this->assertEquals(
