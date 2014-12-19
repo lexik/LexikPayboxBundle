@@ -2,9 +2,8 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
-use Symfony\Component\Form\FormFactoryInterface;
-
 use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request;
+use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * Paybox\System\Request class tests.

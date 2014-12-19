@@ -2,13 +2,13 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
+use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Paybox\System\Response class.
@@ -23,12 +23,12 @@ class Response
     private $request;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $dispatcher;
 
@@ -60,7 +60,7 @@ class Response
         $this->request    = $request;
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
-        $this->parameters  = $parameters;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -81,27 +81,42 @@ class Response
 
     /**
      * Gets the signature set in the http request.
+     *
+     * Paybox documentation says :
+     *     The Paybox signature is created by encrypting a SHA-1 hash with the private Paybox RSA key. The size
+     *     of a SHA-1 hash is 160 bits and the size of the Paybox key is 1024 bits. The signature is always a binary
+     *     value of fixed 128 bytes size (172 bytes in Base64 encoding).
+     *
+     * But sometimes, base64 encoded signature are also url encoded.
      */
     protected function initSignature()
     {
-        if ($this->getRequestParameters()->has($this->parameters['hmac']['signature_name'])) {
-            $signature = $this->getRequestParameters()->get($this->parameters['hmac']['signature_name']);
+        if (!$this->getRequestParameters()->has($this->parameters['hmac']['signature_name'])) {
+            $this->logger->error('Payment signature not set.');
 
-            switch (strlen($signature)) {
-                case 172 :
-                    $this->signature = base64_decode($signature);
-                    break;
+            return false;
+        }
 
-                case 128 :
-                    $this->signature = $signature;
-                    break;
+        $signature = $this->getRequestParameters()->get($this->parameters['hmac']['signature_name']);
+        $signatureLength = strlen($signature);
 
-                default :
-                    $this->logger->err('Bad signature format.');
-                    break;
-            }
+        if ($signatureLength > 172) {
+            $this->signature = base64_decode(urldecode($signature));
+
+            return true;
+        } elseif ($signatureLength == 172) {
+            $this->signature = base64_decode($signature);
+
+            return true;
+        } elseif ($signatureLength == 128) {
+            $this->signature = $signature;
+
+            return true;
         } else {
-            $this->logger->err('Payment signature not set.');
+            $this->signature = null;
+            $this->logger->error('Bad signature format.');
+
+            return false;
         }
     }
 
@@ -132,15 +147,16 @@ class Response
         $this->initSignature();
 
         $file = fopen($this->parameters['public_key'], 'r');
-        $cert = fread($file, 8192);
+        $cert = fread($file, 1024);
         fclose($file);
 
-        $publicKey = openssl_get_publickey($cert);
+        $publicKey = openssl_pkey_get_public($cert);
 
         $result = openssl_verify(
             Paybox::stringify($this->data),
             $this->signature,
-            $publicKey
+            $publicKey,
+            'sha1WithRSAEncryption'
         );
 
         $this->logger->info(Paybox::stringify($this->data));
@@ -149,9 +165,9 @@ class Response
         if ($result == 1) {
             $this->logger->info('Signature is valid.');
         } elseif ($result == 0) {
-            $this->logger->err('Signature is invalid.');
+            $this->logger->error('Signature is invalid.');
         } else {
-            $this->logger->err('Error while verifying Signature.');
+            $this->logger->error('Error while verifying Signature.');
         }
 
         $result = (1 == $result);
