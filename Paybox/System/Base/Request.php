@@ -2,20 +2,22 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
 use Symfony\Component\Form\FormFactoryInterface;
 
-use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
-
 /**
- * Paybox\System\Request class.
+ * Class Request
  *
+ * @package Lexik\Bundle\PayboxBundle\Paybox\System\Base
+ *
+ * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class Request extends Paybox
+class Request extends AbstractPaybox
 {
     /**
-     * @var FormFactory
+     * @var FormFactoryInterface
      */
     protected $factory;
 
@@ -34,7 +36,7 @@ class Request extends Paybox
     }
 
     /**
-     * @see Paybox::initParameters()
+     * {@inheritdoc}
      */
     protected function initParameters()
     {

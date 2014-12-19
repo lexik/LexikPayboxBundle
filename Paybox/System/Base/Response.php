@@ -4,6 +4,7 @@ namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
 use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -11,8 +12,11 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
- * Paybox\System\Response class.
+ * Class Response
  *
+ * @package Lexik\Bundle\PayboxBundle\Paybox\System\Base
+ *
+ * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class Response
@@ -55,7 +59,7 @@ class Response
      * @param EventDispatcherInterface $dispatcher
      * @param array                    $parameters
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, $parameters)
+    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, array $parameters)
     {
         $this->request    = $request;
         $this->logger     = $logger;
@@ -153,13 +157,13 @@ class Response
         $publicKey = openssl_pkey_get_public($cert);
 
         $result = openssl_verify(
-            Paybox::stringify($this->data),
+            AbstractPaybox::stringify($this->data),
             $this->signature,
             $publicKey,
             'sha1WithRSAEncryption'
         );
 
-        $this->logger->info(Paybox::stringify($this->data));
+        $this->logger->info(AbstractPaybox::stringify($this->data));
         $this->logger->info(base64_encode($this->signature));
 
         if ($result == 1) {

@@ -48,6 +48,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
     public function testCallEmpty()
     {
         $curl = new mockCurlTransport();
+
         $this->assertEquals($curl->call(new Request($this->globals, $this->server, $this->object)), '');
     }
 
