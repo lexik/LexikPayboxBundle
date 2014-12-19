@@ -88,7 +88,7 @@ abstract class AbstractPaybox
      * @param  string $name
      * @param  mixed  $value
      *
-     * @return Paybox
+     * @return AbstractPaybox
      */
     public function setParameter($name, $value)
     {
@@ -102,7 +102,7 @@ abstract class AbstractPaybox
      *
      * @param  array $parameters
      *
-     * @return Paybox
+     * @return AbstractPaybox
      */
     public function setParameters(array $parameters)
     {
