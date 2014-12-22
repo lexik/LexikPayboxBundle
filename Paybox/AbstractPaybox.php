@@ -7,11 +7,14 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
- * Paybox class.
+ * Class AbstractPaybox
+ *
+ * @package Lexik\Bundle\PayboxBundle\Paybox
  *
  * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-abstract class Paybox
+abstract class AbstractPaybox
 {
     /**
      * Array of parameters of the transaction.
@@ -85,7 +88,7 @@ abstract class Paybox
      * @param  string $name
      * @param  mixed  $value
      *
-     * @return Paybox
+     * @return AbstractPaybox
      */
     public function setParameter($name, $value)
     {
@@ -99,7 +102,7 @@ abstract class Paybox
      *
      * @param  array $parameters
      *
-     * @return Paybox
+     * @return AbstractPaybox
      */
     public function setParameters(array $parameters)
     {

@@ -5,7 +5,9 @@ namespace Lexik\Bundle\PayboxBundle\Transport;
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 
 /**
- * Transport\CurlTransport class.
+ * Class CurlTransport
+ *
+ * @package Lexik\Bundle\PayboxBundle\Transport
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
@@ -14,8 +16,9 @@ class CurlTransport extends AbstractTransport implements TransportInterface
     /**
      * Constructor
      *
-     * @param  string           $endpoint to paybox endpoint
-     * @throws RuntimeException If cURL is not available
+     * @param  string $url to paybox endpoint
+     *
+     * @throws \RuntimeException If cURL is not available
      */
     public function __construct($url = '')
     {
@@ -29,9 +32,9 @@ class CurlTransport extends AbstractTransport implements TransportInterface
     /**
      * {@inheritDoc}
      *
-     * @param PayboxRequest $request Request instance
+     * @param Request $request Request instance
      *
-     * @throws RuntimeException On cURL error
+     * @throws \RuntimeException On cURL error
      *
      * @return string $response The html of the temporary form
      */
@@ -43,11 +46,11 @@ class CurlTransport extends AbstractTransport implements TransportInterface
 
         // cURL options
         $options = array(
-                CURLOPT_URL => $this->getEndpoint(),
-                CURLOPT_HEADER => false,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => http_build_query($request->getParameters())
+            CURLOPT_URL            => $this->getEndpoint(),
+            CURLOPT_HEADER         => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => http_build_query($request->getParameters())
         );
         curl_setopt_array($ch, $options);
 
@@ -65,5 +68,4 @@ class CurlTransport extends AbstractTransport implements TransportInterface
 
         return $response;
     }
-
 }

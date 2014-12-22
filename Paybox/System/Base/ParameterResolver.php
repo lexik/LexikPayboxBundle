@@ -6,21 +6,83 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * Paybox\System\ParameterResolver class.
+ * Class ParameterResolver
  *
+ * @package Lexik\Bundle\PayboxBundle\Paybox\System\Base
+ *
+ * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class ParameterResolver
 {
     /**
-     * @var array
+     * @var array All availables parameters for payments requests.
      */
-    private $knownParameters;
+    private $knownParameters = array(
+        'PBX_1EURO_CODEEXTER',
+        'PBX_1EURO_DATA',
+        'PBX_2MONT1',
+        'PBX_2MONT2',
+        'PBX_2MONT3',
+        'PBX_3DS',
+        'PBX_ANNULE',
+        'PBX_ARCHIVAGE',
+        'PBX_AUTOSEULE',
+        'PBX_CMD',
+        'PBX_CODEFAMILLE',
+        'PBX_CURRENCYDISPLAY',
+        'PBX_DATE1',
+        'PBX_DATE2',
+        'PBX_DATE3',
+        'PBX_DEVISE',
+        'PBX_DIFF',
+        'PBX_DISPLAY',
+        'PBX_EFFECTUE',
+        'PBX_EMPREINTE',
+        'PBX_ENTITE',
+        'PBX_ERRORCODETEST',
+        'PBX_HASH',
+        'PBX_HMAC',
+        'PBX_IDABT',
+        'PBX_IDENTIFIANT',
+        'PBX_INTRUM_DATA',
+        'PBX_LANGUE',
+        'PBX_MAXICHEQUE_DATA',
+        'PBX_NETRESERVE_DATA',
+        'PBX_ONEY_DATA',
+        'PBX_PAYPAL_DATA',
+        'PBX_PORTEUR',
+        'PBX_RANG',
+        'PBX_REFABONNE',
+        'PBX_REFUSE',
+        'PBX_REPONDRE_A',
+        'PBX_RETOUR',
+        'PBX_RUF1',
+        'PBX_SITE',
+        'PBX_SOURCE',
+        'PBX_TIME',
+        'PBX_TOTAL',
+        'PBX_TYPECARTE',
+        'PBX_TYPEPAIEMENT',
+        'PBX_ATTENTE',
+    );
 
     /**
-     * @var array
+     * @var array Requireds parameters for a standard payment request.
      */
-    private $requiredParameters;
+    private $requiredParameters = array(
+        'PBX_SITE',
+        'PBX_RANG',
+        'PBX_IDENTIFIANT',
+        'PBX_TOTAL',
+        'PBX_DEVISE',
+        'PBX_CMD',
+        'PBX_PORTEUR',
+        'PBX_RETOUR',
+        'PBX_HASH',
+        'PBX_TIME',
+        'PBX_HMAC',
+    );
 
     /**
      * @var OptionsResolver
@@ -42,54 +104,6 @@ class ParameterResolver
         $this->resolver = new OptionsResolver();
 
         $this->currencies = $currencies;
-        $this->knownParameters = array(
-            'PBX_1EURO_CODEEXTER',
-            'PBX_1EURO_DATA',
-            'PBX_2MONT1',
-            'PBX_2MONT2',
-            'PBX_2MONT3',
-            'PBX_3DS',
-            'PBX_ANNULE',
-            'PBX_ARCHIVAGE',
-            'PBX_AUTOSEULE',
-            'PBX_CMD',
-            'PBX_CODEFAMILLE',
-            'PBX_CURRENCYDISPLAY',
-            'PBX_DATE1',
-            'PBX_DATE2',
-            'PBX_DATE3',
-            'PBX_DEVISE',
-            'PBX_DIFF',
-            'PBX_DISPLAY',
-            'PBX_EFFECTUE',
-            'PBX_EMPREINTE',
-            'PBX_ENTITE',
-            'PBX_ERRORCODETEST',
-            'PBX_HASH',
-            'PBX_HMAC',
-            'PBX_IDABT',
-            'PBX_IDENTIFIANT',
-            'PBX_INTRUM_DATA',
-            'PBX_LANGUE',
-            'PBX_MAXICHEQUE_DATA',
-            'PBX_NETRESERVE_DATA',
-            'PBX_ONEY_DATA',
-            'PBX_PAYPAL_DATA',
-            'PBX_PORTEUR',
-            'PBX_RANG',
-            'PBX_REFABONNE',
-            'PBX_REFUSE',
-            'PBX_REPONDRE_A',
-            'PBX_RETOUR',
-            'PBX_RUF1',
-            'PBX_SITE',
-            'PBX_SOURCE',
-            'PBX_TIME',
-            'PBX_TOTAL',
-            'PBX_TYPECARTE',
-            'PBX_TYPEPAIEMENT',
-            'PBX_ATTENTE',
-        );
     }
 
     /**
@@ -101,31 +115,9 @@ class ParameterResolver
      */
     public function resolve(array $parameters)
     {
-        $this->initParameters();
+        $this->initResolver();
 
         return $this->resolver->resolve($parameters);
-    }
-
-    /**
-     * Initialise required parameters for a payment call.
-     */
-    protected function initParameters()
-    {
-        $this->requiredParameters = array(
-            'PBX_SITE',
-            'PBX_RANG',
-            'PBX_IDENTIFIANT',
-            'PBX_TOTAL',
-            'PBX_DEVISE',
-            'PBX_CMD',
-            'PBX_PORTEUR',
-            'PBX_RETOUR',
-            'PBX_HASH',
-            'PBX_TIME',
-            'PBX_HMAC',
-        );
-
-        $this->initResolver();
     }
 
     /**

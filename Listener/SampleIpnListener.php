@@ -2,9 +2,8 @@
 
 namespace Lexik\Bundle\PayboxBundle\Listener;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Sample listener that create a file for each ipn call.
