@@ -5,7 +5,6 @@ namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
-use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;

@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 abstract class AbstractPaybox
 {
     /**
-     * Array of parameters of the transaction.
+     * Array of the transaction's parameters.
      *
      * @var array
      */

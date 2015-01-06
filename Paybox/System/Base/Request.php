@@ -3,7 +3,7 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
@@ -30,7 +30,7 @@ class Request extends AbstractPaybox
      */
     public function __construct(array $parameters, array $servers, FormFactoryInterface $factory)
     {
-        parent::__construct($parameters, $servers);
+        parent::__construct($parameters, $servers['system']);
 
         $this->factory = $factory;
     }

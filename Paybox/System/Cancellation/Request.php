@@ -30,9 +30,9 @@ class Request extends AbstractPaybox
      */
     public function __construct(array $parameters, array $servers, TransportInterface $transport = null)
     {
-        $this->transport = $transport;
+        parent::__construct($parameters, $servers['system']);
 
-        parent::__construct($parameters, $servers);
+        $this->transport = $transport;
     }
 
     /**

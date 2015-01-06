@@ -2,6 +2,7 @@ parameters:
     lexik_paybox.request_handler.class:              'Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request'
     lexik_paybox.request_cancellation_handler.class: 'Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request'
     lexik_paybox.response_handler.class:             'Lexik\Bundle\PayboxBundle\Paybox\System\Base\Response'
+    lexik_paybox.api_manager.class:                  'Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\Manager'
 
 services:
     lexik_paybox.request_handler:
@@ -15,6 +16,12 @@ services:
     lexik_paybox.response_handler:
         class:     '%lexik_paybox.response_handler.class%'
         arguments: ['@request=', '@logger', '@event_dispatcher', '%lexik_paybox.parameters%']
+        tags:
+            - { name: monolog.logger, channel: payment }
+
+    lexik_paybox.api_manager:
+        class:     '%lexik_paybox.api_manager.class%'
+        arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@logger', '@event_dispatcher']
         tags:
             - { name: monolog.logger, channel: payment }
 
