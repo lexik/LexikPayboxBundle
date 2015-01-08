@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -12,7 +13,7 @@ use Symfony\Component\OptionsResolver\Options;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class ParameterResolver
+class ParameterResolver extends AbstractParameterResolver
 {
     /**
      * @var array
@@ -41,19 +42,6 @@ class ParameterResolver
         'HMAC',
         'TIME',
     );
-
-    /**
-     * @var OptionsResolver
-     */
-    private $resolver;
-
-    /**
-     * Constructor initialize all available parameters.
-     */
-    public function __construct()
-    {
-        $this->resolver = new OptionsResolver();
-    }
 
     /**
      * Resolves parameters for a cancellation call.

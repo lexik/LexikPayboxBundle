@@ -2,8 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
-use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
 use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
 
 /**
@@ -13,7 +12,7 @@ use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class Request extends AbstractPaybox
+class Request extends AbstractRequest
 {
     /**
      * @var TransportInterface This is how
@@ -33,6 +32,22 @@ class Request extends AbstractPaybox
         parent::__construct($parameters, $servers['system']);
 
         $this->transport = $transport;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initGlobals(array $parameters)
+    {
+        $this->globals = array(
+            'currencies'          => $parameters['currencies'],
+            'site'                => $parameters['site'],
+            'rank'                => $parameters['rank'],
+            'login'               => $parameters['login'],
+            'hmac_key'            => $parameters['hmac']['key'],
+            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
+            'hmac_signature_name' => $parameters['hmac']['signature_name'],
+        );
     }
 
     /**

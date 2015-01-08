@@ -3,11 +3,13 @@
 namespace Lexik\Bundle\PayboxBundle\Transport;
 
 /**
- * Transport\AbstractTransport class.
+ * Class AbstractTransport
+ *
+ * @package Lexik\Bundle\PayboxBundle\Transport
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-abstract class AbstractTransport
+abstract class AbstractTransport implements TransportInterface
 {
     /**
      * This is what the transport will point. Can be an url or a path (depends

@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Transport;
 
+use Lexik\Bundle\PayboxBundle\Paybox\RequestInterface;
 use Lexik\Bundle\PayboxBundle\Transport\AbstractTransport;
 
 /**
@@ -63,9 +64,8 @@ class AbstractTransportTest extends \PHPUnit_Framework_TestCase
 
 class MockTransport extends AbstractTransport
 {
-    public function call(array $datas)
+    public function call(RequestInterface $request)
     {
-
+        return;
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
 
@@ -9,7 +9,7 @@ use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolveFirst()
     {

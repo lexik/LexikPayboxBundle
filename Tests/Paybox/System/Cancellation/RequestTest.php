@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
@@ -10,7 +10,7 @@ use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationRequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
     private $_paybox;
 
@@ -81,27 +81,29 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
                 'signature_name' => 'Sign',
             ),
         ), array(
-            'primary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'secondary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb1.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'preprod' => array(
-                'protocol'    => 'https',
-                'host'        => 'preprod-tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
+            'system' => array(
+                'primary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'secondary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb1.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'preprod' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'preprod-tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+            )
         ), new CurlTransport());
     }
 

@@ -7,7 +7,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Paybox\System\Response class tests.
+ * Class ResponseTest
+ *
+ * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\System
  *
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
@@ -51,7 +53,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         ;
 
         $parameters = array(
-            'public_key' => __DIR__ . '/../../../Resources/config/paybox_public_key.pem',
+            'public_key' => __DIR__ . '/../../../../Resources/config/paybox_public_key.pem',
             'hmac' => array(
                 'signature_name' => 'Sign',
             ),

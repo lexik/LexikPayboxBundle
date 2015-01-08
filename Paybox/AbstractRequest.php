@@ -2,19 +2,19 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Tools;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
- * Class AbstractPaybox
+ * Class AbstractRequest
  *
  * @package Lexik\Bundle\PayboxBundle\Paybox
  *
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-abstract class AbstractPaybox
+abstract class AbstractRequest implements RequestInterface
 {
     /**
      * Array of the transaction's parameters.
@@ -42,15 +42,9 @@ abstract class AbstractPaybox
      *
      * @param  array $parameters
      * @param  array $servers
-     *
-     * @throws InvalidConfigurationException If the hash_hmac() function of PECL hash is not available.
      */
     public function __construct(array $parameters, array $servers)
     {
-        if (!function_exists('hash_hmac')) {
-            throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
-        }
-
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers;
@@ -64,18 +58,7 @@ abstract class AbstractPaybox
      *
      * @param array $parameters
      */
-    protected function initGlobals(array $parameters)
-    {
-        $this->globals = array(
-            'currencies'          => $parameters['currencies'],
-            'site'                => $parameters['site'],
-            'rank'                => $parameters['rank'],
-            'login'               => $parameters['login'],
-            'hmac_key'            => $parameters['hmac']['key'],
-            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
-            'hmac_signature_name' => $parameters['hmac']['signature_name'],
-        );
-    }
+    abstract protected function initGlobals(array $parameters);
 
     /**
      * Initialize defaults parameters with globals.
@@ -83,12 +66,7 @@ abstract class AbstractPaybox
     abstract protected function initParameters();
 
     /**
-     * Sets a parameter.
-     *
-     * @param  string $name
-     * @param  mixed  $value
-     *
-     * @return AbstractPaybox
+     * {@inheritdoc}
      */
     public function setParameter($name, $value)
     {
@@ -98,11 +76,7 @@ abstract class AbstractPaybox
     }
 
     /**
-     * Sets a bunch of parameters.
-     *
-     * @param  array $parameters
-     *
-     * @return AbstractPaybox
+     * {@inheritdoc}
      */
     public function setParameters(array $parameters)
     {
@@ -114,23 +88,12 @@ abstract class AbstractPaybox
     }
 
     /**
-     * Returns a parameter.
-     *
-     * @param  string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getParameter($name)
     {
         return (isset($this->parameters[strtoupper($name)])) ? $this->parameters[strtoupper($name)] : null;
     }
-
-    /**
-     * Returns all parameters set for a payment.
-     *
-     * @return array
-     */
-    abstract public function getParameters();
 
     /**
      * Returns all parameters as a querystring.
@@ -145,25 +108,7 @@ abstract class AbstractPaybox
 
         ksort($this->parameters);
 
-        return self::stringify($this->parameters);
-    }
-
-    /**
-     * Makes an array of parameters become a querystring like string.
-     *
-     * @param  array $array
-     *
-     * @return string
-     */
-    static public function stringify(array $array)
-    {
-        $result = array();
-
-        foreach ($array as $key => $value) {
-            $result[] = sprintf('%s=%s', $key, $value);
-        }
-
-        return implode('&', $result);
+        return Tools::stringify($this->parameters);
     }
 
     /**

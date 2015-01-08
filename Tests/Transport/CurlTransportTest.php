@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Transport;
 
+use Lexik\Bundle\PayboxBundle\Paybox\RequestInterface;
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 
@@ -24,7 +25,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
 
         $this->object = new CurlTransport();
 
-        $this->server = array('protocol' => 'http', 'host' => 'test.com', 'cancellation_path' => 'test.cgi');
+        $this->server = array('system' => array('protocol' => 'http', 'host' => 'test.com', 'cancellation_path' => 'test.cgi'));
         $this->globals = array('currencies' => array(), 'site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512', 'signature_name' => 'Sign'));
     }
 
@@ -56,7 +57,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
 
 class mockCurlTransport extends CurlTransport
 {
-    public function call(Request $request)
+    public function call(RequestInterface $request)
     {
         return '';
     }

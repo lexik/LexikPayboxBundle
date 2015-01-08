@@ -4,7 +4,7 @@ namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
-use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Tools;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -156,13 +156,13 @@ class Response
         $publicKey = openssl_pkey_get_public($cert);
 
         $result = openssl_verify(
-            AbstractPaybox::stringify($this->data),
+            Tools::stringify($this->data),
             $this->signature,
             $publicKey,
             'sha1WithRSAEncryption'
         );
 
-        $this->logger->info(AbstractPaybox::stringify($this->data));
+        $this->logger->info(Tools::stringify($this->data));
         $this->logger->info(base64_encode($this->signature));
 
         if ($result == 1) {

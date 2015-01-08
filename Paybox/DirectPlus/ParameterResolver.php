@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\DirectPlus;
 
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -14,7 +15,7 @@ use Symfony\Component\OptionsResolver\Options;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class ParameterResolver
+class ParameterResolver extends AbstractParameterResolver
 {
     /**
      * @var array All availables parameters DirectPlus calls.
@@ -68,11 +69,6 @@ class ParameterResolver
     );
 
     /**
-     * @var OptionsResolver
-     */
-    private $resolver;
-
-    /**
      * @var array
      */
     private $currencies;
@@ -84,7 +80,7 @@ class ParameterResolver
      */
     public function __construct(array $currencies)
     {
-        $this->resolver = new OptionsResolver();
+        parent::__construct();
 
         $this->currencies = $currencies;
     }
@@ -130,6 +126,12 @@ class ParameterResolver
                 '023',
                 '024',
                 '027',
+                20,
+                21,
+                22,
+                23,
+                24,
+                27,
             ),
             'DEVISE' => $this->currencies,
             'TYPE'   => array(
@@ -152,6 +154,25 @@ class ParameterResolver
                 '00057',
                 '00058',
                 '00061',
+                1,
+                2,
+                3,
+                4,
+                5,
+                11,
+                12,
+                13,
+                14,
+                17,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                61,
             ),
             'VERSION' => array(
                 '00103',
@@ -162,6 +183,10 @@ class ParameterResolver
         ));
     }
 
+    /**
+     * Initialization of basic normalizers for parameters.
+     * Depending on Paybox's 6.2 parameters specifications.
+     */
     protected function initNormalizers()
     {
         foreach ($this->knownParameters as $parameter => $pattern) {

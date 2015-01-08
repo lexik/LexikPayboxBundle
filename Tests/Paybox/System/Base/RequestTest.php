@@ -115,24 +115,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                 'signature_name' => 'Sign',
             ),
         ), array(
-            'primary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'secondary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb1.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'preprod' => array(
-                'protocol'    => 'https',
-                'host'        => 'preprod-tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
+            'system' => array(
+                'primary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'secondary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb1.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'preprod' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'preprod-tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+            )
         ), $formFactory);
 
         $this->_paybox->setParameter('PBX_CMD',     'cmd123');

@@ -6,15 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Paybox default controller.
+ * Class DefaultController
  *
+ * @package Lexik\Bundle\PayboxBundle\Controller
+ *
+ * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class DefaultController extends Controller
 {
     /**
      * Instant Payment Notification action.
-     * Here, presentation is anecdotic, the server only look at the http status.
+     * Here, presentation is anecdotal, the requesting server only looks at the http status.
      *
      * @return Response
      */

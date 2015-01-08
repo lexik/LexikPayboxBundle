@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -13,7 +14,7 @@ use Symfony\Component\OptionsResolver\Options;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class ParameterResolver
+class ParameterResolver extends AbstractParameterResolver
 {
     /**
      * @var array All availables parameters for payments requests.
@@ -85,11 +86,6 @@ class ParameterResolver
     );
 
     /**
-     * @var OptionsResolver
-     */
-    private $resolver;
-
-    /**
      * @var array
      */
     private $currencies;
@@ -101,7 +97,7 @@ class ParameterResolver
      */
     public function __construct(array $currencies)
     {
-        $this->resolver = new OptionsResolver();
+        parent::__construct();
 
         $this->currencies = $currencies;
     }

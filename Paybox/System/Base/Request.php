@@ -2,7 +2,8 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
-use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Form\FormFactoryInterface;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class Request extends AbstractPaybox
+class Request extends AbstractRequest
 {
     /**
      * @var FormFactoryInterface
@@ -27,9 +28,15 @@ class Request extends AbstractPaybox
      * @param array                $parameters
      * @param array                $servers
      * @param FormFactoryInterface $factory
+     *
+     * @throws InvalidConfigurationException If the hash_hmac() function of PECL hash is not available.
      */
     public function __construct(array $parameters, array $servers, FormFactoryInterface $factory)
     {
+        if (!function_exists('hash_hmac')) {
+            throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
+        }
+
         parent::__construct($parameters, $servers['system']);
 
         $this->factory = $factory;
@@ -38,12 +45,28 @@ class Request extends AbstractPaybox
     /**
      * {@inheritdoc}
      */
+    protected function initGlobals(array $parameters)
+    {
+        $this->globals = array(
+            'currencies'          => $parameters['currencies'],
+            'site'                => $parameters['site'],
+            'rank'                => $parameters['rank'],
+            'login'               => $parameters['login'],
+            'hmac_key'            => $parameters['hmac']['key'],
+            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
+            'hmac_signature_name' => $parameters['hmac']['signature_name'],
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function initParameters()
     {
-        $this->setParameter('PBX_SITE', $this->globals['site']);
-        $this->setParameter('PBX_RANG', $this->globals['rank']);
+        $this->setParameter('PBX_SITE',        $this->globals['site']);
+        $this->setParameter('PBX_RANG',        $this->globals['rank']);
         $this->setParameter('PBX_IDENTIFIANT', $this->globals['login']);
-        $this->setParameter('PBX_HASH', $this->globals['hmac_algorithm']);
+        $this->setParameter('PBX_HASH',        $this->globals['hmac_algorithm']);
     }
 
     /**

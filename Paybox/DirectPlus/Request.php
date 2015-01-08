@@ -2,11 +2,10 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\DirectPlus;
 
-use Buzz\Browser;
-use Buzz\Client\Curl;
 use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
-use Lexik\Bundle\PayboxBundle\Paybox\AbstractPaybox;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
+use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -18,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class Manager extends AbstractPaybox
+class Request extends AbstractRequest
 {
     /**
      * @var LoggerInterface
@@ -31,6 +30,11 @@ class Manager extends AbstractPaybox
     private $dispatcher;
 
     /**
+     * @var TransportInterface
+     */
+    private $transport;
+
+    /**
      * Constructor.
      *
      * @param array                    $parameters
@@ -38,13 +42,14 @@ class Manager extends AbstractPaybox
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(array $parameters, array $servers, LoggerInterface $logger, EventDispatcherInterface $dispatcher)
+    public function __construct(array $parameters, array $servers, LoggerInterface $logger, EventDispatcherInterface $dispatcher, TransportInterface $transport)
     {
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers['direct_plus'];
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
+        $this->transport  = $transport;
 
         $this->initGlobals($parameters);
         $this->initParameters();
@@ -71,7 +76,7 @@ class Manager extends AbstractPaybox
      */
     protected function initParameters()
     {
-        $this->setParameter('VERSION', null); // 'VERSION' must be the first parameter so it have to be declared in first...
+        $this->setParameter('VERSION', null); // 'VERSION' must be the first parameter so it have to be declared first...
         $this->setParameter('SITE',    $this->globals['site']);
         $this->setParameter('RANG',    $this->globals['rang']);
         $this->setParameter('CLE',     $this->globals['cle']);
@@ -83,7 +88,7 @@ class Manager extends AbstractPaybox
      * @param  string $name
      * @param  mixed  $value
      *
-     * @return AbstractPaybox
+     * @return Request
      */
     public function setParameter($name, $value)
     {
@@ -105,30 +110,45 @@ class Manager extends AbstractPaybox
     /**
      * @return array|false
      */
-    public function callApi()
+    public function send()
     {
-        $browser = new Browser(new Curl());
-        $response = $browser->submit($this->getUrl(), $this->getParameters());
-        $request = $browser->getLastRequest();
-
         $this->logger->info('New API call.');
         $this->logger->info('Url : ' . $this->getUrl());
-        $this->logger->info('Request content : ' . $request->getContent());
-        $this->logger->info('Response content : ' . $response->getContent());
 
-        if ($response->isOk()) {
-            parse_str($response->getContent(), $result);
+        $this->transport->setEndpoint($this->getUrl());
+        $result = $this->transport->call($this);
 
-            $verified = ('00000' === $result['CODEREPONSE']) && !empty($result['NUMTRANS']) && !empty($result['NUMAPPEL']);
+        $this->logger->info('Data :');
+        foreach ($this->getParameters() as $parameterName => $parameterValue) {
+            /**
+             * We don't want credit card's information in the server's log.
+             */
+            if (!in_array($parameterName, ['PORTEUR', 'DATEVAL', 'CVV'])) {
+                $this->logger->info(sprintf(' > %s = %s', $parameterName, $parameterValue));
+            }
+        }
 
-            $event = new PayboxResponseEvent($result, $verified);
-            $this->dispatcher->dispatch(PayboxEvents::PAYBOX_API_RESPONSE, $event);
+        $this->logger->info('Result : ' . $result);
 
-            return $result;
-        } else {
+        if (null === $result) {
             $this->logger->error('Http error.');
 
             return false;
+        } else {
+            parse_str($result, $result);
+
+            if (isset($result['CODEREPONSE']) && isset($result['NUMTRANS']) && isset($result['NUMAPPEL'])) {
+                $verified = ('00000' === $result['CODEREPONSE']) && !empty($result['NUMTRANS']) && !empty($result['NUMAPPEL']);
+
+                $event = new PayboxResponseEvent($result, $verified);
+                $this->dispatcher->dispatch(PayboxEvents::PAYBOX_API_RESPONSE, $event);
+
+                return $result;
+            } else {
+                $this->logger->error('Bad response content.');
+
+                return false;
+            }
         }
     }
 

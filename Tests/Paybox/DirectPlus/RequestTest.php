@@ -1,25 +1,31 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus;
 
-use Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\Manager;
+use Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\Request;
+use Lexik\Bundle\PayboxBundle\Transport\BuzzTransport;
+use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 
 /**
- * Class ManagerTest
+ * Class RequestTest
  *
- * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\System
+ * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus
+ *
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Manager
+     * @var Request
      */
-    private $manager;
+    private $request;
 
     /**
-     * @param array $messages
+     * @param array  $messages
+     * @param string $httpResponse
+     * @param bool   $dispatch
      */
-    protected function initMock(array $messages, $dispatch = false)
+    protected function initMock(array $messages, $httpResponse = null, $dispatch = false)
     {
         $parameters = array(
             'site'       => '1999888',
@@ -75,12 +81,27 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ;
         }
 
-        $this->manager = new Manager($parameters, $servers, $logger, $dispatcher);
+        $transport = $this->getMockForAbstractClass('Lexik\Bundle\PayboxBundle\Transport\AbstractTransport');
+        if (null !== $httpResponse) {
+            $transport
+                ->expects($this->once())
+                ->method('call')
+                ->will($this->returnValue($httpResponse))
+            ;
+        }
+
+        /**
+         * @wtf Shut... You haven't seen the lines below, ok ?
+         */
+        // $transport = new CurlTransport();
+        // $transport = new BuzzTransport();
+
+        $this->request = new Request($parameters, $servers, $logger, $dispatcher, $transport);
     }
 
     public function tearDown()
     {
-        $this->manager = null;
+        $this->request = null;
     }
 
     public function testGetParametersAddsAccountInformations()
@@ -102,8 +123,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => '30012013',
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->getParameters();
+        $this->request->setParameters($parameters);
+        $result = $this->request->getParameters();
 
         $expected = array(
             'SITE'        => '1999888',
@@ -168,8 +189,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'VERSION'             => '00104',
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->getParameters();
+        $this->request->setParameters($parameters);
+        $result = $this->request->getParameters();
 
         $this->assertEquals($expected, $result);
     }
@@ -188,8 +209,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'VERSION'     => 104,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->getParameters();
+        $this->request->setParameters($parameters);
+        $result = $this->request->getParameters();
 
         $keys = array_keys($result);
 
@@ -197,16 +218,29 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('00104', $result['VERSION']);
     }
 
-    public function testCallApiSimpleAutorization()
+    public function testSendSimpleAutorization()
     {
         $time = time();
 
         $this->initMock([
             ['info', 'New API call.'],
             ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Request content : VERSION=00104&SITE=1999888&RANG=032&CLE=1999888I&TYPE=00001&NUMQUESTION='.sprintf('%010d', $time).'&MONTANT=0000001000&DEVISE=978&REFERENCE=TestPaybox&PORTEUR=1111222233334444&DATEVAL=0520&CVV=222&ACTIVITE=024&DATEQ='.sprintf('%014d', $time)],
-            ['info', 'Response content : NUMTRANS=%d&NUMAPPEL=%d&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ], true);
+            ['info', 'Data :'],
+            ['info', ' > VERSION = 00104'],
+            ['info', ' > SITE = 1999888'],
+            ['info', ' > RANG = 032'],
+            ['info', ' > CLE = 1999888I'],
+            ['info', ' > TYPE = 00001'],
+            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
+            ['info', ' > MONTANT = 0000001000'],
+            ['info', ' > DEVISE = 978'],
+            ['info', ' > REFERENCE = TestPaybox'],
+            ['info', ' > ACTIVITE = 024'],
+            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
+            ['info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
+        ],
+        'NUMTRANS=0005329117&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
+        true);
 
         $parameters = array(
             'VERSION'     => '00104',
@@ -222,8 +256,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => $time,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->callApi();
+        $this->request->setParameters($parameters);
+        $result = $this->request->send();
 
         $this->assertEquals('00000', $result['CODEREPONSE']);
         $this->assertEquals('XXXXXX', $result['AUTORISATION']);
@@ -235,16 +269,33 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['NUMAPPEL'] = $result['NUMAPPEL'];
     }
 
-    public function testCallApiCapture()
+    /**
+     * @depends testSendSimpleAutorization
+     */
+    public function testSendCapture()
     {
         $time = time();
 
         $this->initMock([
             ['info', 'New API call.'],
             ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Request content : VERSION=00104&SITE=1999888&RANG=032&CLE=1999888I&TYPE=00002&NUMQUESTION='.sprintf('%010d', $time).'&MONTANT=0000001000&DEVISE=978&REFERENCE=TestPaybox&NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&DATEQ='.sprintf('%014d', $time)],
-            ['info', 'Response content : NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ], true);
+            ['info', 'Data :'],
+            ['info', ' > VERSION = 00104'],
+            ['info', ' > SITE = 1999888'],
+            ['info', ' > RANG = 032'],
+            ['info', ' > CLE = 1999888I'],
+            ['info', ' > TYPE = 00002'],
+            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
+            ['info', ' > MONTANT = 0000001000'],
+            ['info', ' > DEVISE = 978'],
+            ['info', ' > REFERENCE = TestPaybox'],
+            ['info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']],
+            ['info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']],
+            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
+            ['info', 'Result : NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
+        ],
+        'NUMTRANS=0005329117&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
+        true);
 
         $parameters = array(
             'VERSION'     => '00104',
@@ -258,23 +309,41 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => $time,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->callApi();
+        $this->request->setParameters($parameters);
+        $result = $this->request->send();
 
         $this->assertEquals('00000', $result['CODEREPONSE']);
         $this->assertEquals('XXXXXX', $result['AUTORISATION']);
     }
 
-    public function testCallApiRefund()
+    /**
+     * @depends testSendCapture
+     */
+    public function testSendRefund()
     {
         $time = time();
 
         $this->initMock([
             ['info', 'New API call.'],
             ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Request content : VERSION=00104&SITE=1999888&RANG=032&CLE=1999888I&TYPE=00014&NUMQUESTION='.sprintf('%010d', $time).'&MONTANT=0000001000&DEVISE=978&REFERENCE=TestPaybox&NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&ACTIVITE=024&DATEQ='.sprintf('%014d', $time)],
-            ['info', 'Response content : NUMTRANS=%d&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ], true);
+            ['info', 'Data :'],
+            ['info', ' > VERSION = 00104'],
+            ['info', ' > SITE = 1999888'],
+            ['info', ' > RANG = 032'],
+            ['info', ' > CLE = 1999888I'],
+            ['info', ' > TYPE = 00014'],
+            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
+            ['info', ' > MONTANT = 0000001000'],
+            ['info', ' > DEVISE = 978'],
+            ['info', ' > REFERENCE = TestPaybox'],
+            ['info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']],
+            ['info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']],
+            ['info', ' > ACTIVITE = 024'],
+            ['info', ' > DATEQ = '.sprintf('%014d', $time)],
+            ['info', 'Result : NUMTRANS=%s&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
+        ],
+        'NUMTRANS=0005329136&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
+        true);
 
         $parameters = array(
             'VERSION'     => '00104',
@@ -289,23 +358,37 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => $time,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->callApi();
+        $this->request->setParameters($parameters);
+        $result = $this->request->send();
 
         $this->assertEquals('00000', $result['CODEREPONSE']);
         $this->assertEquals('XXXXXX', $result['AUTORISATION']);
     }
 
-    public function testCallApiSubscriberCreationButUserAlreadyExists()
+    public function testSendSubscriberCreationButUserAlreadyExists()
     {
         $time = time();
 
         $this->initMock([
             ['info', 'New API call.'],
             ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Request content : VERSION=00104&SITE=1999888&RANG=032&CLE=1999888I&TYPE=00056&NUMQUESTION='.sprintf('%010d', $time).'&MONTANT=0000001000&DEVISE=978&REFERENCE=TestPaybox&PORTEUR=1111222233334444&DATEVAL=0520&CVV=222&REFABONNE=ABODOCUMENTATION001&ACTIVITE=027&DATEQ='.sprintf('%014d', $time)],
-            ['info', 'Response content : NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
-        ], true);
+            ['info', 'Data :'],
+            ['info', ' > VERSION = 00104'],
+            ['info', ' > SITE = 1999888'],
+            ['info', ' > RANG = 032'],
+            ['info', ' > CLE = 1999888I'],
+            ['info', ' > TYPE = 00056'],
+            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
+            ['info', ' > MONTANT = 0000001000'],
+            ['info', ' > DEVISE = 978'],
+            ['info', ' > REFERENCE = TestPaybox'],
+            ['info', ' > REFABONNE = ABODOCUMENTATION001'],
+            ['info', ' > ACTIVITE = 027'],
+            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
+            ['info', 'Result : NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
+        ],
+        'NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=PAYBOX : Abonn� d�j� existant&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444',
+        true);
 
         $parameters = array(
             'VERSION'     => '00104',
@@ -322,23 +405,40 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => $time,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->callApi();
+        $this->request->setParameters($parameters);
+        $result = $this->request->send();
 
         $this->assertEquals('00016', $result['CODEREPONSE']);
         $this->assertEquals('', $result['AUTORISATION']);
     }
 
-    public function testCallApiSubscriberDebit()
+    /**
+     * @depends testSendSubscriberCreationButUserAlreadyExists
+     */
+    public function testSendSubscriberDebit()
     {
         $time = time();
 
         $this->initMock([
             ['info', 'New API call.'],
             ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Request content : VERSION=00104&SITE=1999888&RANG=032&CLE=1999888I&TYPE=00053&NUMQUESTION='.sprintf('%010d', $time).'&MONTANT=0000001000&DEVISE=978&REFERENCE=TestPaybox&PORTEUR=1111222233334444&DATEVAL=0520&REFABONNE=ABODOCUMENTATION001&ACTIVITE=027&DATEQ='.sprintf('%014d', $time)],
-            ['info', 'Response content : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
-        ], true);
+            ['info', 'Data :'],
+            ['info', ' > VERSION = 00104'],
+            ['info', ' > SITE = 1999888'],
+            ['info', ' > RANG = 032'],
+            ['info', ' > CLE = 1999888I'],
+            ['info', ' > TYPE = 00053'],
+            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
+            ['info', ' > MONTANT = 0000001000'],
+            ['info', ' > DEVISE = 978'],
+            ['info', ' > REFERENCE = TestPaybox'],
+            ['info', ' > REFABONNE = ABODOCUMENTATION001'],
+            ['info', ' > ACTIVITE = 027'],
+            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
+            ['info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
+        ],
+        'NUMTRANS=0005329164&NUMAPPEL=0010244857&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444',
+        true);
 
         $parameters = array(
             'VERSION'     => '00104',
@@ -354,8 +454,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'DATEQ'       => $time,
         );
 
-        $this->manager->setParameters($parameters);
-        $result = $this->manager->callApi();
+        $this->request->setParameters($parameters);
+        $result = $this->request->send();
 
         $this->assertEquals('00000', $result['CODEREPONSE']);
         $this->assertEquals('XXXXXX', $result['AUTORISATION']);

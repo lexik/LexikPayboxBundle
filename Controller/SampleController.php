@@ -3,16 +3,23 @@
 namespace Lexik\Bundle\PayboxBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Paybox sample controller.
+ * Class SampleController
  *
+ * @package Lexik\Bundle\PayboxBundle\Controller
+ *
+ * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class SampleController extends Controller
 {
     /**
      * Index action creates the form for a payment call.
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -29,7 +36,7 @@ class SampleController extends Controller
             'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
             'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
             'PBX_RUF1'         => 'POST',
-            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), true),
+            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array(), true),
         ));
 
         return $this->render(
@@ -44,16 +51,18 @@ class SampleController extends Controller
     /**
      * Return action for a confirmation payment page on which the user is sent
      * after he seizes his payment informations on the Paybox's platform.
-     * This action must only containts presentation logic.
+     * This action might only containts presentation logic.
+     *
+     * @param Request $request
+     * @param string  $status
+     *
+     * @return Response
      */
-    public function returnAction($status)
+    public function returnAction(Request $request, $status)
     {
-        return $this->render(
-            'LexikPayboxBundle:Sample:return.html.twig',
-            array(
-                'status'     => $status,
-                'parameters' => $this->getRequest()->query,
-            )
-        );
+        return $this->render('LexikPayboxBundle:Sample:return.html.twig', array(
+            'status'     => $status,
+            'parameters' => $request->query,
+        ));
     }
 }
