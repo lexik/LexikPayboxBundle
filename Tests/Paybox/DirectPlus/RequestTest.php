@@ -149,7 +149,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testParameterNamesAreForcedToUpperCase()
     {
-        $this->initMock([]);
+        $this->initMock(array());
 
         $parameters = array(
             'cle'                 => '',
@@ -197,7 +197,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testVersionParameterMustBeFirst()
     {
-        $this->initMock([]);
+        $this->initMock(array());
 
         $parameters = array(
             'CLE'         => '',
@@ -222,23 +222,23 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
 
-        $this->initMock([
-            ['info', 'New API call.'],
-            ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Data :'],
-            ['info', ' > VERSION = 00104'],
-            ['info', ' > SITE = 1999888'],
-            ['info', ' > RANG = 032'],
-            ['info', ' > CLE = 1999888I'],
-            ['info', ' > TYPE = 00001'],
-            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
-            ['info', ' > MONTANT = 0000001000'],
-            ['info', ' > DEVISE = 978'],
-            ['info', ' > REFERENCE = TestPaybox'],
-            ['info', ' > ACTIVITE = 024'],
-            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
-            ['info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ],
+        $this->initMock(array(
+            array('info', 'New API call.'),
+            array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
+            array('info', 'Data :'),
+            array('info', ' > VERSION = 00104'),
+            array('info', ' > SITE = 1999888'),
+            array('info', ' > RANG = 032'),
+            array('info', ' > CLE = 1999888I'),
+            array('info', ' > TYPE = 00001'),
+            array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
+            array('info', ' > MONTANT = 0000001000'),
+            array('info', ' > DEVISE = 978'),
+            array('info', ' > REFERENCE = TestPaybox'),
+            array('info', ' > ACTIVITE = 024'),
+            array('info', ' > DATEQ = ' . sprintf('%014d', $time)),
+            array('info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='),
+        ),
         'NUMTRANS=0005329117&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
         true);
 
@@ -276,24 +276,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
 
-        $this->initMock([
-            ['info', 'New API call.'],
-            ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Data :'],
-            ['info', ' > VERSION = 00104'],
-            ['info', ' > SITE = 1999888'],
-            ['info', ' > RANG = 032'],
-            ['info', ' > CLE = 1999888I'],
-            ['info', ' > TYPE = 00002'],
-            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
-            ['info', ' > MONTANT = 0000001000'],
-            ['info', ' > DEVISE = 978'],
-            ['info', ' > REFERENCE = TestPaybox'],
-            ['info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']],
-            ['info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']],
-            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
-            ['info', 'Result : NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ],
+        $this->initMock(array(
+            array('info', 'New API call.'),
+            array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
+            array('info', 'Data :'),
+            array('info', ' > VERSION = 00104'),
+            array('info', ' > SITE = 1999888'),
+            array('info', ' > RANG = 032'),
+            array('info', ' > CLE = 1999888I'),
+            array('info', ' > TYPE = 00002'),
+            array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
+            array('info', ' > MONTANT = 0000001000'),
+            array('info', ' > DEVISE = 978'),
+            array('info', ' > REFERENCE = TestPaybox'),
+            array('info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']),
+            array('info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']),
+            array('info', ' > DATEQ = ' . sprintf('%014d', $time)),
+            array('info', 'Result : NUMTRANS='.$GLOBALS['NUMTRANS'].'&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='),
+        ),
         'NUMTRANS=0005329117&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
         true);
 
@@ -323,25 +323,25 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
 
-        $this->initMock([
-            ['info', 'New API call.'],
-            ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Data :'],
-            ['info', ' > VERSION = 00104'],
-            ['info', ' > SITE = 1999888'],
-            ['info', ' > RANG = 032'],
-            ['info', ' > CLE = 1999888I'],
-            ['info', ' > TYPE = 00014'],
-            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
-            ['info', ' > MONTANT = 0000001000'],
-            ['info', ' > DEVISE = 978'],
-            ['info', ' > REFERENCE = TestPaybox'],
-            ['info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']],
-            ['info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']],
-            ['info', ' > ACTIVITE = 024'],
-            ['info', ' > DATEQ = '.sprintf('%014d', $time)],
-            ['info', 'Result : NUMTRANS=%s&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='],
-        ],
+        $this->initMock(array(
+            array('info', 'New API call.'),
+            array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
+            array('info', 'Data :'),
+            array('info', ' > VERSION = 00104'),
+            array('info', ' > SITE = 1999888'),
+            array('info', ' > RANG = 032'),
+            array('info', ' > CLE = 1999888I'),
+            array('info', ' > TYPE = 00014'),
+            array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
+            array('info', ' > MONTANT = 0000001000'),
+            array('info', ' > DEVISE = 978'),
+            array('info', ' > REFERENCE = TestPaybox'),
+            array('info', ' > NUMTRANS = ' . $GLOBALS['NUMTRANS']),
+            array('info', ' > NUMAPPEL = ' . $GLOBALS['NUMAPPEL']),
+            array('info', ' > ACTIVITE = 024'),
+            array('info', ' > DATEQ = '.sprintf('%014d', $time)),
+            array('info', 'Result : NUMTRANS=%s&NUMAPPEL='.$GLOBALS['NUMAPPEL'].'&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='),
+        ),
         'NUMTRANS=0005329136&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
         true);
 
@@ -369,24 +369,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
 
-        $this->initMock([
-            ['info', 'New API call.'],
-            ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Data :'],
-            ['info', ' > VERSION = 00104'],
-            ['info', ' > SITE = 1999888'],
-            ['info', ' > RANG = 032'],
-            ['info', ' > CLE = 1999888I'],
-            ['info', ' > TYPE = 00056'],
-            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
-            ['info', ' > MONTANT = 0000001000'],
-            ['info', ' > DEVISE = 978'],
-            ['info', ' > REFERENCE = TestPaybox'],
-            ['info', ' > REFABONNE = ABODOCUMENTATION001'],
-            ['info', ' > ACTIVITE = 027'],
-            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
-            ['info', 'Result : NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
-        ],
+        $this->initMock(array(
+            array('info', 'New API call.'),
+            array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
+            array('info', 'Data :'),
+            array('info', ' > VERSION = 00104'),
+            array('info', ' > SITE = 1999888'),
+            array('info', ' > RANG = 032'),
+            array('info', ' > CLE = 1999888I'),
+            array('info', ' > TYPE = 00056'),
+            array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
+            array('info', ' > MONTANT = 0000001000'),
+            array('info', ' > DEVISE = 978'),
+            array('info', ' > REFERENCE = TestPaybox'),
+            array('info', ' > REFABONNE = ABODOCUMENTATION001'),
+            array('info', ' > ACTIVITE = 027'),
+            array('info', ' > DATEQ = ' . sprintf('%014d', $time)),
+            array('info', 'Result : NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'),
+        ),
         'NUMTRANS=0000000000&NUMAPPEL=0000000000&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=&CODEREPONSE=00016&COMMENTAIRE=PAYBOX : Abonn� d�j� existant&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444',
         true);
 
@@ -419,24 +419,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
 
-        $this->initMock([
-            ['info', 'New API call.'],
-            ['info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'],
-            ['info', 'Data :'],
-            ['info', ' > VERSION = 00104'],
-            ['info', ' > SITE = 1999888'],
-            ['info', ' > RANG = 032'],
-            ['info', ' > CLE = 1999888I'],
-            ['info', ' > TYPE = 00053'],
-            ['info', ' > NUMQUESTION = ' . sprintf('%010d', $time)],
-            ['info', ' > MONTANT = 0000001000'],
-            ['info', ' > DEVISE = 978'],
-            ['info', ' > REFERENCE = TestPaybox'],
-            ['info', ' > REFABONNE = ABODOCUMENTATION001'],
-            ['info', ' > ACTIVITE = 027'],
-            ['info', ' > DATEQ = ' . sprintf('%014d', $time)],
-            ['info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'],
-        ],
+        $this->initMock(array(
+            array('info', 'New API call.'),
+            array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
+            array('info', 'Data :'),
+            array('info', ' > VERSION = 00104'),
+            array('info', ' > SITE = 1999888'),
+            array('info', ' > RANG = 032'),
+            array('info', ' > CLE = 1999888I'),
+            array('info', ' > TYPE = 00053'),
+            array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
+            array('info', ' > MONTANT = 0000001000'),
+            array('info', ' > DEVISE = 978'),
+            array('info', ' > REFERENCE = TestPaybox'),
+            array('info', ' > REFABONNE = ABODOCUMENTATION001'),
+            array('info', ' > ACTIVITE = 027'),
+            array('info', ' > DATEQ = ' . sprintf('%014d', $time)),
+            array('info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444'),
+        ),
         'NUMTRANS=0005329164&NUMAPPEL=0010244857&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=ABODOCUMENTATION001&PORTEUR=1111222233334444',
         true);
 
