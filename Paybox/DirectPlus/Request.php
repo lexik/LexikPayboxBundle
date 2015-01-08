@@ -123,7 +123,7 @@ class Request extends AbstractRequest
             /**
              * We don't want credit card's information in the server's log.
              */
-            if (!in_array($parameterName, ['PORTEUR', 'DATEVAL', 'CVV'])) {
+            if (!in_array($parameterName, array('PORTEUR', 'DATEVAL', 'CVV'))) {
                 $this->logger->info(sprintf(' > %s = %s', $parameterName, $parameterValue));
             }
         }
