@@ -67,9 +67,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             $logger
                 ->expects($this->at($i))
                 ->method($message[0])
-                ->with(
-                    new \PHPUnit_Framework_Constraint_StringMatches($message[1])
-                )
+                ->with(new \PHPUnit_Framework_Constraint_StringMatches($message[1]))
             ;
         }
 
@@ -106,7 +104,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParametersAddsAccountInformations()
     {
-        $this->initMock([]);
+        $this->initMock(array());
 
         $parameters = array(
             'VERSION'     => '00104',
