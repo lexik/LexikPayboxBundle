@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Base;
 
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
