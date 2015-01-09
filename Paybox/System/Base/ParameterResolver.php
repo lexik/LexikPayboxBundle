@@ -102,11 +102,7 @@ class ParameterResolver extends AbstractParameterResolver
     }
 
     /**
-     * Resolves parameters for a payment call.
-     *
-     * @param  array $parameters
-     *
-     * @return Options
+     * {@inheritdoc}
      */
     public function resolve(array $parameters)
     {
@@ -116,7 +112,7 @@ class ParameterResolver extends AbstractParameterResolver
     }
 
     /**
-     * Initialize the OptionResolver with required/optionnal options and allowed values.
+     * {@inheritdoc}
      */
     protected function initResolver()
     {
@@ -129,6 +125,7 @@ class ParameterResolver extends AbstractParameterResolver
 
     /**
      * Initialize allowed values.
+     *
      * @see http://www.fastwrite.com/resources/core/iso-currency-codes/index.php
      */
     protected function initAllowed()

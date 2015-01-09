@@ -11,7 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractParameterResolver implements ParameterResolverInterface
 {
-
     /**
      * @var OptionsResolver
      */

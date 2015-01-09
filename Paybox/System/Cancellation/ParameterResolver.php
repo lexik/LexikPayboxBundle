@@ -43,11 +43,7 @@ class ParameterResolver extends AbstractParameterResolver
     );
 
     /**
-     * Resolves parameters for a cancellation call.
-     *
-     * @param  array $parameters
-     *
-     * @return Options
+     * {@inheritdoc}
      */
     public function resolve(array $parameters)
     {
@@ -57,7 +53,7 @@ class ParameterResolver extends AbstractParameterResolver
     }
 
     /**
-     * Initialize the OptionResolver with required/optionnal options and allowed values.
+     * {@inheritdoc}
      */
     protected function initResolver()
     {
