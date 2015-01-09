@@ -85,12 +85,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
 
-        $server = $this->_paybox->getUrl('prod');
+        $reflection = new \ReflectionProperty(get_class($this->_paybox), 'globals');
+        $reflection->setAccessible(true);
+        $globals = $reflection->getValue($this->_paybox);
+        $globals['production'] = true;
+        $reflection->setValue($this->_paybox, $globals);
+
+        $server = $this->_paybox->getUrl();
 
         $this->assertEquals('https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
-
-        $this->setExpectedException('InvalidArgumentException', 'Invalid $env argument value.');
-        $server = $this->_paybox->getUrl('bad');
     }
 
     protected function setUp()
@@ -98,6 +101,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 
         $this->_paybox = new Request(array(
+            'production' => false,
             'currencies' => array(
                 '036', // AUD
                 '124', // CAD

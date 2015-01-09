@@ -40,7 +40,7 @@ class Request extends AbstractRequest
     protected function initGlobals(array $parameters)
     {
         $this->globals = array(
-            'production'          => $parameters['production'],
+            'production'          => isset($parameters['production']) ? $parameters['production'] : false,
             'currencies'          => $parameters['currencies'],
             'site'                => $parameters['site'],
             'rank'                => $parameters['rank'],

@@ -60,17 +60,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi-bin/ResAbon.cgi', $server);
 
-        $server = $this->_paybox->getUrl('prod');
+        $reflection = new \ReflectionProperty(get_class($this->_paybox), 'globals');
+        $reflection->setAccessible(true);
+        $globals = $reflection->getValue($this->_paybox);
+        $globals['production'] = true;
+        $reflection->setValue($this->_paybox, $globals);
+
+        $server = $this->_paybox->getUrl();
 
         $this->assertEquals('https://tpeweb.paybox.com/cgi-bin/ResAbon.cgi', $server);
-
-        $this->setExpectedException('InvalidArgumentException', 'Invalid $env argument value.');
-        $server = $this->_paybox->getUrl('bad');
     }
 
     protected function setUp()
     {
         $this->_paybox = new Request(array(
+            'production' => false,
             'currencies' => array(),
             'site'       => 1999888,
             'rank'       => 32,
