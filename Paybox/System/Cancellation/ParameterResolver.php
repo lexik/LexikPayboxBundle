@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
-use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Class ParameterResolver

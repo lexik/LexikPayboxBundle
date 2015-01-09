@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 class Response
 {
     /**
-     * @var Request
+     * @var HttpRequest
      */
     private $request;
 

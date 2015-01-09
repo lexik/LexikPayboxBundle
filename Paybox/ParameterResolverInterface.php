@@ -14,7 +14,7 @@ interface ParameterResolverInterface
      *
      * @param array $parameters
      *
-     * @return \ArrayAccess
+     * @return array
      */
     public function resolve(array $parameters);
 }

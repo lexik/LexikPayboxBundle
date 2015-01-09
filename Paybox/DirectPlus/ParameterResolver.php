@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\DirectPlus;
 
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
-use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Class ParameterResolver
