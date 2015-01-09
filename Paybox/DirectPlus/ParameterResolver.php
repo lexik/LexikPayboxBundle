@@ -3,6 +3,7 @@
 namespace Lexik\Bundle\PayboxBundle\Paybox\DirectPlus;
 
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Class ParameterResolver
@@ -90,7 +91,10 @@ class ParameterResolver extends AbstractParameterResolver
     {
         $this->initResolver();
 
-        return $this->resolver->resolve($parameters);
+        $result = $this->resolver->resolve($parameters);
+        $result = $this->normalize($result);
+
+        return $result;
     }
 
     /**
@@ -103,8 +107,6 @@ class ParameterResolver extends AbstractParameterResolver
         $this->resolver->setOptional(array_diff(array_keys($this->knownParameters), $this->requiredParameters));
 
         $this->initAllowed();
-
-        $this->initNormalizers();
     }
 
     /**
@@ -178,17 +180,20 @@ class ParameterResolver extends AbstractParameterResolver
     }
 
     /**
-     * Initialization of basic normalizers for parameters.
-     * Depending on Paybox's 6.2 parameters specifications.
+     * Normalizes parameters depending on Paybox's 6.2 parameters specifications.
+     *
+     * @param array $parameters
+     *
+     * @return array
      */
-    protected function initNormalizers()
+    protected function normalize(array $parameters)
     {
-        foreach ($this->knownParameters as $parameter => $pattern) {
-            if (null !== $pattern) {
-                $this->resolver->setNormalizer($parameter,  function ($options, $value) use ($pattern) {
-                    return sprintf($pattern, $value);
-                });
+        foreach ($parameters as $parameter => $value) {
+            if (null !== $this->knownParameters[$parameter]) {
+                $parameters[$parameter] = sprintf($this->knownParameters[$parameter], $value);
             }
         }
+
+        return $parameters;
     }
 }
