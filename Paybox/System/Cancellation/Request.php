@@ -40,6 +40,7 @@ class Request extends AbstractRequest
     protected function initGlobals(array $parameters)
     {
         $this->globals = array(
+            'production'          => $parameters['production'],
             'currencies'          => $parameters['currencies'],
             'site'                => $parameters['site'],
             'rank'                => $parameters['rank'],
@@ -80,15 +81,11 @@ class Request extends AbstractRequest
     }
 
     /**
-     * Returns the url of an available server.
-     *
-     * @param  string $env
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getUrl($env = 'dev')
+    public function getUrl()
     {
-        $server = $this->getServer($env);
+        $server = $this->getServer();
 
         return sprintf(
             '%s://%s%s',

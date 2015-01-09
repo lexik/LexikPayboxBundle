@@ -153,11 +153,9 @@ class Request extends AbstractRequest
     }
 
     /**
-     * Returns the url of the server.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    protected function getUrl()
+    public function getUrl()
     {
         $server_name = $this->globals['production'] ? 'primary' : 'preprod';
 

@@ -126,25 +126,20 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Returns the url of an available server.
      *
-     * @param  string $env
-     *
      * @return array
      *
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
      * @throws RuntimeException         If no server is available.
      */
-    protected function getServer($env = 'dev')
+    protected function getServer()
     {
-        if (!in_array($env, array('dev', 'prod'))) {
-            throw new InvalidArgumentException('Invalid $env argument value.');
-        }
-
         $servers = array();
-        if ('dev' === $env) {
-            $servers[] = $this->servers['preprod'];
-        } else {
+
+        if (isset($this->globals['production']) && (true === $this->globals['production'])) {
             $servers[] = $this->servers['primary'];
             $servers[] = $this->servers['secondary'];
+        } else {
+            $servers[] = $this->servers['preprod'];
         }
 
         foreach ($servers as $server) {

@@ -46,4 +46,11 @@ interface RequestInterface
      * @return array
      */
     public function getParameters();
+
+    /**
+     * Returns the url of the server.
+     *
+     * @return string
+     */
+    public function getUrl();
 }
