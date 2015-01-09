@@ -60,9 +60,10 @@ Your personnal account informations must be set in your config.yml
 # Lexik Paybox Bundle
 lexik_paybox:
     parameters:
-        site:  '9999999'   # Site number provided by the bank
-        rank:  '99'        # Rank number provided by the bank
-        login: '999999999' # Customer's login provided by Paybox
+        productions: false
+        site:        '9999999'   # Site number provided by the bank
+        rank:        '99'        # Rank number provided by the bank
+        login:       '999999999' # Customer's login provided by Paybox
         hmac:
             key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
 ```
@@ -92,8 +93,8 @@ lexik_paybox:
     resource: '@LexikPayboxBundle/Resources/config/routing.yml'
 ```
 
-Usage
------
+Usage of Paybox System
+----------------------
 
 The bundle includes a sample controller `SampleController.php` with two actions.
 
@@ -216,12 +217,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
 ```
-
-Production
-----------
-
-By default, getUrl() returns the preproduction url.
-To toggle in production, you just need to specify 'prod' in parameter of the getUrl('prod') method.
 
 Resources
 ---------

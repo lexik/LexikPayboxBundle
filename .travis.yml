@@ -5,8 +5,16 @@ php:
     - 5.4
     - 5.5
 
-before_script:
-    - composer self-update
-    - composer install --dev
+env:
+  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION=2.5.*
+  - SYMFONY_VERSION=2.6.*
 
-script: phpunit -c phpunit.xml.dist
+before_script:
+  - composer self-update
+  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
+  - composer require symfony/form:${SYMFONY_VERSION} --no-update
+  - composer require symfony/options-resolver:${SYMFONY_VERSION} --no-update
+  - composer update --dev
+
+script: phpunit
