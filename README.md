@@ -1,10 +1,10 @@
 LexikPayboxBundle
 =================
 
-[![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
-![Project Status](http://stillmaintained.com/lexik/LexikPayboxBundle.png)
-
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/big.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
+[![Build Status](https://scrutinizer-ci.com/g/lexik/LexikPayboxBundle/badges/build.png?b=refactoring)](https://scrutinizer-ci.com/g/lexik/LexikPayboxBundle/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lexik/LexikPayboxBundle/badges/quality-score.png?b=refactoring)](https://scrutinizer-ci.com/g/lexik/LexikPayboxBundle/?branch=master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/mini.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
+[![Latest Stable Version](https://poser.pugx.org/lexik/paybox-bundle/v/stable.svg)](https://packagist.org/packages/lexik/paybox-bundle)
 
 LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
