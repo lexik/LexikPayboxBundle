@@ -2,19 +2,22 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Lexik\Bundle\PayboxBundle\Paybox\System\Tools;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
- * Paybox class.
+ * Class AbstractRequest
+ *
+ * @package Lexik\Bundle\PayboxBundle\Paybox
  *
  * @author Lexik <dev@lexik.fr>
+ * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-abstract class Paybox
+abstract class AbstractRequest implements RequestInterface
 {
     /**
-     * Array of parameters of the transaction.
+     * Array of the transaction's parameters.
      *
      * @var array
      */
@@ -39,15 +42,9 @@ abstract class Paybox
      *
      * @param  array $parameters
      * @param  array $servers
-     *
-     * @throws InvalidConfigurationException If the hash_hmac() function of PECL hash is not available.
      */
     public function __construct(array $parameters, array $servers)
     {
-        if (!function_exists('hash_hmac')) {
-            throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
-        }
-
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers;
@@ -61,18 +58,7 @@ abstract class Paybox
      *
      * @param array $parameters
      */
-    protected function initGlobals(array $parameters)
-    {
-        $this->globals = array(
-            'currencies'          => $parameters['currencies'],
-            'site'                => $parameters['site'],
-            'rank'                => $parameters['rank'],
-            'login'               => $parameters['login'],
-            'hmac_key'            => $parameters['hmac']['key'],
-            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
-            'hmac_signature_name' => $parameters['hmac']['signature_name'],
-        );
-    }
+    abstract protected function initGlobals(array $parameters);
 
     /**
      * Initialize defaults parameters with globals.
@@ -80,12 +66,7 @@ abstract class Paybox
     abstract protected function initParameters();
 
     /**
-     * Sets a parameter.
-     *
-     * @param  string $name
-     * @param  mixed  $value
-     *
-     * @return Paybox
+     * {@inheritdoc}
      */
     public function setParameter($name, $value)
     {
@@ -95,11 +76,7 @@ abstract class Paybox
     }
 
     /**
-     * Sets a bunch of parameters.
-     *
-     * @param  array $parameters
-     *
-     * @return Paybox
+     * {@inheritdoc}
      */
     public function setParameters(array $parameters)
     {
@@ -111,23 +88,12 @@ abstract class Paybox
     }
 
     /**
-     * Returns a parameter.
-     *
-     * @param  string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getParameter($name)
     {
         return (isset($this->parameters[strtoupper($name)])) ? $this->parameters[strtoupper($name)] : null;
     }
-
-    /**
-     * Returns all parameters set for a payment.
-     *
-     * @return array
-     */
-    abstract public function getParameters();
 
     /**
      * Returns all parameters as a querystring.
@@ -142,25 +108,7 @@ abstract class Paybox
 
         ksort($this->parameters);
 
-        return self::stringify($this->parameters);
-    }
-
-    /**
-     * Makes an array of parameters become a querystring like string.
-     *
-     * @param  array $array
-     *
-     * @return string
-     */
-    static public function stringify(array $array)
-    {
-        $result = array();
-
-        foreach ($array as $key => $value) {
-            $result[] = sprintf('%s=%s', $key, $value);
-        }
-
-        return implode('&', $result);
+        return Tools::stringify($this->parameters);
     }
 
     /**
@@ -178,25 +126,20 @@ abstract class Paybox
     /**
      * Returns the url of an available server.
      *
-     * @param  string $env
-     *
      * @return array
      *
      * @throws InvalidArgumentException If the specified environment is not valid (dev/prod).
      * @throws RuntimeException         If no server is available.
      */
-    protected function getServer($env = 'dev')
+    protected function getServer()
     {
-        if (!in_array($env, array('dev', 'prod'))) {
-            throw new InvalidArgumentException('Invalid $env argument value.');
-        }
-
         $servers = array();
-        if ('dev' === $env) {
-            $servers[] = $this->servers['preprod'];
-        } else {
+
+        if (isset($this->globals['production']) && (true === $this->globals['production'])) {
             $servers[] = $this->servers['primary'];
             $servers[] = $this->servers['secondary'];
+        } else {
+            $servers[] = $this->servers['preprod'];
         }
 
         foreach ($servers as $server) {

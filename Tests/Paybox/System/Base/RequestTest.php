@@ -2,17 +2,20 @@
 
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
-use Symfony\Component\Form\FormFactoryInterface;
-
 use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Request;
 
 /**
- * Paybox\System\Request class tests.
+ * Class RequestTest
+ *
+ * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\System
  *
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Request
+     */
     private $_paybox;
 
     public function testInitParameters()
@@ -63,7 +66,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $qs .= '&PBX_RANG=32';
         $qs .= '&PBX_RETOUR=Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K'; // "Sign:K" is automaticaly added at the end of PBX_RETOUR
         $qs .= '&PBX_SITE=1999888';
-        $qs .= '&PBX_TIME='.$parameters['PBX_TIME'];
+        $qs .= '&PBX_TIME=' . $parameters['PBX_TIME'];
         $qs .= '&PBX_TOTAL=100';
 
         $this->assertEquals(
@@ -82,12 +85,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
 
-        $server = $this->_paybox->getUrl('prod');
+        $reflection = new \ReflectionProperty(get_class($this->_paybox), 'globals');
+        $reflection->setAccessible(true);
+        $globals = $reflection->getValue($this->_paybox);
+        $globals['production'] = true;
+        $reflection->setValue($this->_paybox, $globals);
+
+        $server = $this->_paybox->getUrl();
 
         $this->assertEquals('https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $server);
-
-        $this->setExpectedException('InvalidArgumentException', 'Invalid $env argument value.');
-        $server = $this->_paybox->getUrl('bad');
     }
 
     protected function setUp()
@@ -95,6 +101,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 
         $this->_paybox = new Request(array(
+            'production' => false,
             'currencies' => array(
                 '036', // AUD
                 '124', // CAD
@@ -112,24 +119,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                 'signature_name' => 'Sign',
             ),
         ), array(
-            'primary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'secondary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb1.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'preprod' => array(
-                'protocol'    => 'https',
-                'host'        => 'preprod-tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'test_path'   => '/load.html',
-            ),
+            'system' => array(
+                'primary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'secondary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb1.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'preprod' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'preprod-tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'test_path'   => '/load.html',
+                ),
+            )
         ), $formFactory);
 
         $this->_paybox->setParameter('PBX_CMD',     'cmd123');

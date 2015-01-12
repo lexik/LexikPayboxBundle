@@ -1,8 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
-
-use Symfony\Component\Form\FormFactoryInterface;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
@@ -12,7 +10,7 @@ use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationRequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
     private $_paybox;
 
@@ -62,17 +60,21 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi-bin/ResAbon.cgi', $server);
 
-        $server = $this->_paybox->getUrl('prod');
+        $reflection = new \ReflectionProperty(get_class($this->_paybox), 'globals');
+        $reflection->setAccessible(true);
+        $globals = $reflection->getValue($this->_paybox);
+        $globals['production'] = true;
+        $reflection->setValue($this->_paybox, $globals);
+
+        $server = $this->_paybox->getUrl();
 
         $this->assertEquals('https://tpeweb.paybox.com/cgi-bin/ResAbon.cgi', $server);
-
-        $this->setExpectedException('InvalidArgumentException', 'Invalid $env argument value.');
-        $server = $this->_paybox->getUrl('bad');
     }
 
     protected function setUp()
     {
         $this->_paybox = new Request(array(
+            'production' => false,
             'currencies' => array(),
             'site'       => 1999888,
             'rank'       => 32,
@@ -83,27 +85,29 @@ class CancellationRequestTest extends \PHPUnit_Framework_TestCase
                 'signature_name' => 'Sign',
             ),
         ), array(
-            'primary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'secondary' => array(
-                'protocol'    => 'https',
-                'host'        => 'tpeweb1.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
-            'preprod' => array(
-                'protocol'    => 'https',
-                'host'        => 'preprod-tpeweb.paybox.com',
-                'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                'cancellation_path' => '/cgi-bin/ResAbon.cgi',
-                'test_path'   => '/load.html',
-            ),
+            'system' => array(
+                'primary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'secondary' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'tpeweb1.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+                'preprod' => array(
+                    'protocol'    => 'https',
+                    'host'        => 'preprod-tpeweb.paybox.com',
+                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
+                    'cancellation_path' => '/cgi-bin/ResAbon.cgi',
+                    'test_path'   => '/load.html',
+                ),
+            )
         ), new CurlTransport());
     }
 

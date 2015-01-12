@@ -2,16 +2,17 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
-use Lexik\Bundle\PayboxBundle\Paybox\Paybox;
-use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
 use Lexik\Bundle\PayboxBundle\Transport\TransportInterface;
 
 /**
- * Paybox\System\Cancellation\Request class.
+ * Class Request
+ *
+ * @package Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class Request extends Paybox
+class Request extends AbstractRequest
 {
     /**
      * @var TransportInterface This is how
@@ -28,12 +29,30 @@ class Request extends Paybox
      */
     public function __construct(array $parameters, array $servers, TransportInterface $transport = null)
     {
+        parent::__construct($parameters, $servers['system']);
+
         $this->transport = $transport;
-        parent::__construct($parameters, $servers);
     }
 
     /**
-     * @see Paybox::initParameters()
+     * {@inheritdoc}
+     */
+    protected function initGlobals(array $parameters)
+    {
+        $this->globals = array(
+            'production'          => isset($parameters['production']) ? $parameters['production'] : false,
+            'currencies'          => $parameters['currencies'],
+            'site'                => $parameters['site'],
+            'rank'                => $parameters['rank'],
+            'login'               => $parameters['login'],
+            'hmac_key'            => $parameters['hmac']['key'],
+            'hmac_algorithm'      => $parameters['hmac']['algorithm'],
+            'hmac_signature_name' => $parameters['hmac']['signature_name'],
+        );
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function initParameters()
     {
@@ -62,15 +81,11 @@ class Request extends Paybox
     }
 
     /**
-     * Returns the url of an available server.
-     *
-     * @param  string $env
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getUrl($env = 'dev')
+    public function getUrl()
     {
-        $server = $this->getServer($env);
+        $server = $this->getServer();
 
         return sprintf(
             '%s://%s%s',
@@ -83,17 +98,19 @@ class Request extends Paybox
     /**
      * {@inheritDoc}
      *
-     * @param PayboxRequest $request Request instance
+     * @param string $reference
+     * @param string $subscriptionId
      *
-     * @throws RuntimeException On cURL error
+     * @throws \RuntimeException On cURL error
      *
-     * @return string $response The html of the temporary form
+     * @return string The html of the temporary form
      */
     public function cancel($reference = null, $subscriptionId = null)
     {
         if ($reference) {
           $this->setParameter('REFERENCE', $reference);
         }
+
         if ($subscriptionId) {
           $this->setParameter('ABONNEMENT', $reference);
         }

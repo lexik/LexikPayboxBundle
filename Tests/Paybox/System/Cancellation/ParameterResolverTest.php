@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
 
@@ -9,11 +9,11 @@ use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class CancellationParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolveFirst()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The required options "HMAC", "IDENTIFIANT", "MACH", "SITE", "TIME", "TYPE", "VERSION" are missing.');
+        $this->setExpectedException('InvalidArgumentException');
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array());
@@ -21,7 +21,7 @@ class CancellationParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveSecond()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The option "VERSION" with value "" is invalid. Accepted values are: "001".');
+        $this->setExpectedException('InvalidArgumentException');
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array(
@@ -37,7 +37,7 @@ class CancellationParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveThird()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The option "unknow" does not exist. Known options are: "ABONNEMENT", "HMAC", "IDENTIFIANT", "MACH", "REFERENCE", "SITE", "TIME", "TYPE", "VERSION"');
+        $this->setExpectedException('InvalidArgumentException');
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array(

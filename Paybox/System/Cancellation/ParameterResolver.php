@@ -2,85 +2,57 @@
 
 namespace Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\Options;
+use Lexik\Bundle\PayboxBundle\Paybox\AbstractParameterResolver;
 
 /**
- * Paybox\System\CancellationParameterResolver class.
+ * Class ParameterResolver
+ *
+ * @package Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class ParameterResolver
+class ParameterResolver extends AbstractParameterResolver
 {
     /**
      * @var array
      */
-    private $knownParameters;
+    private $knownParameters = array(
+        'VERSION',
+        'TYPE',
+        'SITE',
+        'IDENTIFIANT',
+        'MACH',
+        'HMAC',
+        'TIME',
+        'ABONNEMENT',
+        'REFERENCE',
+    );
 
     /**
      * @var array
      */
-    private $requiredParameters;
+    private $requiredParameters = array(
+        'VERSION',
+        'TYPE',
+        'SITE',
+        'IDENTIFIANT',
+        'MACH',
+        'HMAC',
+        'TIME',
+    );
 
     /**
-     * @var OptionsResolver
-     */
-    private $resolver;
-
-    /**
-     * Constructor initialize all available parameters.
-     */
-    public function __construct()
-    {
-        $this->resolver = new OptionsResolver();
-
-        $this->knownParameters = array(
-            'VERSION',
-            'TYPE',
-            'SITE',
-            'IDENTIFIANT',
-            'MACH',
-            'HMAC',
-            'TIME',
-            'ABONNEMENT',
-            'REFERENCE',
-        );
-    }
-
-    /**
-     * Resolves parameters for a cancellation call.
-     *
-     * @param  array $parameters
-     *
-     * @return Options
+     * {@inheritdoc}
      */
     public function resolve(array $parameters)
     {
-        $this->initParameters();
+        $this->initResolver();
 
         return $this->resolver->resolve($parameters);
     }
 
     /**
-     * Initialise required parameters for a cancellation call.
-     */
-    protected function initParameters()
-    {
-        $this->requiredParameters = array(
-            'VERSION',
-            'TYPE',
-            'SITE',
-            'IDENTIFIANT',
-            'MACH',
-            'HMAC',
-            'TIME',
-        );
-
-        $this->initResolver();
-    }
-
-    /**
-     * Initialize the OptionResolver with required/optionnal options and allowed values.
+     * {@inheritdoc}
      */
     protected function initResolver()
     {
