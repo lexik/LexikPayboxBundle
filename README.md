@@ -209,6 +209,9 @@ To create your own listener, you just have to make it wait for the "paybox.ipn_r
 For example the listener of the bundle:
 
 ```yml
+parameters:
+    lexik_paybox.sample_response_listener.class: 'Lexik\Bundle\PayboxBundle\Listener\SampleIpnListener'
+
 services:
     ...
     lexik_paybox.sample_response_listener:
