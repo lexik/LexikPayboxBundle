@@ -25,7 +25,7 @@ class ParameterResolver extends AbstractParameterResolver
         'RANG'                => '%03d',
         'CLE'                 => '%s',
         'NUMQUESTION'         => '%010d',
-        'DATEQ'               => '%014d',
+        'DATEQ'               => '%014s',
         'ACQUEREUR'           => null,
         'ACTIVITE'            => '%03d',
         'ARCHIVAGE'           => null,
