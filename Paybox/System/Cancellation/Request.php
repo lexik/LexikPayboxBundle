@@ -112,7 +112,7 @@ class Request extends AbstractRequest
         }
 
         if ($subscriptionId) {
-          $this->setParameter('ABONNEMENT', $reference);
+          $this->setParameter('ABONNEMENT', $subscriptionId);
         }
 
         $this->transport->setEndpoint($this->getUrl());
