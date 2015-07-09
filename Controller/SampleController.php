@@ -36,7 +36,7 @@ class SampleController extends Controller
             'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
             'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
             'PBX_RUF1'         => 'POST',
-            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array(), true),
+            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), true),
         ));
 
         return $this->render(
