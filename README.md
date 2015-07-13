@@ -60,7 +60,7 @@ Your personnal account informations must be set in your config.yml
 # Lexik Paybox Bundle
 lexik_paybox:
     parameters:
-        production: false
+        production: false        # Switches between Paybox test and production servers (preprod-tpe <> tpe)
         site:        '9999999'   # Site number provided by the bank
         rank:        '99'        # Rank number provided by the bank
         login:       '999999999' # Customer's login provided by Paybox
