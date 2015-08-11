@@ -24,5 +24,10 @@
     },
     "autoload": {
         "psr-4": { "Lexik\\Bundle\\PayboxBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x.x-dev"
+        }
     }
 }
