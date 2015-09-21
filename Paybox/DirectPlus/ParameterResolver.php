@@ -38,7 +38,7 @@ class ParameterResolver extends AbstractParameterResolver
         'DEVISE'              => null,
         'DIFFERE'             => '%03d',
         'ERRORCODETEST'       => '%05d',
-        'ID3D'                => '%020d',
+        'ID3D'                => null,
         'MONTANT'             => '%010d',
         'NUMAPPEL'            => '%010d',
         'NUMTRANS'            => '%010d',
