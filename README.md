@@ -64,6 +64,10 @@ lexik_paybox:
         site:        '9999999'   # Site number provided by the bank
         rank:        '99'        # Rank number provided by the bank
         login:       '999999999' # Customer's login provided by Paybox
+        idmerchant:  '999999999' # Id number provided by the bank.
+        return_path: 'your.website.com/index' # Client 3dSecure redirection (RemoteMpi)
+        redirect_path: 'your.website.com/listener' # Server to Server 3dSecure redirection (RemoteMpi)
+        deferred:    '005'       # days number of payment deferred
         hmac:
             key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
 ```
@@ -91,6 +95,18 @@ The routing collection must be set in your routing.yml
 # Lexik Paybox Bundle
 lexik_paybox:
     resource: '@LexikPayboxBundle/Resources/config/routing.yml'
+```
+
+```yml
+# Lexik Paybox Bundle DirectPlus
+lexik_paybox:
+    resource: '@LexikPayboxBundle/Resources/config/routing_direct_plus.yml'
+```
+
+```yml
+# Lexik Paybox Bundle 3D Secure RemoteMpi
+lexik_paybox:
+    resource: '@LexikPayboxBundle/Resources/config/routing_remote_mpi.yml'
 ```
 
 Usage of Paybox System
@@ -219,6 +235,169 @@ services:
         arguments: [ %kernel.root_dir%, @filesystem ]
         tags:
             - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
+```
+
+
+```php
+namespace Lexik\Bundle\PayboxBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Class DirectPlusController
+ *
+ * @package Lexik\Bundle\PayboxBundle\Controller
+ *
+ * @author Romain Marecat <romain.marecat@gmail.com>
+ */
+class DirectPlusController extends Controller
+{
+    /**
+     * Euro
+     */
+    const PBX_DEVISE_EURO = '978';
+
+    /**
+     * Different version of Paybox direct
+     */
+    const VERSION_DIRECT            = '00103';
+    const VERSION_DIRECT_PLUS       = '00104';
+    /**
+     * ECL(Electronic Commerce Indicator).
+     * Type of ordering items. Need for some banks.
+     * 024 - request by internet
+     */
+    const PBX_ACTIVITE_VALUE = '024';
+
+    /**
+     * All payment direct action listed
+     */
+    const PBX_PAYMENT_ACTION_AUTHORIZE = '00001';
+    const PBX_PAYMENT_ACTION_DEBIT = '00002';
+    const PBX_PAYMENT_ACTION_AUTHORIZE_CAPTURE = '00003';
+    const PBX_PAYMENT_ACTION_CREDIT = '00004';
+    const PBX_PAYMENT_ACTION_CANCELLATION = '00005';
+    const PBX_PAYMENT_ACTION_CHECK_EXIST_TRANSACTION = '00011';
+    const PBX_PAYMENT_ACTION_TRANSACTION_WHITOUT_AUTHORIZE = '00012';
+    const PBX_PAYMENT_ACTION_UPDATE_AMOUNT_TRANSACTION = '00013';
+    const PBX_PAYMENT_ACTION_REFUND = '00014';
+    const PBX_PAYMENT_ACTION_READ = '00017';
+
+    /**
+     * All payment direct plus action listed
+     */
+    const PBX_PAYMENT_ACTION_AUTHORIZE_ON_SUBSCRIBER = '00051';
+    const PBX_PAYMENT_ACTION_DEBIT_ON_SUBSCRIBER = '00052';
+    const PBX_PAYMENT_ACTION_AUTHORIZE_CAPTURE_ON_SUBSCRIBER = '00053';
+    const PBX_PAYMENT_ACTION_CREDIT_ON_SUBSCRIBER = '00054';
+    const PBX_PAYMENT_ACTION_CANCEL_ON_SUBSCRIBER = '00055';
+    const PBX_PAYMENT_ACTION_REGISTER_SUBSCRIBER = '00056';
+    const PBX_PAYMENT_ACTION_UPDATE_EXIST_SUBSRIBER = '00057';
+    const PBX_PAYMENT_ACTION_DELETE_SUBSCRIBER = '00058';
+    const PBX_PAYMENT_ACTION_TRANSACTION_WHITOUT_AUTHORIZE_FORCE = '00061';
+
+    /**
+     * $transactionNumber NUMTRANS returned by Authorize
+     * @var string
+     */
+    protected $transactionNumber;
+
+    /**
+     * $callNumber NUMAPPEL returned by Authorize
+     * @var string
+     */
+    protected $callNumber;
+
+    /**
+     * [generateRequestNumber description]
+     * @return [type] [description]
+     */
+    protected function generateRequestNumber()
+    {
+        $secs = (date('G') * 3600) + (date('i') * 60) + date('s');
+        return (string) $secs . rand(10, 99);
+    }
+
+    /**
+     * authorizeAction
+     * @return array response      Paybox Authorization client
+     */
+    public function authorizeAction()
+    {
+        $paybox = $this->get('lexik_paybox.direc_plus.request_handler');
+        $parameters = [
+            'VERSION'               => self::VERSION_DIRECT_PLUS,
+            'TYPE'                  => self::PBX_PAYMENT_ACTION_AUTHORIZE,
+            'DATEQ'                 => sprintf('%014d', time()),
+            'NUMQUESTION'           => $this->generateRequestNumber(),
+            'MONTANT'               => sprintf('%010d', str_pad(100 * 100, 10, '0', STR_PAD_LEFT)),
+            'DEVISE'                => self::PBX_DEVISE_EURO,
+            'REFERENCE'             => 'ORDER' . rand(1000, 9999),
+            'PORTEUR'               => sprintf('%016d', '1111222233334444'),
+            'DATEVAL'               => sprintf('%04d', '0117'),
+            'CVV'                   => sprintf('%03d', '123'),
+            'ACTIVITE'              => self::PBX_ACTIVITE_VALUE,
+            'DIFFERE'               => sprintf('%03d', '001'),
+        ];
+
+        if ($this->id3d) {
+            $parameters['ID3D'] = $this->id3d;
+        }
+
+        $paybox->setParameters($parameters);
+
+        $response = array_map("utf8_encode", $paybox->send());
+
+        if (isset($response['NUMTRANS']) && isset($response['NUMAPPEL'])) {
+            $this->transactionNumber = $response['NUMTRANS'];
+            $this->callNumber = $response['NUMTRANS'];
+        }
+
+        return $this->render(
+            'LexikPayboxBundle:DirectPlus:index.html.twig',
+            array(
+                'response' => $response,
+            )
+        );
+    }
+
+    /**
+     * captureAction
+     * @return array response    Paybox debit client
+     */
+    public function captureAction()
+    {
+        $paybox = $this->get('lexik_paybox.direc_plus.request_handler');
+        $parameters = [
+            'VERSION'               => self::VERSION_DIRECT_PLUS,
+            'TYPE'                  => self::PBX_PAYMENT_ACTION_DEBIT,
+            'NUMQUESTION'           => $this->generateRequestNumber(),
+            'MONTANT'               => sprintf('%010d', str_pad(100 * 100, 10, '0', STR_PAD_LEFT)),
+            'DEVISE'                => self::PBX_DEVISE_EURO,
+            'REFERENCE'             => 'ORDER' . rand(1000, 9999),
+            'DATEQ'                 => sprintf('%014d', time()),
+            'NUMTRANS'              => $this->transactionNumber,
+            'NUMAPPEL'              => $this->callNumber,
+            'ACTIVITE'              => self::PBX_ACTIVITE_VALUE,
+            'DIFFERE'               => sprintf('%03d', '001'),
+        ];
+
+        if ($this->id3d) {
+            $parameters['ID3D'] = $this->id3d;
+        }
+
+        $paybox->setParameters($parameters);
+        $response = array_map("utf8_encode", $paybox->send());
+
+        return $this->render(
+            'LexikPayboxBundle:DirectPlus:index.html.twig',
+            array(
+                'response' => $response,
+            )
+        );
+    }
 ```
 
 Resources

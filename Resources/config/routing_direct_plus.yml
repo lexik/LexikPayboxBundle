@@ -1,0 +1,75 @@
+lexik_paybox_direct_plus_authorize:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:authorize }
+
+lexik_paybox_direct_plus_capture:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:capture }
+
+lexik_paybox_direct_plus_authorizeCapture:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:authorizeCapture }
+
+lexik_paybox_direct_plus_credit:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:credit }
+
+lexik_paybox_direct_plus_cancellation:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:cancellation }
+
+lexik_paybox_direct_plus_checkExistTransaction:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:checkExistTransaction }
+
+lexik_paybox_direct_plus_transactionWhitoutAuthorize:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:transactionWhitoutAuthorize }
+
+lexik_paybox_direct_plus_updateAmountTransaction:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:updateAmountTransaction }
+
+lexik_paybox_direct_plus_refund:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:refund }
+
+lexik_paybox_direct_plus_read:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:read }
+
+lexik_paybox_direct_plus_authorizeOnSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:authorizeOnSubscriber }
+
+lexik_paybox_direct_plus_captureOnSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:captureOnSubscriber }
+
+lexik_paybox_direct_plus_authorizeCaptureOnSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:authorizeCaptureOnSubscriber }
+
+lexik_paybox_direct_plus_creditOnSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:creditOnSubscriber }
+
+lexik_paybox_direct_plus_cancelOnSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:cancelOnSubscriber }
+
+lexik_paybox_direct_plus_registerNewSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:registerNewSubscriber }
+
+lexik_paybox_direct_plus_updateExistSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:updateExistSubscriber }
+
+lexik_paybox_direct_plus_deleteSubscriber:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:deleteSubscriber }
+
+lexik_paybox_direct_plus_transactionWhitoutAuthorizeForce:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:DirectPlus:transactionWhitoutAuthorizeForce }
