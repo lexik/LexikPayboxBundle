@@ -6,7 +6,6 @@ use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use SquareCo\TransactionBundle\Services\ParameterResolver;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -17,17 +16,12 @@ use Symfony\Component\Form\FormFactoryInterface;
  *  @author Romain Marecat <romain.marecat@gmail.com>
  *
  */
-class RemoteMpiRequest extends AbstractRequest
+class Request extends AbstractRequest
 {
     /**
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
 
     /**
      * @var FormFactoryInterface
@@ -40,15 +34,14 @@ class RemoteMpiRequest extends AbstractRequest
      * @param array                    $parameters
      * @param array                    $servers
      * @param LoggerInterface          $logger
-     * @param EventDispatcherInterface $dispatcher
+     * @param FormFactoryInterface     $factory
      */
-    public function __construct(array $parameters, array $servers, LoggerInterface $logger, EventDispatcherInterface $dispatcher, FormFactoryInterface $factory)
+    public function __construct(array $parameters, array $servers, LoggerInterface $logger, FormFactoryInterface $factory)
     {
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers['remote_mpi'];
         $this->logger     = $logger;
-        $this->dispatcher = $dispatcher;
         $this->factory    = $factory;
 
         $this->initGlobals($parameters);
@@ -117,7 +110,6 @@ class RemoteMpiRequest extends AbstractRequest
     {
         $options['csrf_protection'] = false;
         $options['action'] = $this->getUrl();
-
         $parameters = $this->getParameters();
         $builder = $this->factory->createNamedBuilder('', 'form', $parameters, $options);
 

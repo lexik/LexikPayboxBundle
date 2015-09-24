@@ -1,10 +1,8 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\RemoteMPI;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\RemoteMpi;
 
-use Lexik\Bundle\PayboxBundle\Paybox\RemoteMPI\Request;
-use Lexik\Bundle\PayboxBundle\Transport\BuzzTransport;
-use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
+use Lexik\Bundle\PayboxBundle\Paybox\RemoteMpi\Request;
 
 /**
  * Class RequestTest
@@ -18,20 +16,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Request
      */
-    private $request;
+    protected $request;
 
-    /**
-     * @param array  $messages
-     * @param string $httpResponse
-     * @param bool   $dispatch
-     */
-    protected function initMock(array $messages, $httpResponse = null, $dispatch = false)
+    protected $logger;
+
+    protected $formFactory;
+
+    protected $parameters;
+
+    protected $servers;
+
+    protected function setUp()
     {
-        $parameters = array(
+        $this->parameters = array(
             'site'       => '1999888',
             'rang'       => '063',
             'cle'        => '1999888I',
+            'idmerchant' => '109518543',
             'production' => false,
+            'return_path'=> 'https://github.com/lexik/LexikPayboxBundle',
+            'redirect_path' => 'https://github.com/lexik/LexikPayboxBundle',
             'currencies' => array(
                 '036',
                 '124',
@@ -42,111 +46,92 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $servers = array(
+        $this->servers = array(
             'remote_mpi' => array(
                 'primary' => array(
-                    'protocol'    => 'https',
-                    'host'        => 'tpeweb.paybox.com',
-                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                    'test_path'   => '/load.html',
+                    'protocol' => 'https',
+                    'host'     => 'tpeweb.paybox.com',
+                    'mpi_path' => '/cgi/RemoteMPI.cgi',
                 ),
                 'secondary' => array(
-                    'protocol'    => 'https',
-                    'host'        => 'tpeweb1.paybox.com',
-                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                    'test_path'   => '/load.html',
+                    'protocol' => 'https',
+                    'host'     => 'tpeweb1.paybox.com',
+                    'mpi_path' => '/cgi/RemoteMPI.cgi',
                 ),
                 'preprod' => array(
-                    'protocol'    => 'https',
-                    'host'        => 'preprod-tpeweb.paybox.com',
-                    'system_path' => '/cgi/MYchoix_pagepaiement.cgi',
-                    'test_path'   => '/load.html',
+                    'protocol' => 'https',
+                    'host'     => 'preprod-tpeweb.paybox.com',
+                    'mpi_path' => '/cgi/RemoteMPI.cgi',
                 ),
             ),
         );
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        foreach ($messages as $i => $message) {
-            $logger
-                ->expects($this->at($i))
-                ->method($message[0])
-                ->with(new \PHPUnit_Framework_Constraint_StringMatches($message[1]))
-            ;
-        }
-
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
-        if (true === $dispatch) {
-            $dispatcher
-                ->expects($this->once())
-                ->method('dispatch')
-            ;
-        }
-
-        $transport = $this->getMockForAbstractClass('Lexik\Bundle\PayboxBundle\Transport\AbstractTransport');
-        if (null !== $httpResponse) {
-            $transport
-                ->expects($this->once())
-                ->method('call')
-                ->will($this->returnValue($httpResponse))
-            ;
-        }
-
-        /**
-         * @wtf Shut... You haven't seen the lines below, ok ?
-         */
-        // $transport = new CurlTransport();
-        // $transport = new BuzzTransport();
-
-        $this->request = new Request($parameters, $servers, $logger, $dispatcher, $transport);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactoryInterface')->disableOriginalConstructor()->getMock();
+        $this->request = new Request($this->parameters, $this->servers, $this->logger, $this->formFactory);
     }
 
-    public function tearDown()
+    public function testGetForm()
     {
-        $this->request = null;
-    }
-
-    public function testSimpleAuthentication()
-    {
-        $time = time();
-
-        $this->initMock(
-            array(
-                array('info', 'New API call.'),
-                array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
-                array('info', 'Data :'),
-                array('info', ' > VERSION = 00104'),
-                array('info', ' > SITE = 1999888'),
-                array('info', ' > RANG = 032'),
-                array('info', ' > CLE = 1999888I'),
-                array('info', ' > TYPE = 00001'),
-                array('info', ' > NUMQUESTION = ' . sprintf('%010d', $time)),
-                array('info', ' > MONTANT = 0000001000'),
-                array('info', ' > DEVISE = 978'),
-                array('info', ' > REFERENCE = TestPaybox'),
-                array('info', ' > ACTIVITE = 024'),
-                array('info', ' > DATEQ = ' . sprintf('%014s', $time)),
-                array('info', 'Result : NUMTRANS=%s&NUMAPPEL=%s&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=%s&REFABONNE=&PORTEUR='),
-            ),
-            'NUMTRANS=0005329117&NUMAPPEL=0010244812&NUMQUESTION='.sprintf('%010d', $time).'&SITE=1999888&RANG=32&AUTORISATION=XXXXXX&CODEREPONSE=00000&COMMENTAIRE=Demande trait�e avec succ�s&REFABONNE=&PORTEUR=',
-            true
-        );
-
-        $parameters([
-            'Amount'                => '100',
+        $parameters = array(
+            'Amount'                => '0000000100',
             'CCExpDate'             => '0117',
             'CCNumber'              => '1111222233334444',
             'Currency'              => '978',
             'CVVCode'               => '123',
             'IdSession'             => 'ORDER' . rand(1000, 9999),
+            'IdMerchant'            => '109518543',
             'URLHttpDirect'         => 'https://github.com/lexik/LexikPayboxBundle',
             'URLRetour'             => 'https://github.com/lexik/LexikPayboxBundle',
-        ]);
+        );
 
-        $this->request->setParameters($parameters);
-        $result = $this->request->send();
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
 
-        $this->assertNotEmpty($result['ID3D']);
-        $this->assertEquals('00000', $result['']);
-        $this->assertEquals('XXXXXX', $result['AUTORISATION']);
+        $formBuilderInterface  = $this->getMockBuilder('Symfony\Component\Form\FormBuilderInterface')->disableOriginalConstructor()->getMock();
+        $formBuilderInterface->expects($this->any())
+         ->method('add')
+         ->will($this->returnSelf());
+
+        $formBuilderInterface->expects($this->any())->method('getForm')->will($this->returnValue($form));
+
+        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactoryInterface')->disableOriginalConstructor()->getMock();
+        // $this->formFactory->expects(
+        //     $this->once()
+        // )
+        // ->method('createNamedBuilder')
+        // ->with(
+        //     '',
+        //     'form',
+        //     $parameters,
+        //     array('csrf_protection' => false, 'action' => 'https://preprod-tpeweb.paybox.com/cgi/RemoteMPI.cgi')
+        // );
+
+        // $this->request = new Request($this->parameters, $this->servers, $this->logger, $this->formFactory);
+        // $this->request->setParameters($parameters);
+
+        // $view = $this->request->getForm();
+
+    }
+
+    public function testGetUrl()
+    {
+        $server = $this->request->getUrl();
+
+        $this->assertEquals('https://preprod-tpeweb.paybox.com/cgi/RemoteMPI.cgi', $server);
+
+        $reflection = new \ReflectionProperty(get_class($this->request), 'globals');
+        $reflection->setAccessible(true);
+        $globals = $reflection->getValue($this->request);
+        $globals['production'] = true;
+        $reflection->setValue($this->request, $globals);
+
+        $server = $this->request->getUrl();
+
+        $this->assertEquals('https://tpeweb.paybox.com/cgi/RemoteMPI.cgi', $server);
+    }
+
+    public function tearDown()
+    {
+        $this->request = null;
     }
 }

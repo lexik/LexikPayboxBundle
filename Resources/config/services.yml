@@ -28,7 +28,7 @@ services:
 
     lexik_paybox.remote_mpi.request_handler:
         class:     '%lexik_paybox.remote_mpi.request_handler.class%'
-        arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@logger', '@event_dispatcher', '@form.factory']
+        arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@logger', '@form.factory']
         tags:
             - { name: monolog.logger, channel: payment }
 
