@@ -58,7 +58,7 @@ class ParameterResolver extends AbstractParameterResolver
     {
         $this->resolver->setRequired($this->requiredParameters);
 
-        $this->resolver->setOptional(array_diff($this->knownParameters, $this->requiredParameters));
+        $this->resolver->setDefined(array_diff($this->knownParameters, $this->requiredParameters));
 
         $this->initAllowed();
     }
@@ -68,9 +68,9 @@ class ParameterResolver extends AbstractParameterResolver
      */
     protected function initAllowed()
     {
-        $this->resolver->setAllowedValues(array(
-            'VERSION' => array('001'),
-            'TYPE'    => array('001'),
-        ));
+        $this->resolver
+            ->setAllowedValues('VERSION', array('001'))
+            ->setAllowedValues('TYPE', array('001'))
+        ;
     }
 }

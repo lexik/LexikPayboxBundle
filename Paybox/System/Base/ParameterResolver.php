@@ -117,7 +117,7 @@ class ParameterResolver extends AbstractParameterResolver
     {
         $this->resolver->setRequired($this->requiredParameters);
 
-        $this->resolver->setOptional(array_diff($this->knownParameters, $this->requiredParameters));
+        $this->resolver->setDefined(array_diff($this->knownParameters, $this->requiredParameters));
 
         $this->initAllowed();
     }
@@ -129,18 +129,18 @@ class ParameterResolver extends AbstractParameterResolver
      */
     protected function initAllowed()
     {
-        $this->resolver->setAllowedValues(array(
-            'PBX_DEVISE' => $this->currencies,
-            'PBX_RUF1'   => array(
+        $this->resolver
+            ->setAllowedValues('PBX_DEVISE', $this->currencies)
+            ->setAllowedValues('PBX_RUF1', array(
                 'GET',
                 'POST',
-            ),
-            'PBX_TYPECARTE' => array(
+            ))
+            ->setAllowedValues('PBX_TYPECARTE', array(
                 'CB',
                 'VISA',
                 'EUROCARD_MASTERCARD',
                 'AMEX'
-            )
-        ));
+            ))
+        ;
     }
 }
