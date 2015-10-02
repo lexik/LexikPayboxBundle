@@ -113,8 +113,8 @@ class ParameterResolver extends AbstractParameterResolver
      */
     protected function initAllowed()
     {
-        $this->resolver->setAllowedValues(array(
-            'ACTIVITE' => array(
+        $this->resolver
+            ->setAllowedValues('ACTIVITE', array(
                 '020',
                 '021',
                 '022',
@@ -127,9 +127,9 @@ class ParameterResolver extends AbstractParameterResolver
                 23,
                 24,
                 27,
-            ),
-            'DEVISE' => $this->currencies,
-            'TYPE'   => array(
+            ))
+            ->setAllowedValues('DEVISE', $this->currencies)
+            ->setAllowedValues('TYPE', array(
                 '00001',
                 '00002',
                 '00003',
@@ -168,14 +168,14 @@ class ParameterResolver extends AbstractParameterResolver
                 57,
                 58,
                 61,
-            ),
-            'VERSION' => array(
+            ))
+            ->setAllowedValues('VERSION', array(
                 '00103',
                 '00104',
                 103,
                 104,
-            ),
-        ));
+            ))
+        ;
     }
 
     /**
