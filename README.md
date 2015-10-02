@@ -28,14 +28,8 @@ Installation
 
 Installation with composer :
 
-```json
-    ...
-    "require": {
-        ...
-        "lexik/paybox-bundle": "dev-master",
-        ...
-    },
-    ...
+```bash
+composer require lexik/paybox-bundle
 ```
 
 Add this bundle to your app/AppKernel.php :
