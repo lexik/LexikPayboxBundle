@@ -60,7 +60,7 @@ class CurlTransport extends AbstractTransport
         $curlErrorMessage = curl_error($ch);
         $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if (!in_array($responseCode, array(0, 200, 201, 204))) {
+        if ($curlErrorNumber > 0 || !in_array($responseCode, array(0, 200, 201, 204))) {
             throw new \RuntimeException('cUrl returns some errors (cURL errno '.$curlErrorNumber.'): '.$curlErrorMessage.' (HTTP Code: '.$responseCode.')');
         }
 
