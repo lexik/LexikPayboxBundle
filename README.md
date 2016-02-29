@@ -2,7 +2,6 @@ LexikPayboxBundle
 =================
 
 [![Build Status](https://secure.travis-ci.org/lexik/LexikPayboxBundle.png)](http://travis-ci.org/lexik/LexikPayboxBundle)
-[![Project Status](https://stillmaintained.com/lexik/LexikPayboxBundle.png)](https://stillmaintained.com/lexik/LexikPayboxBundle)
 [![Latest Stable Version](https://poser.pugx.org/lexik/paybox-bundle/v/stable.svg)](https://packagist.org/packages/lexik/paybox-bundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/mini.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
 
