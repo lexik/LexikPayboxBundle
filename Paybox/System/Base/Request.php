@@ -6,6 +6,7 @@ use Lexik\Bundle\PayboxBundle\Paybox\AbstractRequest;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Class Request
@@ -147,10 +148,23 @@ class Request extends AbstractRequest
         $options['csrf_protection'] = false;
 
         $parameters = $this->getParameters();
-        $builder = $this->factory->createNamedBuilder('', 'form', $parameters, $options);
-
-        foreach ($parameters as $key => $value) {
-            $builder->add($key, 'hidden');
+        // If symfony version is 3.* then we use the FQCN for form types
+        // Else we use the IDs.
+        if (substr(Kernel::VERSION, 0, 1) === "3") {
+            $builder = $this->factory->createNamedBuilder(
+                '',
+                'Symfony\Component\Form\Extension\Core\Type\FormType',
+                $parameters,
+                $options
+            );
+            foreach ($parameters as $key => $value) {
+                $builder->add($key, 'Symfony\Component\Form\Extension\Core\Type\HiddenType');
+            }
+        } else {
+            $builder = $this->factory->createNamedBuilder('', 'form', $parameters, $options);
+            foreach ($parameters as $key => $value) {
+                $builder->add($key, 'hidden');
+            }
         }
 
         return $builder->getForm();
