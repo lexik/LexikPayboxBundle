@@ -139,7 +139,9 @@ class ParameterResolver extends AbstractParameterResolver
                 'CB',
                 'VISA',
                 'EUROCARD_MASTERCARD',
-                'AMEX'
+                'AMEX',
+                'AURORE',
+                'E_CARD',
             ))
         ;
     }
