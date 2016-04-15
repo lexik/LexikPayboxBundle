@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Response
@@ -53,14 +54,14 @@ class Response
     /**
      * Contructor.
      *
-     * @param HttpRequest              $request
+     * @param RequestStack             $requestStack
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
      * @param array                    $parameters
      */
-    public function __construct(HttpRequest $request, LoggerInterface $logger, EventDispatcherInterface $dispatcher, array $parameters)
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger, EventDispatcherInterface $dispatcher, array $parameters)
     {
-        $this->request    = $request;
+        $this->request    = $requestStack->getCurrentRequest();
         $this->logger     = $logger;
         $this->dispatcher = $dispatcher;
         $this->parameters = $parameters;

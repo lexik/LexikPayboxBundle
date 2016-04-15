@@ -36,6 +36,12 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         $request->request = new ParameterBag($parameters);
 
+        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        $requestStack
+            ->expects($this->once())
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+
         /** @var LoggerInterface $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         foreach ($messages as $i => $message) {
@@ -59,7 +65,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->_response = new Response($request, $logger, $dispatcher, $parameters);
+        $this->_response = new Response($requestStack, $logger, $dispatcher, $parameters);
     }
 
     protected function tearDown()
