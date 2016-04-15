@@ -150,7 +150,7 @@ class Request extends AbstractRequest
         $parameters = $this->getParameters();
         // If symfony version is 3.* then we use the FQCN for form types
         // Else we use the IDs.
-        if (substr(Kernel::VERSION, 0, 1) === "3") {
+        if (version_compare(Kernel::VERSION, '3.0.0') >= 0) {
             $builder = $this->factory->createNamedBuilder(
                 '',
                 'Symfony\Component\Form\Extension\Core\Type\FormType',
