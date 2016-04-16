@@ -148,9 +148,9 @@ class Request extends AbstractRequest
         $options['csrf_protection'] = false;
 
         $parameters = $this->getParameters();
-        // If symfony version is 3.* then we use the FQCN for form types
+        // If symfony version is >=2.8 then we use the FQCN for form types
         // Else we use the IDs.
-        if (version_compare(Kernel::VERSION, '3.0.0') >= 0) {
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
             $builder = $this->factory->createNamedBuilder(
                 '',
                 'Symfony\Component\Form\Extension\Core\Type\FormType',
