@@ -5,6 +5,9 @@ LexikPayboxBundle
 [![Latest Stable Version](https://poser.pugx.org/lexik/paybox-bundle/v/stable.svg)](https://packagist.org/packages/lexik/paybox-bundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/mini.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
 
+This bundle is deprecated
+=========================
+
 LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
 LexikPayboxBundle silently does :
