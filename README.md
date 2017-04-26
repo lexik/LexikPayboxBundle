@@ -6,7 +6,7 @@ LexikPayboxBundle
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9/mini.png)](https://insight.sensiolabs.com/projects/378718a0-ea77-4592-89eb-9bf47214efc9)
 
 ## Important!
-**This bundle is not maintained anymore.**
+**This bundle is partially maintained. No new features will be added but some PR will be merged for compatibility or security.**
 
 LexikPayboxBundle makes the use of [Paybox](http://www.paybox.com) payment system easier by doing all the boring things for you.
 
