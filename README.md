@@ -96,6 +96,8 @@ The bundle includes a sample controller `SampleController.php` with two actions.
 
 ```php
 ...
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * Sample action to call a payment.
  * It create the form to submit with all parameters.
@@ -111,11 +113,11 @@ public function callAction()
         'PBX_TOTAL'        => '1000',
         'PBX_TYPEPAIEMENT' => 'CARTE',
         'PBX_TYPECARTE'    => 'CB',
-        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), true),
-        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
-        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
+        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGeneratorInterface::ABSOLUTE_PATH),
+        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGeneratorInterface::ABSOLUTE_PATH),
+        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGeneratorInterface::ABSOLUTE_PATH),
         'PBX_RUF1'         => 'POST',
-        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), true),
+        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGeneratorInterface::ABSOLUTE_PATH),
     ));
 
     return $this->render(
