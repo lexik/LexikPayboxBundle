@@ -87,6 +87,10 @@ The routing collection must be set in your routing.yml
 # Lexik Paybox Bundle
 lexik_paybox:
     resource: '@LexikPayboxBundle/Resources/config/routing.yml'
+
+# Lexik Paybox sample routes
+lexik_paybox_sample:
+    resource: '@LexikPayboxBundle/Resources/config/routing_sample.yml'
 ```
 
 Usage of Paybox System
