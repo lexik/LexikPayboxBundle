@@ -117,7 +117,7 @@ public function callAction()
         'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGeneratorInterface::ABSOLUTE_URL),
         'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGeneratorInterface::ABSOLUTE_URL),
         'PBX_RUF1'         => 'POST',
-        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGeneratorInterface::ABSOLUTE_PATH),
+        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGeneratorInterface::ABSOLUTE_URL),
     ));
 
     return $this->render(
