@@ -113,9 +113,9 @@ public function callAction()
         'PBX_TOTAL'        => '1000',
         'PBX_TYPEPAIEMENT' => 'CARTE',
         'PBX_TYPECARTE'    => 'CB',
-        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGeneratorInterface::ABSOLUTE_PATH),
-        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGeneratorInterface::ABSOLUTE_PATH),
-        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGeneratorInterface::ABSOLUTE_PATH),
+        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGeneratorInterface::ABSOLUTE_URL),
+        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGeneratorInterface::ABSOLUTE_URL),
+        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGeneratorInterface::ABSOLUTE_URL),
         'PBX_RUF1'         => 'POST',
         'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGeneratorInterface::ABSOLUTE_PATH),
     ));
