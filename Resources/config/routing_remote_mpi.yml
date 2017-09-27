@@ -1,0 +1,7 @@
+lexik_paybox_remote_mpi_call:
+    pattern:  /
+    defaults: { _controller: LexikPayboxBundle:RemoteMpi:index }
+
+lexik_paybox_remote_mpi_return:
+    pattern:  /payment/return
+    defaults: { _controller: LexikPayboxBundle:RemoteMpi:return }
