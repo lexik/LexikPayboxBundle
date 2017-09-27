@@ -5,6 +5,7 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class SampleController
@@ -32,11 +33,11 @@ class SampleController extends Controller
             'PBX_TOTAL'        => '1000',
             'PBX_TYPEPAIEMENT' => 'CARTE',
             'PBX_TYPECARTE'    => 'CB',
-            'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), true),
-            'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), true),
-            'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), true),
+            'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGenerator::ABSOLUTE_URL),
+            'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGenerator::ABSOLUTE_URL),
+            'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGenerator::ABSOLUTE_URL),
             'PBX_RUF1'         => 'POST',
-            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), true),
+            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGenerator::ABSOLUTE_URL),
         ));
 
         return $this->render(
