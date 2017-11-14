@@ -100,7 +100,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
 
-        $this->_paybox = new Request(array(
+        $this->_paybox = new Request('default', array(
             'production' => false,
             'currencies' => array(
                 '036', // AUD

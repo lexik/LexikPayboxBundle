@@ -37,13 +37,16 @@ class Request extends AbstractRequest
     /**
      * Constructor.
      *
+     * @param string                   $account
      * @param array                    $parameters
      * @param array                    $servers
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $dispatcher
+     * @param TransportInterface       $transport
      */
-    public function __construct(array $parameters, array $servers, LoggerInterface $logger, EventDispatcherInterface $dispatcher, TransportInterface $transport)
+    public function __construct($account, array $parameters, array $servers, LoggerInterface $logger, EventDispatcherInterface $dispatcher, TransportInterface $transport)
     {
+        $this->account    = $account;
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers['direct_plus'];
@@ -113,6 +116,7 @@ class Request extends AbstractRequest
     public function send()
     {
         $this->logger->info('New API call.');
+        $this->logger->info('Account : ' . $this->account);
         $this->logger->info('Url : ' . $this->getUrl());
 
         $this->transport->setEndpoint($this->getUrl());
@@ -140,7 +144,7 @@ class Request extends AbstractRequest
             if (isset($result['CODEREPONSE']) && isset($result['NUMTRANS']) && isset($result['NUMAPPEL'])) {
                 $verified = ('00000' === $result['CODEREPONSE']) && !empty($result['NUMTRANS']) && !empty($result['NUMAPPEL']);
 
-                $event = new PayboxResponseEvent($result, $verified);
+                $event = new PayboxResponseEvent($result, $this->account, $verified);
                 $this->dispatcher->dispatch(PayboxEvents::PAYBOX_API_RESPONSE, $event);
 
                 return $result;

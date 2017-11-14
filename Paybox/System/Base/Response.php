@@ -145,7 +145,10 @@ class Response
      */
     public function verifySignature()
     {
+        $account = $this->request->get('account');
+
         $this->logger->info('New IPN call.');
+        $this->logger->info('Account : ' . $account);
 
         $this->initData();
         $this->initSignature();
@@ -178,7 +181,7 @@ class Response
 
         openssl_free_key($publicKey);
 
-        $event = new PayboxResponseEvent($this->data, $result);
+        $event = new PayboxResponseEvent($this->data, $account, $result);
         $this->dispatcher->dispatch(PayboxEvents::PAYBOX_IPN_RESPONSE, $event);
 
         return $result;

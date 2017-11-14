@@ -44,7 +44,8 @@ class SampleIpnListener
         $path = sprintf('%s/../data/%s', $this->rootDir, date('Y\/m\/d\/'));
         $this->filesystem->mkdir($path);
 
-        $content = sprintf('Signature verification : %s%s', $event->isVerified() ? 'OK' : 'KO', PHP_EOL);
+        $content = sprintf('Account : %s%s', $event->getAccount(), PHP_EOL);
+        $content .= sprintf('Signature verification : %s%s', $event->isVerified() ? 'OK' : 'KO', PHP_EOL);
         foreach ($event->getData() as $key => $value) {
             $content .= sprintf("%s:%s%s", $key, $value, PHP_EOL);
         }

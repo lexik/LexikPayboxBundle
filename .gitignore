@@ -6,3 +6,4 @@ phpunit.xml
 .buildpath
 .project
 .settings
+.idea

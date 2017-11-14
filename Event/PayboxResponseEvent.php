@@ -17,6 +17,11 @@ class PayboxResponseEvent extends Event
     private $data;
 
     /**
+     * @var string
+     */
+    private $account;
+
+    /**
      * @var boolean
      */
     private $verified;
@@ -25,11 +30,13 @@ class PayboxResponseEvent extends Event
      * Constructor.
      *
      * @param array   $data
+     * @param string  $account
      * @param boolean $verified
      */
-    public function __construct(array $data, $verified = false)
+    public function __construct(array $data, $account, $verified = false)
     {
         $this->data = $data;
+        $this->account = $account;
         $this->verified = (bool) $verified;
     }
 
@@ -41,6 +48,16 @@ class PayboxResponseEvent extends Event
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Returns the account in relation with the IPN.
+     *
+     * @return string
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 
     /**

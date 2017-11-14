@@ -27,6 +27,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     protected function initMock(array $messages, $httpResponse = null, $dispatch = false)
     {
+        $account = 'default';
+
         $parameters = array(
             'site'       => '1999888',
             'rang'       => '032',
@@ -94,7 +96,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         // $transport = new CurlTransport();
         // $transport = new BuzzTransport();
 
-        $this->request = new Request($parameters, $servers, $logger, $dispatcher, $transport);
+        $this->request = new Request($account, $parameters, $servers, $logger, $dispatcher, $transport);
     }
 
     public function tearDown()
@@ -222,6 +224,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->initMock(array(
             array('info', 'New API call.'),
+            array('info', 'Account : default'),
             array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
             array('info', 'Data :'),
             array('info', ' > VERSION = 00104'),
@@ -276,6 +279,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->initMock(array(
             array('info', 'New API call.'),
+            array('info', 'Account : default'),
             array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
             array('info', 'Data :'),
             array('info', ' > VERSION = 00104'),
@@ -323,6 +327,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->initMock(array(
             array('info', 'New API call.'),
+            array('info', 'Account : default'),
             array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
             array('info', 'Data :'),
             array('info', ' > VERSION = 00104'),
@@ -369,6 +374,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->initMock(array(
             array('info', 'New API call.'),
+            array('info', 'Account : default'),
             array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
             array('info', 'Data :'),
             array('info', ' > VERSION = 00104'),
@@ -419,6 +425,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->initMock(array(
             array('info', 'New API call.'),
+            array('info', 'Account : default'),
             array('info', 'Url : https://preprod-ppps.paybox.com/PPPS.php'),
             array('info', 'Data :'),
             array('info', ' > VERSION = 00104'),

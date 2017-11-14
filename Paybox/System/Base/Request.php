@@ -26,19 +26,20 @@ class Request extends AbstractRequest
     /**
      * Constructor.
      *
+     * @param string               $account
      * @param array                $parameters
      * @param array                $servers
      * @param FormFactoryInterface $factory
      *
      * @throws InvalidConfigurationException If the hash_hmac() function of PECL hash is not available.
      */
-    public function __construct(array $parameters, array $servers, FormFactoryInterface $factory)
+    public function __construct($account, array $parameters, array $servers, FormFactoryInterface $factory)
     {
         if (!function_exists('hash_hmac')) {
             throw new InvalidConfigurationException('Function "hash_hmac()" unavailable. You need to install "PECL hash >= 1.1".');
         }
 
-        parent::__construct($parameters, $servers['system']);
+        parent::__construct($account, $parameters, $servers['system']);
 
         $this->factory = $factory;
     }

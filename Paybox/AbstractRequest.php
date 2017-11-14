@@ -17,6 +17,13 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 abstract class AbstractRequest implements RequestInterface
 {
     /**
+     * Account attached to the request.
+     *
+     * @var array
+     */
+    protected $account;
+
+    /**
      * Array of the transaction's parameters.
      *
      * @var array
@@ -40,11 +47,13 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Constructor.
      *
-     * @param  array $parameters
-     * @param  array $servers
+     * @param string $account
+     * @param array  $parameters
+     * @param array  $servers
      */
-    public function __construct(array $parameters, array $servers)
+    public function __construct($account, array $parameters, array $servers)
     {
+        $this->account    = $account;
         $this->parameters = array();
         $this->globals    = array();
         $this->servers    = $servers;
@@ -85,6 +94,24 @@ abstract class AbstractRequest implements RequestInterface
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAccount($name)
+    {
+        $this->account = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 
     /**
