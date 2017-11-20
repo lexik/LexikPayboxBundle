@@ -73,7 +73,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_paybox = new Request(array(
+        $this->_paybox = new Request('default', array(
             'production' => false,
             'currencies' => array(),
             'site'       => 1999888,

@@ -3,7 +3,7 @@ parameters:
 
 services:
     lexik_paybox.sample_response_listener:
-        class:     %lexik_paybox.sample_response_listener.class%
-        arguments: [ %kernel.root_dir%, @filesystem ]
+        class:     '%lexik_paybox.sample_response_listener.class%'
+        arguments: [ '%kernel.root_dir%', '@filesystem' ]
         tags:
             - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }

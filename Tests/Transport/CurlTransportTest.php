@@ -11,6 +11,8 @@ use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
  */
 class CurlTransportTest extends \PHPUnit_Framework_TestCase
 {
+    protected $account;
+
     protected $object;
 
     protected $globals;
@@ -22,6 +24,8 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
         if (!function_exists('curl_init')) {
             $this->markTestSkipped('cURL is not available. Activate it first.');
         }
+
+        $this->account = 'default';
 
         $this->object = new CurlTransport();
 
@@ -37,7 +41,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
         $this->object->setEndpoint('http://www.google.com/hey.cgi');
         $method = new \ReflectionMethod('\Lexik\Bundle\PayboxBundle\Transport\CurlTransport', 'call');
 
-        $cancellationRequest = new Request($this->globals, $this->server, $this->object);
+        $cancellationRequest = new Request($this->account, $this->globals, $this->server, $this->object);
         $cancellationRequest->setParameter('HMAC', 'test');
         $cancellationRequest->setParameter('TIME', 'test');
 
@@ -50,7 +54,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
     {
         $curl = new mockCurlTransport();
 
-        $this->assertEquals($curl->call(new Request($this->globals, $this->server, $this->object)), '');
+        $this->assertEquals($curl->call(new Request($this->account, $this->globals, $this->server, $this->object)), '');
     }
 
 }

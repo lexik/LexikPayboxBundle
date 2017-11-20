@@ -13,6 +13,22 @@ namespace Lexik\Bundle\PayboxBundle\Paybox;
 interface RequestInterface
 {
     /**
+     * Sets the account.
+     *
+     * @param  array $account
+     *
+     * @return RequestInterface
+     */
+    public function setAccount($account);
+
+    /**
+     * Returns the account.
+     *
+     * @return string
+     */
+    public function getAccount();
+
+    /**
      * Sets a parameter.
      *
      * @param  string $name

@@ -5,6 +5,7 @@ namespace Lexik\Bundle\PayboxBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
@@ -20,11 +21,19 @@ class SampleController extends Controller
     /**
      * Index action creates the form for a payment call.
      *
+     * @param string $account
+     *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction($account)
     {
-        $paybox = $this->get('lexik_paybox.request_handler');
+        $service = sprintf('lexik_paybox.request_handler.%s', $account);
+
+        if (!$this->has($service)) {
+            throw new NotFoundHttpException(sprintf('Service %s not found', $service));
+        }
+
+        $paybox = $this->get($service);
         $paybox->setParameters(array(
             'PBX_CMD'          => 'CMD'.time(),
             'PBX_DEVISE'       => '978',
@@ -33,11 +42,11 @@ class SampleController extends Controller
             'PBX_TOTAL'        => '1000',
             'PBX_TYPEPAIEMENT' => 'CARTE',
             'PBX_TYPECARTE'    => 'CB',
-            'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGenerator::ABSOLUTE_URL),
-            'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGenerator::ABSOLUTE_URL),
-            'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGenerator::ABSOLUTE_URL),
+            'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'success'), UrlGenerator::ABSOLUTE_URL),
+            'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'denied'), UrlGenerator::ABSOLUTE_URL),
+            'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'canceled'), UrlGenerator::ABSOLUTE_URL),
             'PBX_RUF1'         => 'POST',
-            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGenerator::ABSOLUTE_URL),
+            'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('account' => $account, 'time' => time()), UrlGenerator::ABSOLUTE_URL),
         ));
 
         return $this->render(
@@ -56,13 +65,15 @@ class SampleController extends Controller
      *
      * @param Request $request
      * @param string  $status
+     * @param string  $account
      *
      * @return Response
      */
-    public function returnAction(Request $request, $status)
+    public function returnAction(Request $request, $status, $account)
     {
         return $this->render('LexikPayboxBundle:Sample:return.html.twig', array(
             'status'     => $status,
+            'account'    => $account,
             'parameters' => $request->query,
         ));
     }

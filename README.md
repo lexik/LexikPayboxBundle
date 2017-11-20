@@ -55,30 +55,34 @@ Your personnal account informations must be set in your config.yml
 ```yml
 # Lexik Paybox Bundle
 lexik_paybox:
-    parameters:
-        production: false        # Switches between Paybox test and production servers (preprod-tpe <> tpe)
-        site:        '9999999'   # Site number provided by the bank
-        rank:        '99'        # Rank number provided by the bank
-        login:       '999999999' # Customer's login provided by Paybox
-        hmac:
-            key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
+    accounts:
+        default:
+            parameters:
+                production: false        # Switches between Paybox test and production servers (preprod-tpe <> tpe)
+                site:        '9999999'   # Site number provided by the bank
+                rank:        '99'        # Rank number provided by the bank
+                login:       '999999999' # Customer's login provided by Paybox
+                hmac:
+                    key: '01234...BCDEF' # Key used to compute the hmac hash, provided by Paybox
 ```
 
 Additional configuration:
 
 ```yml
 lexik_paybox:
-    parameters:
-        currencies:  # Optionnal parameters, this is the default value
-            - '036'  # AUD
-            - '124'  # CAD
-            - '756'  # CHF
-            - '826'  # GBP
-            - '840'  # USD
-            - '978'  # EUR
-        hmac:
-            algorithm:      sha512 # signature algorithm
-            signature_name: Sign   # customize the signature parameter name
+    accounts:
+        default:
+            parameters:
+                currencies:  # Optionnal parameters, this is the default value
+                    - '036'  # AUD
+                    - '124'  # CAD
+                    - '756'  # CHF
+                    - '826'  # GBP
+                    - '840'  # USD
+                    - '978'  # EUR
+                hmac:
+                    algorithm:      sha512 # signature algorithm
+                    signature_name: Sign   # customize the signature parameter name
 ```
 
 The routing collection must be set in your routing.yml
@@ -102,9 +106,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Sample action to call a payment.
  * It create the form to submit with all parameters.
  */
-public function callAction()
+public function indexAction($account)
 {
-    $paybox = $this->get('lexik_paybox.request_handler');
+    $service = sprintf('lexik_paybox.request_handler.%s', $account);
+
+    if (!$this->has($service)) {
+        throw new NotFoundHttpException(sprintf('Service %s not found', $service));
+    }
+
+    $paybox = $this->get($service);
     $paybox->setParameters(array(
         'PBX_CMD'          => 'CMD'.time(),
         'PBX_DEVISE'       => '978',
@@ -113,11 +123,11 @@ public function callAction()
         'PBX_TOTAL'        => '1000',
         'PBX_TYPEPAIEMENT' => 'CARTE',
         'PBX_TYPECARTE'    => 'CB',
-        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'success'), UrlGeneratorInterface::ABSOLUTE_URL),
-        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'denied'), UrlGeneratorInterface::ABSOLUTE_URL),
-        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('status' => 'canceled'), UrlGeneratorInterface::ABSOLUTE_URL),
+        'PBX_EFFECTUE'     => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'success'), UrlGenerator::ABSOLUTE_URL),
+        'PBX_REFUSE'       => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'denied'), UrlGenerator::ABSOLUTE_URL),
+        'PBX_ANNULE'       => $this->generateUrl('lexik_paybox_sample_return', array('account' => $account, 'status' => 'canceled'), UrlGenerator::ABSOLUTE_URL),
         'PBX_RUF1'         => 'POST',
-        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('time' => time()), UrlGeneratorInterface::ABSOLUTE_URL),
+        'PBX_REPONDRE_A'   => $this->generateUrl('lexik_paybox_ipn', array('account' => $account, 'time' => time()), UrlGenerator::ABSOLUTE_URL),
     ));
 
     return $this->render(
@@ -134,15 +144,13 @@ public function callAction()
  * after he seizes his payment informations on the Paybox's platform.
  * This action must only containts presentation logic.
  */
-public function responseAction($status)
+public function returnAction(Request $request, $status, $account)
 {
-    return $this->render(
-        'LexikPayboxBundle:Sample:return.html.twig',
-        array(
-            'status'     => $status,
-            'parameters' => $this->getRequest()->query,
-        )
-    );
+    return $this->render('LexikPayboxBundle:Sample:return.html.twig', array(
+        'status'     => $status,
+        'account'    => $account,
+        'parameters' => $request->query,
+    ));
 }
 ...
 ```
@@ -158,17 +166,22 @@ The bundle contains a listener example that simply create a file on each ipn cal
 ```php
 namespace Lexik\Bundle\PayboxBundle\Listener;
 
+use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 use Symfony\Component\Filesystem\Filesystem;
 
-use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
-
 /**
- * Simple listener that create a file for each ipn call.
+ * Sample listener that create a file for each ipn call.
  */
-class PayboxResponseListener
+class SampleIpnListener
 {
+    /**
+     * @var string
+     */
     private $rootDir;
 
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
     /**
@@ -186,19 +199,23 @@ class PayboxResponseListener
     /**
      * Creates a txt file containing all parameters for each IPN.
      *
-     * @param  PayboxResponseEvent $event
+     * @param PayboxResponseEvent $event
      */
     public function onPayboxIpnResponse(PayboxResponseEvent $event)
     {
-        $path = $this->rootDir . '/../data/' . date('Y\/m\/d\/');
+        $path = sprintf('%s/../data/%s', $this->rootDir, date('Y\/m\/d\/'));
         $this->filesystem->mkdir($path);
 
-        $content = sprintf("Signature verification : %s\n", $event->isVerified() ? 'OK' : 'KO');
+        $content = sprintf('Account : %s%s', $event->getAccount(), PHP_EOL);
+        $content .= sprintf('Signature verification : %s%s', $event->isVerified() ? 'OK' : 'KO', PHP_EOL);
         foreach ($event->getData() as $key => $value) {
-            $content .= sprintf("%s:%s\n", $key, $value);
+            $content .= sprintf("%s:%s%s", $key, $value, PHP_EOL);
         }
 
-        file_put_contents($path . time() . '.txt', $content);
+        file_put_contents(
+            sprintf('%s%s.txt', $path, time()),
+            $content
+        );
     }
 }
 ```
@@ -213,8 +230,8 @@ parameters:
 services:
     ...
     lexik_paybox.sample_response_listener:
-        class: %lexik_paybox.sample_response_listener.class%
-        arguments: [ %kernel.root_dir%, @filesystem ]
+        class: '%lexik_paybox.sample_response_listener.class%'
+        arguments: [ '%kernel.root_dir%', '@filesystem' ]
         tags:
             - { name: kernel.event_listener, event: paybox.ipn_response, method: onPayboxIpnResponse }
 ```

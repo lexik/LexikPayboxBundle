@@ -1,10 +1,11 @@
 <?php
 
-namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
+namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Base;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Base\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ResponseTest
@@ -21,12 +22,19 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     private $_response;
 
     /**
-     * @param array $parameters
-     * @param array $messages
+     * @param string $account
+     * @param array  $parameters
+     * @param array  $messages
      */
-    protected function initMock(array $parameters, array $messages)
+    protected function initMock($account, array $parameters, array $messages)
     {
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request
+            ->expects($this->any())
+            ->method('get')
+            ->with('account')
+            ->will($this->returnValue($account))
+        ;
         $request
             ->expects($this->any())
             ->method('isMethod')
@@ -75,7 +83,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifySignatureValid()
     {
-        $this->initMock(array(
+        $this->initMock('default', array(
             'Mt'     => '1000',
             'Ref'    => 'CMD1349338388',
             'Auto'   => 'XXXXXX',
@@ -83,6 +91,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Sign'   => 'QnhlnuOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClpFw0=',
         ), array(
             array('info', 'New IPN call.'),
+            array('info', 'Account : default'),
             array('info', 'Mt=1000'),
             array('info', 'Ref=CMD1349338388'),
             array('info', 'Auto=XXXXXX'),
@@ -98,7 +107,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifySignatureInvalidParameter()
     {
-        $this->initMock(array(
+        $this->initMock('default', array(
             'Mt'     => '1000',
             'Ref'    => 'CMD1349338389',
             'Auto'   => 'XXXXXX',
@@ -106,6 +115,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Sign'   => 'QnhlnuOpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClpFw0=',
         ), array(
             array('info',  'New IPN call.'),
+            array('info',  'Account : default'),
             array('info',  'Mt=1000'),
             array('info',  'Ref=CMD1349338389'),
             array('info',  'Auto=XXXXXX'),
@@ -121,7 +131,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifySignatureInvalidSignature()
     {
-        $this->initMock(array(
+        $this->initMock('default', array(
             'Mt'     => '1000',
             'Ref'    => 'CMD1349338388',
             'Auto'   => 'XXXXXX',
@@ -129,6 +139,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Sign'   => 'invalidpcbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClpFw0=',
         ), array(
             array('info', 'New IPN call.'),
+            array('info', 'Account : default'),
             array('info', 'Mt=1000'),
             array('info', 'Ref=CMD1349338388'),
             array('info', 'Auto=XXXXXX'),
@@ -144,7 +155,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifySignatureInvalidSignatureFormat()
     {
-        $this->initMock(array(
+        $this->initMock('default', array(
             'Mt'     => '1000',
             'Ref'    => 'CMD1349338388',
             'Auto'   => 'XXXXXX',
@@ -152,6 +163,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Sign'   => 'badformatbfUruOU7kKG/ZmDPsDzM31VrpMIObQomYwEE/afhJiDPkWVN9+r3JVFXBsFnqo3VlOVzxQVVahXpF7eWiJoAe5LcIoqSvms96SFFv9LfndS/3zAO5fF/tR4Us3rOSUwT1Hs2AS17R3B9ATwBMhKt1l3DPw9hClp',
         ), array(
             array('info', 'New IPN call.'),
+            array('info', 'Account : default'),
             array('info', 'Mt=1000'),
             array('info', 'Ref=CMD1349338388'),
             array('info', 'Auto=XXXXXX'),
@@ -168,13 +180,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifySignatureValidUrlencodedSignature()
     {
-        $this->initMock(array(
+        $this->initMock('default', array(
                 'Mt'     => '8160',
                 'Ref'    => 'COM000000117T1402932051',
                 'Erreur' => '00004',
                 'Sign'   => 'j2OZPEE0gKc%2BD34u2QkpBUR3VQyd9zYhpewHS6IZ1vjdiuGvC01irSBb2taQblYQ3RXI0DkmgIgdFY8ywW6NOdWx1vH%2B1c3GSZX2MhMqlonpfElUAN%2FlzYNH%2Ftw%2BntQLvzO2HBPobCLNUERqKrFqU9dSAvAYagXNdjpU%2BXPzPgI%3D',
             ), array(
                 array('info', 'New IPN call.'),
+                array('info', 'Account : default'),
                 array('info', 'Mt=8160'),
                 array('info', 'Ref=COM000000117T1402932051'),
                 array('info', 'Erreur=00004'),

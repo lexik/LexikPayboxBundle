@@ -1,9 +1,11 @@
 lexik_paybox_sample_call:
-    path:     /
+    path:     /payment/{account}
     defaults: { _controller: LexikPayboxBundle:Sample:index }
+    requirements:
+        account: \w+
 
 lexik_paybox_sample_return:
-    path:     /payment/return/{status}
+    path:     /payment/{account}/return/{status}
     defaults: { _controller: LexikPayboxBundle:Sample:return, status: error }
     requirements:
         status: success|canceled|denied

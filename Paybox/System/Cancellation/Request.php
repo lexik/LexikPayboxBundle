@@ -23,13 +23,14 @@ class Request extends AbstractRequest
     /**
      * Constructor.
      *
+     * @param string             $account
      * @param array              $parameters
      * @param array              $servers
      * @param TransportInterface $transport
      */
-    public function __construct(array $parameters, array $servers, TransportInterface $transport = null)
+    public function __construct($account, array $parameters, array $servers, TransportInterface $transport = null)
     {
-        parent::__construct($parameters, $servers['system']);
+        parent::__construct($account, $parameters, $servers['system']);
 
         $this->transport = $transport;
     }
