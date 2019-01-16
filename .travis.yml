@@ -48,4 +48,4 @@ before_install:
 
 install: composer install --prefer-dist --no-interaction
 
-script: vendor/bin/simple-phpunit
+script: vendor/bin/phpunit
