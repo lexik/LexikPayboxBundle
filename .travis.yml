@@ -20,7 +20,7 @@ matrix:
           dist: trusty
           group: edge
     allow_failures:
-        - php: hhvm
+        - php: hhvm-stable
 
 cache:
     directories:
