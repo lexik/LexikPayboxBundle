@@ -14,13 +14,13 @@
         "psr/log": "~1.0",
         "lib-curl": ">=7.10.0",
         "lib-openssl": ">=0.9.6",
-        "symfony/framework-bundle": "~2.7|~3.0",
-        "symfony/form": "~2.7|~3.0",
-        "symfony/options-resolver": "~2.7|~3.0",
+        "symfony/framework-bundle": "~2.7|~3.0|~4.0",
+        "symfony/form": "~2.7|~3.0|~4.0",
+        "symfony/options-resolver": "~2.7|~3.0|~4.0",
         "kriswallsmith/buzz": "~0.15"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^2.7.4"
+        "phpunit/phpunit": "~4.0"
     },
     "autoload": {
         "psr-4": { "Lexik\\Bundle\\PayboxBundle\\": "" }
