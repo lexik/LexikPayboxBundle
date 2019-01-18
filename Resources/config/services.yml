@@ -7,20 +7,24 @@ parameters:
 services:
     lexik_paybox.request_handler:
         class:     '%lexik_paybox.request_handler.class%'
+        public:    true
         arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@form.factory']
 
     lexik_paybox.request_cancellation_handler:
         class:     '%lexik_paybox.request_cancellation_handler.class%'
+        public:    true
         arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@lexik_paybox.transport']
 
     lexik_paybox.response_handler:
         class:     '%lexik_paybox.response_handler.class%'
+        public:    true
         arguments: ['@request_stack', '@logger', '@event_dispatcher', '%lexik_paybox.parameters%']
         tags:
             - { name: monolog.logger, channel: payment }
 
     lexik_paybox.direc_plus.request_handler:
         class:     '%lexik_paybox.direc_plus.request_handler%'
+        public:    true
         arguments: ['%lexik_paybox.parameters%', '%lexik_paybox.servers%', '@logger', '@event_dispatcher', '@lexik_paybox.transport']
         tags:
             - { name: monolog.logger, channel: payment }
