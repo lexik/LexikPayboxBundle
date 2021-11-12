@@ -17,10 +17,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('lexik_paybox');
+        $treeBuilder = new TreeBuilder('lexik_paybox');
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('public_key')->defaultValue(null)->end()
