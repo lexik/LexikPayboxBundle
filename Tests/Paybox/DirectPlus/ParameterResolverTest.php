@@ -3,17 +3,18 @@
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus;
 
 use Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\ParameterResolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ParameterResolverTest
  *
  * @package Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus
  */
-class ParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverTest extends TestCase
 {
     public function testRequiredFields()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The required options "CLE", "DATEQ", "NUMQUESTION", "RANG", "SITE", "TYPE", "VERSION" are missing.');
+        $this->expectExceptionObject(new \InvalidArgumentException('The required options "CLE", "DATEQ", "NUMQUESTION", "RANG", "SITE", "TYPE", "VERSION" are missing.'));
 
         $resolver = new ParameterResolver(array());
         $resolver->resolve(array());

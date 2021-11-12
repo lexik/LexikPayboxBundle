@@ -3,8 +3,14 @@
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus;
 
 use Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\Request;
+use Lexik\Bundle\PayboxBundle\Transport\AbstractTransport;
 use Lexik\Bundle\PayboxBundle\Transport\BuzzTransport;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
+use PHPUnit\Framework\Constraint\StringMatchesFormatDescription;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class RequestTest
@@ -13,7 +19,7 @@ use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
  *
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     /**
      * @var Request
@@ -62,16 +68,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock(LoggerInterface::class);
         foreach ($messages as $i => $message) {
             $logger
                 ->expects($this->at($i))
                 ->method($message[0])
-                ->with(new \PHPUnit_Framework_Constraint_StringMatches($message[1]))
+                ->with(new StringMatchesFormatDescription($message[1]))
             ;
         }
 
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
         if (true === $dispatch) {
             $dispatcher
                 ->expects($this->once())
@@ -79,7 +85,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ;
         }
 
-        $transport = $this->getMockForAbstractClass('Lexik\Bundle\PayboxBundle\Transport\AbstractTransport');
+        $transport = $this->getMockForAbstractClass(AbstractTransport::class);
         if (null !== $httpResponse) {
             $transport
                 ->expects($this->once())
@@ -97,7 +103,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->request = new Request($parameters, $servers, $logger, $dispatcher, $transport);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->request = null;
     }
@@ -126,12 +132,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $expected = array(
             'SITE'        => '1999888',
-            'DATEQ'       => '30012013',
+            'DATEQ'       => '00000030012013',
             'RANG'        => '032',
             'VERSION'     => '00104',
             'TYPE'        => '00056',
-            'NUMQUESTION' => '194102422',
-            'MONTANT'     => '1000',
+            'NUMQUESTION' => '0194102422',
+            'MONTANT'     => '0000001000',
             'CLE'         => '1999888I',
             'DEVISE'      => '978',
             'REFABONNE'   => 'ABODOCUMENTATION001',

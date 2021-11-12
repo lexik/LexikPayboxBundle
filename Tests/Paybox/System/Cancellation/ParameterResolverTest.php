@@ -3,17 +3,18 @@
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\ParameterResolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Paybox\System\ParameterResolver class tests.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class ParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverTest extends TestCase
 {
     public function testResolveFirst()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array());
@@ -21,7 +22,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveSecond()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array(
@@ -37,7 +38,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveThird()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver();
         $resolver->resolve(array(

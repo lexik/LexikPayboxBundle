@@ -5,11 +5,12 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Transport;
 use Lexik\Bundle\PayboxBundle\Paybox\RequestInterface;
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for CurlTransport
  */
-class CurlTransportTest extends \PHPUnit_Framework_TestCase
+class CurlTransportTest extends TestCase
 {
     protected $object;
 
@@ -17,7 +18,7 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
 
     protected $server;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!function_exists('curl_init')) {
             $this->markTestSkipped('cURL is not available. Activate it first.');
@@ -29,13 +30,11 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
         $this->globals = array('currencies' => array(), 'site' => '052', 'rank' => '032', 'login' => '12345679', 'hmac' => array('key' => '123123133', 'algorithm' => 'sha512', 'signature_name' => 'Sign'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testCall()
     {
+        $this->expectException(\RuntimeException::class);
         $this->object->setEndpoint('http://www.google.com/hey.cgi');
-        $method = new \ReflectionMethod('\Lexik\Bundle\PayboxBundle\Transport\CurlTransport', 'call');
+        $method = new \ReflectionMethod(CurlTransport::class, 'call');
 
         $cancellationRequest = new Request($this->globals, $this->server, $this->object);
         $cancellationRequest->setParameter('HMAC', 'test');

@@ -4,13 +4,14 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System\Cancellation;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Cancellation\Request;
 use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Paybox\System\Cancellation\Request class tests.
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     private $_paybox;
 
@@ -71,7 +72,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://tpeweb.paybox.com/cgi-bin/ResAbon.cgi', $server);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paybox = new Request(array(
             'production' => false,
@@ -111,7 +112,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         ), new CurlTransport());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_paybox = null;
     }

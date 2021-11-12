@@ -7,21 +7,10 @@
   convertWarningsToExceptions="true"
   processIsolation="false"
   stopOnFailure="false"
-  syntaxCheck="false"
   bootstrap="./Tests/bootstrap.php">
     <testsuites>
         <testsuite name="LexikPayboxBundle's test suite.">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>

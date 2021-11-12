@@ -3,17 +3,18 @@
 namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\System;
 
 use Lexik\Bundle\PayboxBundle\Paybox\System\Base\ParameterResolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Paybox\System\ParameterResolver class tests.
  *
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class ParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverTest extends TestCase
 {
     public function testResolveFirst()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver(array());
         $resolver->resolve(array());
@@ -21,7 +22,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveNoCurrency()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver(array('953'));
         $resolver->resolve(array(
@@ -41,7 +42,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveBadCurrency()
     {
-        $this->setExpectedExceptionRegExp('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver(array('953'));
         $resolver->resolve(array(
@@ -61,7 +62,7 @@ class ParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveUndefinedParameter()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $resolver = new ParameterResolver(array());
         $resolver->resolve(array(

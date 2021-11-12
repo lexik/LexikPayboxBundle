@@ -4,13 +4,15 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Transport;
 
 use Lexik\Bundle\PayboxBundle\Paybox\RequestInterface;
 use Lexik\Bundle\PayboxBundle\Transport\AbstractTransport;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Abstract Transport
  *
  * @author Fabien Pomerol <fabien.pomerol@gmail.com>
  */
-class AbstractTransportTest extends \PHPUnit_Framework_TestCase
+class AbstractTransportTest extends TestCase
 {
     /**
      * @var AbstractTransport
@@ -21,16 +23,14 @@ class AbstractTransportTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new MockTransport();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExceptionSetEndpoint()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->object->setEndpoint(3243204);
     }
 
@@ -40,7 +40,7 @@ class AbstractTransportTest extends \PHPUnit_Framework_TestCase
 
         // This is how to test a private or protected attribute. Value expected,
         // Attribute name, Object
-        $this->assertAttributeEquals('http://www.hello.fr/hey.cgi', 'endpoint', $this->object);
+        $this->assertSame('http://www.hello.fr/hey.cgi', $this->object->getEndpoint());
     }
 
     public function testGetEndpoint()
@@ -50,12 +50,10 @@ class AbstractTransportTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://www.hello.fr/hey.cgi', $this->object->getEndpoint());
     }
 
-    /**
-     * @expectedException \RunTimeException
-     */
     public function testCheckEndpoint()
     {
-        $method = new \ReflectionMethod('Lexik\Bundle\PayboxBundle\Transport\AbstractTransport', 'checkEndpoint');
+        $this->expectException(\RunTimeException::class);
+        $method = new \ReflectionMethod(AbstractTransport::class, 'checkEndpoint');
         $method->setAccessible(TRUE);
         $method->invoke($this->object);
     }
