@@ -6,10 +6,10 @@ use Lexik\Bundle\PayboxBundle\Event\PayboxEvents;
 use Lexik\Bundle\PayboxBundle\Event\PayboxResponseEvent;
 use Lexik\Bundle\PayboxBundle\Paybox\System\Tools;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Response
@@ -179,7 +179,7 @@ class Response
         openssl_free_key($publicKey);
 
         $event = new PayboxResponseEvent($this->data, $result);
-        $this->dispatcher->dispatch(PayboxEvents::PAYBOX_IPN_RESPONSE, $event);
+        $this->dispatcher->dispatch($event, PayboxEvents::PAYBOX_IPN_RESPONSE);
 
         return $result;
     }

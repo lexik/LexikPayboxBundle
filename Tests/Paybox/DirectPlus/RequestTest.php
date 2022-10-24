@@ -4,13 +4,10 @@ namespace Lexik\Bundle\PayboxBundle\Tests\Paybox\DirectPlus;
 
 use Lexik\Bundle\PayboxBundle\Paybox\DirectPlus\Request;
 use Lexik\Bundle\PayboxBundle\Transport\AbstractTransport;
-use Lexik\Bundle\PayboxBundle\Transport\BuzzTransport;
-use Lexik\Bundle\PayboxBundle\Transport\CurlTransport;
 use PHPUnit\Framework\Constraint\StringMatchesFormatDescription;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class RequestTest
