@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * Instant Payment Notification action.

@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\PayboxBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  * @author Lexik <dev@lexik.fr>
  * @author Olivier Maisonneuve <o.maisonneuve@lexik.fr>
  */
-class SampleController extends Controller
+class SampleController extends AbstractController
 {
     /**
      * Index action creates the form for a payment call.
