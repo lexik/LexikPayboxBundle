@@ -18,10 +18,8 @@ class DefaultController extends AbstractController
     /**
      * Instant Payment Notification action.
      * Here, presentation is anecdotal, the requesting server only looks at the http status.
-     *
-     * @return Response
      */
-    public function ipnAction()
+    public function __invoke(): Response
     {
         $payboxResponse = $this->container->get('lexik_paybox.response_handler');
         $result = $payboxResponse->verifySignature();
