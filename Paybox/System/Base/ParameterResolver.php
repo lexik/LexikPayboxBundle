@@ -64,6 +64,9 @@ class ParameterResolver extends AbstractParameterResolver
         'PBX_TYPECARTE',
         'PBX_TYPEPAIEMENT',
         'PBX_ATTENTE',
+        /** 3DSv2 parameters */
+        'PBX_SHOPPINGCART',
+        'PBX_BILLING',
     );
 
     /**
